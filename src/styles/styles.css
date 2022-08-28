@@ -17,3 +17,42 @@ input {
 input::placeholder {
     font-weight: 300;
 }
+
+/*
+* ERROR
+*/
+.error {
+    display: flex;
+    height: -webkit-fill-available;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: rgb(241, 241, 245);
+}
+
+.error img {
+    width: 200px;
+}
+
+.error h3 {
+    margin-top: 30px;
+    font-size: 30px;
+    font-weight: 400;
+    color: #E84545;
+}
+
+.error p {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.error .links {
+    margin-top: 10px;
+    color: #999;
+    font-weight: 300;
+}
+
+.error .links a {
+    margin-left: 10px;
+    color: #7A4495;
+}
