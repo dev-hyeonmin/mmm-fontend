@@ -21,7 +21,7 @@ input::placeholder {
 /*
 * HEADER
 */
-.verifiy-email {
+.tag-verifiy_email {
     background-color: #7A4495;
     color: #fff;
     text-align: center;
@@ -29,7 +29,97 @@ input::placeholder {
 }
 
 /*
-* ERROR
+* LOGIN & SIGNUP
+*/ 
+.wrapper-login {
+    display: flex;    
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: -webkit-fill-available;
+}
+
+.box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    position: relative;
+    width: 50%;
+}
+
+.box:nth-child(2){
+    background-color: rgb(241, 241, 245);
+}
+
+.box form {
+    width: 300px;
+}
+
+.box form h3 {
+    font-size: 22px;
+    font-weight: 400;
+}
+
+.box form h6 {
+    font-size: 14px;
+    font-weight: 300;
+    color: #999;
+    letter-spacing: 1px;
+    margin-top: 10px;
+}
+
+.box form dl {
+    margin-top: 30px;
+}
+
+.box form dt {
+    font-weight: 300;
+    color: #240f2e;
+}
+
+.box form dd {
+    margin: 5px 0 15px;
+}
+
+.box form button {
+    width: 100%;
+    line-height: 40px;
+    border-radius: 2px;
+    margin-top: 20px;
+}
+
+.box .tag-create_account {
+    color: #999;
+    margin-top: 20px;
+}
+
+.box .tag-create_account a {
+    color: #7A4495;
+    margin-left: 10px;
+}
+
+.box .circle {
+    display: inline-block;
+    background-color: #7A4495;
+    width: 200px;
+    height: 200px;
+    border-radius: 100px;
+}
+
+.box .blur {
+    backdrop-filter: blur(20px);
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 50%;  
+}
+
+
+/*
+* ALERT :: ERROR
 */
 .error {
     display: flex;
@@ -65,4 +155,53 @@ input::placeholder {
 .error .links a {
     margin-left: 10px;
     color: #7A4495;
+}
+
+/*
+* VERIFY
+*/
+.wrapper-email {
+    display: flex;
+    height: -webkit-fill-available;
+    justify-content: center;
+    align-items: center;
+}
+
+.box-confirm {
+    display: flex;
+    height: -webkit-fill-available;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    background-color: rgb(241, 241, 245);
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.box-confirm img {
+    width: 120px;
+}
+
+.box-confirm h3 {
+    margin-top: 30px;
+    font-size: 24px;
+    font-weight: 400;
+    color: #333;
+}
+
+.box-confirm p {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #777;
+}
+
+.box-confirm a {
+    background-color: #7A4495;
+    color: #fff;
+    line-height: 35px;
+    margin-top: 20px;
+    padding: 0 50px;
+    text-decoration: none;
 }

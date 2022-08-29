@@ -3,12 +3,18 @@ import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import { NotFound } from "../pages/404";
 import { Header } from "../components/header";
 import { Main } from "../pages/main";
+import { VerifyEmail } from "../pages/verify-email";
 
 const routes = [
     {
         path: "/",
         component: <Main />,
         useHeader: true,
+    },
+    {
+        path: "/confirm",
+        component: <VerifyEmail />,
+        useHeader: false,
     },
 ];
 

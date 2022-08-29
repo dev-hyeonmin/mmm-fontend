@@ -52,7 +52,7 @@ export const CreateAccount = () => {
     };
 
     return (
-        <div className="wrapper">
+        <div className="wrapper-login">
             <div className="box">                
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <h3>Create an account 🥳</h3>

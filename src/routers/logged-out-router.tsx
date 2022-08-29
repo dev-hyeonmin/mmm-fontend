@@ -2,7 +2,6 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { NotFound } from "../pages/404";
 import { CreateAccount } from "../pages/create-account";
 import { Login } from "../pages/login";
-import '../styles/login.css'
 
 const routes = [
     {

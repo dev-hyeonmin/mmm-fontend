@@ -4,16 +4,17 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: me
+// GraphQL query operation: meQuery
 // ====================================================
 
-export interface me_me {
+export interface meQuery_me {
   __typename: "User";
   id: number;
+  name: string;
   email: string;
   verified: boolean;
 }
 
-export interface me {
-  me: me_me;
+export interface meQuery {
+  me: meQuery_me;
 }
