@@ -1,10 +1,11 @@
 import { gql, useQuery } from "@apollo/client";
 
-const ME_QUERY = gql`
-    query me {
+export const ME_QUERY = gql`
+    query meQuery {
         me {
             id
             email
+            role
             verified
         }
     }

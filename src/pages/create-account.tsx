@@ -1,51 +1,49 @@
 import { gql, useMutation } from "@apollo/client";
 import { useForm } from "react-hook-form";
-import { authTokenVar, isLoggedInVar } from "../apollo";
+import { useNavigate } from "react-router-dom";
 import { Button } from "../components/button";
 import { FormError } from "../components/form-error";
-import { LOCALSTORAGE_TOKEN } from "../constants";
-import { loginMutation, loginMutationVariables } from "../__generated__/loginMutation";
-import { Link } from "react-router-dom";
+import { createAccountMutation, createAccountMutationVariables } from "../__generated__/createAccountMutation";
 
 interface IForm {
+    name: string;
     email: string;
     password: string;
 }
 
-const LOGIN_MUTATION = gql`
-    mutation loginMutation($loginInput: LoginInput!) {
-        login(input: $loginInput) {
+const CREATEACCOUNT_MUTATION = gql`
+    mutation createAccountMutation($createAccountInput: CreateAccountInput!) {
+        createAccount(input: $createAccountInput) {
             ok
-            token
             error
         }
     }
 `;
 
-export const Login = () => {    
-    const onCompleted = async (data: loginMutation) => {
+export const CreateAccount = () => {  
+    const navigation = useNavigate();
+    const onCompleted = async (data: createAccountMutation) => {
         const {
-            login: { ok, token }
+            createAccount: { ok }
         } = data;
         
-        if (ok && token) {
-            localStorage.setItem(LOCALSTORAGE_TOKEN, token);
-            
-            isLoggedInVar(true);
-            authTokenVar(token);
+        if (ok) {      
+            alert("Create account success!");
+            navigation("/");
         }
     };
     
     const { register, handleSubmit, getValues, formState: { errors, isValid } } = useForm<IForm>({ mode: 'onChange' });
-    const [loginMutation, { data: loginMutationResult, loading }] = useMutation<loginMutation, loginMutationVariables>(LOGIN_MUTATION, {
+    const [createAccountMutation, { data: createAccountMutationResult, loading }] = useMutation<createAccountMutation, createAccountMutationVariables>(CREATEACCOUNT_MUTATION, {
         onCompleted
     });
     
     const onSubmit = () => {
-        const { email, password } = getValues();
-        loginMutation({
+        const { name, email, password } = getValues();
+        createAccountMutation({
             variables: {
-                loginInput: {
+                createAccountInput: {
+                    name,
                     email,
                     password
                 }
@@ -57,10 +55,20 @@ export const Login = () => {
         <div className="wrapper">
             <div className="box">                
                 <form onSubmit={handleSubmit(onSubmit)}>
-                    <h3>Hello 😎</h3>
-                    <h6>Please enter your detail.</h6>
+                    <h3>Create an account 🥳</h3>
+                    <h6>Let's get started with you.</h6>
 
                     <dl>
+                        <dt>name</dt>
+                            <dd>
+                            <input
+                                type="name" 
+                                placeholder="name"
+                                {...register("name", { required: true })}
+                            />
+                            {errors.name?.type === "required" && <FormError errorMessage="Name is required." />}
+                        </dd>
+
                         <dt>email</dt>
                         <dd>
                             <input
@@ -84,18 +92,13 @@ export const Login = () => {
                         </dd>
                     </dl>
                     
-                    {loginMutationResult?.login.error && <FormError errorMessage={loginMutationResult?.login.error}/>}
+                    {createAccountMutationResult?.createAccount.error && <FormError errorMessage={createAccountMutationResult?.createAccount.error}/>}
                     <Button
                         loading={loading}
                         canClick={isValid}
-                        actionText="Login"
+                        actionText="Create Account"
                     />
                 </form>
-
-                <div className="tag-create_account">
-                    Don't have an account?
-                    <Link to="/create-account">Sign up</Link>
-                </div>
             </div>
 
             <div className="box">

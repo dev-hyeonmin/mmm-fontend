@@ -19,6 +19,16 @@ input::placeholder {
 }
 
 /*
+* HEADER
+*/
+.verifiy-email {
+    background-color: #7A4495;
+    color: #fff;
+    text-align: center;
+    line-height: 30px;
+}
+
+/*
 * ERROR
 */
 .error {

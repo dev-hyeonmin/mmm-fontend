@@ -7,9 +7,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
     position: relative;
     width: 50%;
-
 }
 
 .box:nth-child(2){
@@ -51,6 +51,16 @@
     line-height: 40px;
     border-radius: 2px;
     margin-top: 20px;
+}
+
+.box .tag-create_account {
+    color: #999;
+    margin-top: 20px;
+}
+
+.box .tag-create_account a {
+    color: #7A4495;
+    margin-left: 10px;
 }
 
 .box .circle {
