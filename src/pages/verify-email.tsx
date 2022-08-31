@@ -34,7 +34,7 @@ export const VerifyEmail = () => {
             });
         }
     };
-    const [verfiyEmail, { data: verifyEmailMutationResult, loading }] = useMutation<verifyEmailMutaion, verifyEmailMutaionVariables>(VERIFYEMAIL_MUTATION, {
+    const [verfiyEmail, { loading }] = useMutation<verifyEmailMutaion, verifyEmailMutaionVariables>(VERIFYEMAIL_MUTATION, {
         onCompleted
     });
 

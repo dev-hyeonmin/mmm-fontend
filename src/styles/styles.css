@@ -205,3 +205,25 @@ input::placeholder {
     padding: 0 50px;
     text-decoration: none;
 }
+
+/*
+* main
+*/
+.wrapper-memo {
+    display: flex;    
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+.memo-board {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    width: 100%;
+    padding: 50px 100px;
+}
+.memo-board .memos {
+    padding: 20px 10px;
+}

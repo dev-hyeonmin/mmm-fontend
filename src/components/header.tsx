@@ -1,21 +1,25 @@
-import { Link, useNavigate } from "react-router-dom";
+import { gql, useQuery } from "@apollo/client";
+import { authTokenVar, isLoggedInVar } from "../apollo";
 import { LOCALSTORAGE_TOKEN } from "../constants";
 import { useMe } from "../hooks/useMe";
 
 export const Header = () => {
-    const navigation = useNavigate();
+    const { data: userData } = useMe();    
 
-    const { } = useMe();
     const logout = () => {
         localStorage.removeItem(LOCALSTORAGE_TOKEN);
-        navigation("/");
+        isLoggedInVar(false);
+        authTokenVar('');
     };
     return (
         <div>
             <button onClick={logout}>Logout</button>
-            <div className="tag-verifiy_email">
-                ✉️&nbsp;&nbsp;Please verify your email.
-            </div>
+
+            {!userData?.me.verified &&
+                <div className="tag-verifiy_email">
+                    ✉️&nbsp;&nbsp;Please verify your email.
+                </div>
+            }
         </div>
     );
 }
