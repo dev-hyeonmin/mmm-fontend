@@ -1,10 +1,12 @@
-import { gql, useQuery } from "@apollo/client";
+import { gql, useApolloClient, useMutation, useQuery } from "@apollo/client";
 import styled from "styled-components";
-import { myMemos, myMemos_myMemos } from "../__generated__/myMemos";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { DragDropContext, Droppable, Draggable, DropResult } from "react-beautiful-dnd";
+import { editMemoMutation, editMemoMutationVariables } from "../__generated__/editMemoMutation";
+import { rangeMemoMutation, rangeMemoMutationVariables } from "../__generated__/rangeMemoMutation";
+import { myMemosQuery, myMemosQuery_myMemos } from "../__generated__/myMemosQuery";
 
 const MYMEMOS_QUERY = gql`
-    query myMemos {
+    query myMemosQuery {
         myMemos {
             ok
             error
@@ -19,6 +21,31 @@ const MYMEMOS_QUERY = gql`
         }
     }
 `;
+
+const EDITMEMO_MUTATION = gql`
+    mutation editMemoMutation ($editMemoInput: EditMemoInput!) {
+        editMemo (input: $editMemoInput) {
+            ok
+            error
+        }
+    }
+`;
+
+const RANGEMEMO_MUTATION = gql`
+    mutation rangeMemoMutation ($rangeMemoInput: RangeMemoInput!) {
+        rangeMemo (input: $rangeMemoInput) {
+            ok
+            error
+        }
+    }
+`;
+
+export interface IRangeMemoMutationInput {
+    id: number;
+    content: string;
+    orderby: number;
+    groupId?: number;
+}
 
 const MemoGroup = styled.div`
     max-width: 20%;
@@ -48,9 +75,91 @@ const Memo = styled.div`
 `;
 
 export const Main = () => {
-    const { data: myMemoData, loading } = useQuery<myMemos, myMemos_myMemos>(MYMEMOS_QUERY);
-    const onDragEnd = (result: any) => {
-        console.log(result);
+    const client = useApolloClient();
+    const onCompleted = ({ editMemo: { ok } }: editMemoMutation) => {
+        
+    };
+    const onRangeCompleted = ( data: rangeMemoMutation) => {
+        console.log(data);
+    };
+
+
+    const { data: myMemoData, loading } = useQuery<myMemosQuery, myMemosQuery_myMemos>(MYMEMOS_QUERY);
+    const [editMemoMutation, { data: editMemoMutationResult, loading: editMemoLoadaing }] = useMutation<editMemoMutation, editMemoMutationVariables>(EDITMEMO_MUTATION, {
+        onCompleted
+    });
+    const [rangeMemoMutation, { }] = useMutation<rangeMemoMutation, rangeMemoMutationVariables>(RANGEMEMO_MUTATION, {
+        onCompleted: onRangeCompleted
+    });
+    const groups = myMemoData?.myMemos.groups;
+
+    const onDragEnd = (result: DropResult) => {        
+        if (!groups) return;
+
+        const { destination, source } = result;
+        const sourceMemos = groups.find((group) => group.id === Number(source.droppableId))?.memos;
+
+        if (!sourceMemos) return;
+        const sourceMemo = sourceMemos[source.index];
+
+        if (destination?.droppableId === source.droppableId) {
+            // same group
+            if (source.index === destination.index) { return; }
+
+            const tempMemos = sourceMemos.filter((memo, index) => index !== source.index);
+            const newMemos = [
+                ...tempMemos.slice(0, destination.index),
+                sourceMemo,
+                ...tempMemos.slice(destination.index)
+            ];
+            
+            const req:number[] = [];
+            newMemos.map((memo) => {
+                req.push(memo.id);
+            });
+            
+            rangeMemoMutation({
+                variables: {
+                    rangeMemoInput: {
+                        memoIds: req
+                    }
+                }
+            });
+        } else {
+            // move group
+            const destinationMemos = groups.find((group) => group.id === Number(destination?.droppableId))?.memos;
+            const destinationGroupId = Number(destination?.droppableId);
+            if (!destinationMemos) { return; }
+            if (!destination) { return; }
+
+            const newMemos = [
+                ...destinationMemos.slice(0, destination?.index),
+                {...sourceMemo},
+                ...destinationMemos.slice(destination?.index )
+            ];
+            
+            const req:number[] = [];
+            newMemos.map((memo) => {
+                req.push(memo.id);
+            });
+            
+            editMemoMutation({
+                variables: {
+                    editMemoInput: {
+                        id: sourceMemo.id,
+                        groupId: destinationGroupId
+                    }
+                }
+            });
+
+            rangeMemoMutation({
+                variables: {
+                    rangeMemoInput: {
+                        memoIds: req
+                    }
+                }
+            });
+        }
     };
 
     return (                  
@@ -60,11 +169,11 @@ export const Main = () => {
                 !loading && 
                 <div className="memo-board">
                     {
-                        myMemoData?.myMemos.groups?.map((group, index) => (                            
+                        groups?.map((group, index) => (                            
                             <MemoGroup key={group.id}>                                
                                 <GroupTitle>{group.title}</GroupTitle>
                                 
-                                <Droppable droppableId={"group" + group.id}>
+                                <Droppable droppableId={"" + group.id} key={index}>
                                     {(droppableProvided) => (
                                         <div ref={droppableProvided.innerRef}>
                                             {

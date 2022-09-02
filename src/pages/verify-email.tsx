@@ -18,8 +18,9 @@ export const VerifyEmail = () => {
     const client = useApolloClient();
     const onCompleted = (data: verifyEmailMutaion) => {
         const {
-        verifyEmail: { ok },
+            verifyEmail: { ok },
         } = data;
+        
         if (ok && userData?.me.id) {
             client.writeFragment({
                 id: `User:${userData.me.id}`,
