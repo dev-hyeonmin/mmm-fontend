@@ -80,24 +80,110 @@ export const Main = () => {
         
     };
     const onRangeCompleted = ( data: rangeMemoMutation) => {
-        console.log(data);
+        refetch();
     };
 
-
-    const { data: myMemoData, loading } = useQuery<myMemosQuery, myMemosQuery_myMemos>(MYMEMOS_QUERY);
+    const { data: myMemoData, loading, refetch } = useQuery<myMemosQuery, myMemosQuery_myMemos>(MYMEMOS_QUERY);
     const [editMemoMutation, { data: editMemoMutationResult, loading: editMemoLoadaing }] = useMutation<editMemoMutation, editMemoMutationVariables>(EDITMEMO_MUTATION, {
         onCompleted
     });
     const [rangeMemoMutation, { }] = useMutation<rangeMemoMutation, rangeMemoMutationVariables>(RANGEMEMO_MUTATION, {
         onCompleted: onRangeCompleted
     });
-    const groups = myMemoData?.myMemos.groups;
+      
+    const onDragEnd = (result: DropResult) => {
+        console.log(result);
 
-    const onDragEnd = (result: DropResult) => {        
+        const groups = myMemoData?.myMemos.groups;
+        const { source, destination } = result;
+
+        if (!groups || !destination) { return; }
+
+        if (source.droppableId === destination.droppableId) {
+            // same group
+            const group = groups.find((group) => group.id === Number(destination.droppableId));
+            const memos = group?.memos;
+            if (!memos) { return; }
+
+            const tempMemos = memos.filter((memo, index) => index != source.index);
+            const sourceMemo = memos[source.index];
+            
+            const newMemos = [
+                ...tempMemos.slice(0, destination.index),
+                sourceMemo,
+                ...tempMemos.slice(destination.index)
+            ];
+
+            client.writeFragment({
+                id: `MemoGroup:${destination.droppableId}`,
+                fragment: gql`
+                    fragment VerifiedMemoGroup on MemoGroup {
+                        memos {
+                            __typename
+                            id
+                            content
+                        }
+                    }
+                `,
+                data: {
+                    memos: newMemos,
+                },
+            });
+        } else {
+            // diff group
+            let sourceMemos = groups.find((group) => group.id === Number(source.droppableId))?.memos;
+            let destinationMemos = groups.find((group) => group.id === Number(destination.droppableId))?.memos;
+            if (!sourceMemos || !destinationMemos) { return; }
+
+            const sourceMemo = sourceMemos[source.index];
+            sourceMemos = sourceMemos.filter((_, index) => index !== source.index);
+            destinationMemos = [
+                ...destinationMemos.slice(0, destination.index),
+                sourceMemo,
+                ...destinationMemos.slice(destination.index)
+            ];
+
+            
+            client.writeFragment({
+                id: `MemoGroup:${source.droppableId}`,
+                fragment: gql`
+                    fragment VerifiedMemoGroup on MemoGroup {
+                        memos {
+                            __typename
+                            id
+                            content
+                        }
+                    }
+                `,
+                data: {
+                    memos: sourceMemos,
+                },
+            });
+
+            client.writeFragment({
+                id: `MemoGroup:${destination.droppableId}`,
+                fragment: gql`
+                    fragment VerifiedMemoGroup on MemoGroup {
+                        memos {
+                            __typename
+                            id
+                            content
+                        }
+                    }
+                `,
+                data: {
+                    memos: destinationMemos,
+                },
+            });
+        }
+
+        //if (de)
+        /*
+        
         if (!groups) return;
-
-        const { destination, source } = result;
-        const sourceMemos = groups.find((group) => group.id === Number(source.droppableId))?.memos;
+        
+        
+        const sourceMemos = groups.find((group, index) => index === Number(source.droppableId))?.memos;
 
         if (!sourceMemos) return;
         const sourceMemo = sourceMemos[source.index];
@@ -113,11 +199,13 @@ export const Main = () => {
                 ...tempMemos.slice(destination.index)
             ];
             
+            
             const req:number[] = [];
             newMemos.map((memo) => {
                 req.push(memo.id);
             });
             
+              
             rangeMemoMutation({
                 variables: {
                     rangeMemoInput: {
@@ -160,6 +248,7 @@ export const Main = () => {
                 }
             });
         }
+        */
     };
 
     return (                  
@@ -169,7 +258,7 @@ export const Main = () => {
                 !loading && 
                 <div className="memo-board">
                     {
-                        groups?.map((group, index) => (                            
+                        myMemoData?.myMemos.groups?.map((group, index) => (                            
                             <MemoGroup key={group.id}>                                
                                 <GroupTitle>{group.title}</GroupTitle>
                                 
