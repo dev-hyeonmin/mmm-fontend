@@ -1,9 +1,10 @@
-import { gql, useApolloClient, useMutation, useQuery } from "@apollo/client";
+import { ApolloCache, gql, InMemoryCache, useApolloClient, useMutation, useQuery } from "@apollo/client";
 import styled from "styled-components";
 import { DragDropContext, Droppable, Draggable, DropResult } from "react-beautiful-dnd";
 import { editMemoMutation, editMemoMutationVariables } from "../__generated__/editMemoMutation";
 import { rangeMemoMutation, rangeMemoMutationVariables } from "../__generated__/rangeMemoMutation";
-import { myMemosQuery, myMemosQuery_myMemos } from "../__generated__/myMemosQuery";
+import { myMemosQuery, myMemosQuery_myMemos, myMemosQuery_myMemos_groups } from "../__generated__/myMemosQuery";
+import { useState } from "react";
 
 const MYMEMOS_QUERY = gql`
     query myMemosQuery {
@@ -76,21 +77,14 @@ const Memo = styled.div`
 
 export const Main = () => {
     const client = useApolloClient();
-    const onCompleted = ({ editMemo: { ok } }: editMemoMutation) => {
-        
-    };
-    const onRangeCompleted = ( data: rangeMemoMutation) => {
-        refetch();
-    };
+    //const [groups, setGroups] = useState<myMemosQuery_myMemos_groups[]>();
 
     const { data: myMemoData, loading, refetch } = useQuery<myMemosQuery, myMemosQuery_myMemos>(MYMEMOS_QUERY);
-    const [editMemoMutation, { data: editMemoMutationResult, loading: editMemoLoadaing }] = useMutation<editMemoMutation, editMemoMutationVariables>(EDITMEMO_MUTATION, {
-        onCompleted
-    });
+    const [editMemoMutation, { }] = useMutation<editMemoMutation, editMemoMutationVariables>(EDITMEMO_MUTATION);
     const [rangeMemoMutation, { }] = useMutation<rangeMemoMutation, rangeMemoMutationVariables>(RANGEMEMO_MUTATION, {
-        onCompleted: onRangeCompleted
-    });
-      
+        onCompleted: () => { refetch(); }
+    });    
+    
     const onDragEnd = (result: DropResult) => {
         console.log(result);
 
@@ -129,10 +123,23 @@ export const Main = () => {
                     memos: newMemos,
                 },
             });
+
+            const memoIds:number[] = [];
+            newMemos.map((memo) => {
+                memoIds.push(memo.id);
+            });
+            rangeMemoMutation({
+                variables: {
+                    rangeMemoInput: {
+                        memoIds
+                    }
+                }
+            });
         } else {
             // diff group
             let sourceMemos = groups.find((group) => group.id === Number(source.droppableId))?.memos;
             let destinationMemos = groups.find((group) => group.id === Number(destination.droppableId))?.memos;
+            const destinationGroupId = Number(destination?.droppableId);
             if (!sourceMemos || !destinationMemos) { return; }
 
             const sourceMemo = sourceMemos[source.index];
@@ -143,8 +150,58 @@ export const Main = () => {
                 ...destinationMemos.slice(destination.index)
             ];
 
+            /*const temp: any = sourceMemos;
+            const cache = new InMemoryCache({
+                typePolicies: {
+                    MemoGroup: {
+                        fields: {
+                            memos: {
+                                merge(existing = [], incoming: any[]) {
+                                    console.log(existing);
+                                return [...existing, ...incoming];
+                                },
+                            },
+                        },
+                    },
+                },
+            });
+            cache.modify({
+                id: `MemoGroup:${source.droppableId}`,
+                fields: {
+                    memos: temp
+                }
+            });*/
+
+            const newGroups = JSON.parse(JSON.stringify(myMemoData));
+            newGroups.myMemos.groups[0].memos = sourceMemos;
+            newGroups.myMemos.groups[1].memos = destinationMemos;
+            client.writeQuery({
+                query: MYMEMOS_QUERY,
+                data:newGroups
+            });
+
+            const memoIds:number[] = [];
+            destinationMemos.map((memo) => {
+                memoIds.push(memo.id);
+            });
             
-            client.writeFragment({
+            editMemoMutation({
+                variables: {
+                    editMemoInput: {
+                        id: sourceMemo.id,
+                        groupId: destinationGroupId
+                    }
+                }
+            });
+
+            rangeMemoMutation({
+                variables: {
+                    rangeMemoInput: {
+                        memoIds
+                    }
+                }
+            });
+            /*client.writeFragment({
                 id: `MemoGroup:${source.droppableId}`,
                 fragment: gql`
                     fragment VerifiedMemoGroup on MemoGroup {
@@ -175,6 +232,8 @@ export const Main = () => {
                     memos: destinationMemos,
                 },
             });
+            console.log(groups);
+            */
         }
 
         //if (de)
@@ -252,46 +311,41 @@ export const Main = () => {
     };
 
     return (                  
-        <div className="wrapper-memo">
-            <DragDropContext onDragEnd={onDragEnd}>
-            {
-                !loading && 
-                <div className="memo-board">
-                    {
-                        myMemoData?.myMemos.groups?.map((group, index) => (                            
+        <div className="wrapper-memo">        
+            { !loading && 
+
+                    <DragDropContext onDragEnd={onDragEnd}>
+                        { myMemoData?.myMemos.groups?.map((group, index) => (                            
                             <MemoGroup key={group.id}>                                
                                 <GroupTitle>{group.title}</GroupTitle>
                                 
-                                <Droppable droppableId={"" + group.id} key={index}>
-                                    {(droppableProvided) => (
-                                        <div ref={droppableProvided.innerRef}>
-                                            {
-                                                group.memos?.map((memo, index1) => (
-                                                    <Draggable draggableId={"memo" + memo.id} index={index1} key={index1}>
-                                                        {(provided, snapshot) =>
-                                                            <div
-                                                                ref={provided.innerRef}
-                                                            {...provided.draggableProps}
-                                                            {...provided.dragHandleProps}
-                                                          >
-                                                            <Memo key={memo.id} ref={provided.innerRef}>
-                                                                    {memo.content}
-                                                                    {droppableProvided.placeholder}
-                                                                </Memo>
-                                                            </div>
-                                                        }
-                                                    </Draggable>
-                                                ))
-                                            }
+                                <Droppable droppableId={"" + group.id}>
+                                    {(provided, snapshot) => (
+                                        <div
+                                            {...provided.droppableProps}
+                                            ref={provided.innerRef}
+                                        >
+                                            {provided.placeholder}
+                                            {group.memos?.map( (memo, index1) => (
+                                                <Draggable key={memo.id} draggableId={"memo" + memo.id} index={index1}>
+                                                    {(provided, snapshot) => (
+                                                        <Memo
+                                                        ref={provided.innerRef}
+                                                        {...provided.draggableProps}
+                                                        {...provided.dragHandleProps}                                                        
+                                                        >
+                                                            {memo.content}
+                                                        </Memo>
+                                                    )}                                                    
+                                                </Draggable>
+                                            ))}
                                         </div>
                                     )}                                
                                 </Droppable>
                            </MemoGroup>
-                        ))
-                    }
-                </div>
+                        ))}
+                    </DragDropContext>
             }
-            </DragDropContext>
         </div>
     );
 };
