@@ -86,7 +86,7 @@ export const Main = () => {
     });    
     
     const onDragEnd = (result: DropResult) => {
-        console.log(result);
+        //console.log(result);
 
         const groups = myMemoData?.myMemos.groups;
         const { source, destination } = result;
@@ -149,35 +149,14 @@ export const Main = () => {
                 sourceMemo,
                 ...destinationMemos.slice(destination.index)
             ];
-
-            /*const temp: any = sourceMemos;
-            const cache = new InMemoryCache({
-                typePolicies: {
-                    MemoGroup: {
-                        fields: {
-                            memos: {
-                                merge(existing = [], incoming: any[]) {
-                                    console.log(existing);
-                                return [...existing, ...incoming];
-                                },
-                            },
-                        },
-                    },
-                },
-            });
-            cache.modify({
-                id: `MemoGroup:${source.droppableId}`,
+       
+            client.cache.modify({
+                id: client.cache.identify({ __typename: "MemoGroup", ID: source.droppableId }),
                 fields: {
-                    memos: temp
+                    memos: () => {
+                        return;
+                    }
                 }
-            });*/
-
-            const newGroups = JSON.parse(JSON.stringify(myMemoData));
-            newGroups.myMemos.groups[0].memos = sourceMemos;
-            newGroups.myMemos.groups[1].memos = destinationMemos;
-            client.writeQuery({
-                query: MYMEMOS_QUERY,
-                data:newGroups
             });
 
             const memoIds:number[] = [];
@@ -201,113 +180,8 @@ export const Main = () => {
                     }
                 }
             });
-            /*client.writeFragment({
-                id: `MemoGroup:${source.droppableId}`,
-                fragment: gql`
-                    fragment VerifiedMemoGroup on MemoGroup {
-                        memos {
-                            __typename
-                            id
-                            content
-                        }
-                    }
-                `,
-                data: {
-                    memos: sourceMemos,
-                },
-            });
 
-            client.writeFragment({
-                id: `MemoGroup:${destination.droppableId}`,
-                fragment: gql`
-                    fragment VerifiedMemoGroup on MemoGroup {
-                        memos {
-                            __typename
-                            id
-                            content
-                        }
-                    }
-                `,
-                data: {
-                    memos: destinationMemos,
-                },
-            });
-            console.log(groups);
-            */
         }
-
-        //if (de)
-        /*
-        
-        if (!groups) return;
-        
-        
-        const sourceMemos = groups.find((group, index) => index === Number(source.droppableId))?.memos;
-
-        if (!sourceMemos) return;
-        const sourceMemo = sourceMemos[source.index];
-
-        if (destination?.droppableId === source.droppableId) {
-            // same group
-            if (source.index === destination.index) { return; }
-
-            const tempMemos = sourceMemos.filter((memo, index) => index !== source.index);
-            const newMemos = [
-                ...tempMemos.slice(0, destination.index),
-                sourceMemo,
-                ...tempMemos.slice(destination.index)
-            ];
-            
-            
-            const req:number[] = [];
-            newMemos.map((memo) => {
-                req.push(memo.id);
-            });
-            
-              
-            rangeMemoMutation({
-                variables: {
-                    rangeMemoInput: {
-                        memoIds: req
-                    }
-                }
-            });
-        } else {
-            // move group
-            const destinationMemos = groups.find((group) => group.id === Number(destination?.droppableId))?.memos;
-            const destinationGroupId = Number(destination?.droppableId);
-            if (!destinationMemos) { return; }
-            if (!destination) { return; }
-
-            const newMemos = [
-                ...destinationMemos.slice(0, destination?.index),
-                {...sourceMemo},
-                ...destinationMemos.slice(destination?.index )
-            ];
-            
-            const req:number[] = [];
-            newMemos.map((memo) => {
-                req.push(memo.id);
-            });
-            
-            editMemoMutation({
-                variables: {
-                    editMemoInput: {
-                        id: sourceMemo.id,
-                        groupId: destinationGroupId
-                    }
-                }
-            });
-
-            rangeMemoMutation({
-                variables: {
-                    rangeMemoInput: {
-                        memoIds: req
-                    }
-                }
-            });
-        }
-        */
     };
 
     return (                  
