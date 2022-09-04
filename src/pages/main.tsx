@@ -1,10 +1,9 @@
-import { ApolloCache, gql, InMemoryCache, useApolloClient, useMutation, useQuery } from "@apollo/client";
-import styled from "styled-components";
-import { DragDropContext, Droppable, Draggable, DropResult } from "react-beautiful-dnd";
+import { gql, useApolloClient, useMutation, useQuery } from "@apollo/client";
+import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import { editMemoMutation, editMemoMutationVariables } from "../__generated__/editMemoMutation";
 import { rangeMemoMutation, rangeMemoMutationVariables } from "../__generated__/rangeMemoMutation";
-import { myMemosQuery, myMemosQuery_myMemos, myMemosQuery_myMemos_groups } from "../__generated__/myMemosQuery";
-import { useState } from "react";
+import { myMemosQuery, myMemosQuery_myMemos } from "../__generated__/myMemosQuery";
+import { MemoGroup } from "../components/memo-group";
 
 const MYMEMOS_QUERY = gql`
     query myMemosQuery {
@@ -47,33 +46,6 @@ export interface IRangeMemoMutationInput {
     orderby: number;
     groupId?: number;
 }
-
-const MemoGroup = styled.div`
-    max-width: 20%;
-    width: 25%;    
-
-    &:nth-child(n+2) {
-        margin-left: 20px;
-    }
-`;
-
-const GroupTitle = styled.div`
-    padding-bottom: 10px;
-    font-size: 18px;
-    font-weight: 500;
-`;
-
-const Memo = styled.div`
-    border: 1px solid #ededed;
-    border-radius: 5px;
-    width: 100%;
-    min-height: 120px;
-    padding: 10px;
-
-    &:nth-child(n+2) {
-        margin-top: 10px;
-    }
-`;
 
 export const Main = () => {
     const client = useApolloClient();
@@ -180,45 +152,20 @@ export const Main = () => {
                     }
                 }
             });
-
         }
     };
 
     return (                  
         <div className="wrapper-memo">        
             { !loading && 
-
-                    <DragDropContext onDragEnd={onDragEnd}>
-                        { myMemoData?.myMemos.groups?.map((group, index) => (                            
-                            <MemoGroup key={group.id}>                                
-                                <GroupTitle>{group.title}</GroupTitle>
-                                
-                                <Droppable droppableId={"" + group.id}>
-                                    {(provided, snapshot) => (
-                                        <div
-                                            {...provided.droppableProps}
-                                            ref={provided.innerRef}
-                                        >
-                                            {provided.placeholder}
-                                            {group.memos?.map( (memo, index1) => (
-                                                <Draggable key={memo.id} draggableId={"memo" + memo.id} index={index1}>
-                                                    {(provided, snapshot) => (
-                                                        <Memo
-                                                        ref={provided.innerRef}
-                                                        {...provided.draggableProps}
-                                                        {...provided.dragHandleProps}                                                        
-                                                        >
-                                                            {memo.content}
-                                                        </Memo>
-                                                    )}                                                    
-                                                </Draggable>
-                                            ))}
-                                        </div>
-                                    )}                                
-                                </Droppable>
-                           </MemoGroup>
-                        ))}
-                    </DragDropContext>
+                <DragDropContext onDragEnd={onDragEnd}>
+                    { myMemoData?.myMemos.groups?.map((group, index) => (                            
+                        <MemoGroup
+                            key={index}
+                            group={group}
+                        />
+                    ))}
+                </DragDropContext>
             }
         </div>
     );

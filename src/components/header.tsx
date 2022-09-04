@@ -1,8 +1,39 @@
 import { authTokenVar, isLoggedInVar } from "../apollo";
 import { LOCALSTORAGE_TOKEN } from "../constants";
 import { useMe } from "../hooks/useMe";
+import styled from "styled-components";
 
-export const Header = () => {
+const Header = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    line-height: 50px;
+    border-bottom: 1px solid #eee;
+    padding: 0 50px;
+    box-sizing: border-box;
+`;
+
+const Logo = styled.span`
+    font-size: 22px;
+    font-weight: 500;
+`;
+
+const Logout = styled.button`
+    line-height: 30px;
+    padding: 0 15px;
+    background-color: #7A4495;
+    color: #fff;
+    border-radius: 20px;
+`;
+
+const VerifiedMemo = styled.div`
+    background-color: #C9BBCF;
+    color: #fff;
+    text-align: center;
+    line-height: 30px;
+`;
+
+export const Headers = () => {
     const { data: userData } = useMe();    
 
     const logout = () => {
@@ -10,15 +41,17 @@ export const Header = () => {
         isLoggedInVar(false);
         authTokenVar('');
     };
-    return (
-        <div>
-            <button onClick={logout}>Logout</button>
 
+    return (
+        <>
             {!userData?.me.verified &&
-                <div className="tag-verifiy_email">
-                    ✉️&nbsp;&nbsp;Please verify your email.
-                </div>
+                <VerifiedMemo>✉️&nbsp;&nbsp;Please verify your email.</VerifiedMemo>
             }
-        </div>
+
+            <Header>
+                <Logo>m._.m</Logo>
+                <Logout onClick={logout}>Logout</Logout>
+            </Header>
+        </>
     );
 }
