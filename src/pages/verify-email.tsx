@@ -40,7 +40,7 @@ export const VerifyEmail = () => {
     });
 
     useEffect(() => {
-        const [_, code] = window.location.href.split("code=");
+        const [, code] = window.location.href.split("code=");
         verfiyEmail({
             variables: {
                 verifyEmailInput: {

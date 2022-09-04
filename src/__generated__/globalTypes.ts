@@ -13,6 +13,11 @@ export interface CreateAccountInput {
   password: string;
 }
 
+export interface EditMemoGroupInput {
+  id: number;
+  title: string;
+}
+
 export interface EditMemoInput {
   id: number;
   content?: string | null;
@@ -25,8 +30,14 @@ export interface LoginInput {
   password: string;
 }
 
-export interface RangeMemoInput {
-  memoIds?: number[] | null;
+export interface MemoType {
+  id: number;
+  content: string;
+  orderby: number;
+}
+
+export interface SortMemoInput {
+  memos?: MemoType[] | null;
 }
 
 export interface VerifyEmailInput {

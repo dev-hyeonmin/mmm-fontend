@@ -18,7 +18,9 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "noUnusedParameters": false, // 함수 인자
+    "noUnusedLocals": false, // 사용하지 않는 변수
   },
   "include": [
     "src"

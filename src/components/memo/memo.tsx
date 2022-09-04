@@ -7,7 +7,6 @@ interface IMemoProps {
     content: string;
 }
 
-
 const CMemo = styled.div`
     border: 1px solid #ededed;
     border-radius: 7px;
@@ -18,10 +17,6 @@ const CMemo = styled.div`
     background-color: #fff;
     color: #2e3238;
     box-shadow: 0px 1px 10px rgba(153, 161, 173,0.05);
-
-    &:nth-child(n+2) {
-        margin-top: 5px;
-    }
 `;
 
 export const Memo: React.FC<IMemoProps> = ({provided, content}) => {

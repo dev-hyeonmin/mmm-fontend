@@ -1,9 +1,11 @@
 import { gql, useApolloClient, useMutation, useQuery } from "@apollo/client";
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import { editMemoMutation, editMemoMutationVariables } from "../__generated__/editMemoMutation";
-import { rangeMemoMutation, rangeMemoMutationVariables } from "../__generated__/rangeMemoMutation";
-import { myMemosQuery, myMemosQuery_myMemos } from "../__generated__/myMemosQuery";
-import { MemoGroup } from "../components/memo-group";
+import { myMemosQuery, myMemosQuery_myMemos, myMemosQuery_myMemos_groups_memos } from "../__generated__/myMemosQuery";
+import { MemoGroup } from "../components/memo/memo-group";
+import { sortMemoMutation, sortMemoMutationVariables } from "../__generated__/sortMemoMutation";
+import { MemoType } from "../__generated__/globalTypes";
+import { EmptyGroup } from "../components/memo/empty-group";
 
 const MYMEMOS_QUERY = gql`
     query myMemosQuery {
@@ -31,9 +33,9 @@ const EDITMEMO_MUTATION = gql`
     }
 `;
 
-const RANGEMEMO_MUTATION = gql`
-    mutation rangeMemoMutation ($rangeMemoInput: RangeMemoInput!) {
-        rangeMemo (input: $rangeMemoInput) {
+const SORTEMEMO_MUTATION = gql`
+    mutation sortMemoMutation ($sortMemoInput: SortMemoInput!) {
+        sortMemo (input: $sortMemoInput) {
             ok
             error
         }
@@ -49,70 +51,84 @@ export interface IRangeMemoMutationInput {
 
 export const Main = () => {
     const client = useApolloClient();
-    //const [groups, setGroups] = useState<myMemosQuery_myMemos_groups[]>();
+    const { data: myMemoData, loading } = useQuery<myMemosQuery, myMemosQuery_myMemos>(MYMEMOS_QUERY);
+    const [editMemoMutation] = useMutation<editMemoMutation, editMemoMutationVariables>(EDITMEMO_MUTATION);
+    const [sortMemoMutation] = useMutation<sortMemoMutation, sortMemoMutationVariables>(SORTEMEMO_MUTATION);    
+    
+    const reorder = (list: myMemosQuery_myMemos_groups_memos[], startIndex:number, endIndex: number) => {
+        const result = Array.from(list);
+        const [removed] = result.splice(startIndex, 1);
+        result.splice(endIndex, 0, removed);
+      
+        return result;
+    };
 
-    const { data: myMemoData, loading, refetch } = useQuery<myMemosQuery, myMemosQuery_myMemos>(MYMEMOS_QUERY);
-    const [editMemoMutation, { }] = useMutation<editMemoMutation, editMemoMutationVariables>(EDITMEMO_MUTATION);
-    const [rangeMemoMutation, { }] = useMutation<rangeMemoMutation, rangeMemoMutationVariables>(RANGEMEMO_MUTATION, {
-        onCompleted: () => { refetch(); }
-    });    
+    const writeSortMemoFragment = (id: string, memos: myMemosQuery_myMemos_groups_memos[]) => {
+        client.writeFragment({
+            id: `MemoGroup:${id}`,
+            fragment: gql`
+                fragment VerifiedMemoGroup on MemoGroup {
+                    memos {
+                        __typename
+                        id
+                        content
+                    }
+                }
+            `,
+            data: {
+                memos: memos,
+            },
+        });
+    };
+
+    const sortMemo = (memos: myMemosQuery_myMemos_groups_memos[]) => {
+        const reqMemos:MemoType[] = [];
+        memos.map((memo, index) => {
+            reqMemos.push({
+                id: memo.id,
+                content: memo.content,
+                orderby: index
+            })
+        });
+        sortMemoMutation({
+            variables: {
+                sortMemoInput: {
+                    memos: reqMemos
+                }
+            }
+        });
+    };
     
     const onDragEnd = (result: DropResult) => {
         //console.log(result);
-
         const groups = myMemoData?.myMemos.groups;
-        const { source, destination } = result;
 
-        if (!groups || !destination) { return; }
+        if (!groups) {
+            return;
+        }
+        if (!result.destination) {
+            return;
+        }
+
+        const { source, destination } = result;
+        let destinationMemos = groups.find((group) => group.id === Number(destination.droppableId))?.memos;
+        if (!destinationMemos) { return; }
 
         if (source.droppableId === destination.droppableId) {
             // same group
-            const group = groups.find((group) => group.id === Number(destination.droppableId));
-            const memos = group?.memos;
-            if (!memos) { return; }
-
-            const tempMemos = memos.filter((memo, index) => index != source.index);
-            const sourceMemo = memos[source.index];
+            const newMemos = reorder(
+                destinationMemos,
+                source.index,
+                destination.index
+            );
             
-            const newMemos = [
-                ...tempMemos.slice(0, destination.index),
-                sourceMemo,
-                ...tempMemos.slice(destination.index)
-            ];
-
-            client.writeFragment({
-                id: `MemoGroup:${destination.droppableId}`,
-                fragment: gql`
-                    fragment VerifiedMemoGroup on MemoGroup {
-                        memos {
-                            __typename
-                            id
-                            content
-                        }
-                    }
-                `,
-                data: {
-                    memos: newMemos,
-                },
-            });
-
-            const memoIds:number[] = [];
-            newMemos.map((memo) => {
-                memoIds.push(memo.id);
-            });
-            rangeMemoMutation({
-                variables: {
-                    rangeMemoInput: {
-                        memoIds
-                    }
-                }
-            });
+            writeSortMemoFragment(destination.droppableId, newMemos);
+            sortMemo(newMemos);
         } else {
             // diff group
-            let sourceMemos = groups.find((group) => group.id === Number(source.droppableId))?.memos;
-            let destinationMemos = groups.find((group) => group.id === Number(destination.droppableId))?.memos;
+            let sourceMemos = groups.find((group) => group.id === Number(source.droppableId))?.memos;            
             const destinationGroupId = Number(destination?.droppableId);
-            if (!sourceMemos || !destinationMemos) { return; }
+            if (!sourceMemos) { return; }
 
             const sourceMemo = sourceMemos[source.index];
             sourceMemos = sourceMemos.filter((_, index) => index !== source.index);
@@ -121,20 +137,9 @@ export const Main = () => {
                 sourceMemo,
                 ...destinationMemos.slice(destination.index)
             ];
-       
-            client.cache.modify({
-                id: client.cache.identify({ __typename: "MemoGroup", ID: source.droppableId }),
-                fields: {
-                    memos: () => {
-                        return;
-                    }
-                }
-            });
-
-            const memoIds:number[] = [];
-            destinationMemos.map((memo) => {
-                memoIds.push(memo.id);
-            });
+            
+            writeSortMemoFragment(source.droppableId, sourceMemos);
+            writeSortMemoFragment(destination.droppableId, destinationMemos);         
             
             editMemoMutation({
                 variables: {
@@ -144,20 +149,13 @@ export const Main = () => {
                     }
                 }
             });
-
-            rangeMemoMutation({
-                variables: {
-                    rangeMemoInput: {
-                        memoIds
-                    }
-                }
-            });
+            sortMemo(destinationMemos);
         }
     };
 
     return (                  
         <div className="wrapper-memo">        
-            { !loading && 
+            { (!loading && myMemoData?.myMemos.groups) && 
                 <DragDropContext onDragEnd={onDragEnd}>
                     { myMemoData?.myMemos.groups?.map((group, index) => (                            
                         <MemoGroup
@@ -165,6 +163,10 @@ export const Main = () => {
                             group={group}
                         />
                     ))}
+
+                    {myMemoData?.myMemos.groups?.length < 5 && (
+                        <EmptyGroup />
+                    )}
                 </DragDropContext>
             }
         </div>

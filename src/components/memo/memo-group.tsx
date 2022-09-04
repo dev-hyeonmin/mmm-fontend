@@ -1,12 +1,12 @@
-import { Draggable, DraggableProvided, Droppable } from "react-beautiful-dnd";
+import { Draggable, Droppable } from "react-beautiful-dnd";
 import styled from "styled-components";
-import { myMemosQuery_myMemos_groups } from "../__generated__/myMemosQuery";
+import { myMemosQuery_myMemos_groups } from "../../__generated__/myMemosQuery";
+import { GroupTitle } from "./group-title";
 import { Memo } from "./memo";
 
 interface IMemoGroupProps {
     group: myMemosQuery_myMemos_groups;
 }
-
 
 const CMemoGroup = styled.div`
     max-width: 20%;
@@ -18,26 +18,29 @@ const CMemoGroup = styled.div`
     &:nth-child(n+2) {
         margin-left: 20px;
     }
-`;
 
-const GroupTitle = styled.div`
-    padding: 22px 0;
-    font-size: 14px;
-    font-weight: 500;
+    * {
+        margin-bottom: 3px;
+    }
+
+    *:last-child {
+        margin-bottom: 3px;
+    }
 `;
 
 export const MemoGroup: React.FC<IMemoGroupProps> = ({ group }) => {
     return (
-        <CMemoGroup key={group.id}>                                
-            <GroupTitle>{group.title}</GroupTitle>
-            
+        <CMemoGroup key={group.id}>
+            <GroupTitle
+                groupId={group.id}
+                title={group.title}            
+            />
             <Droppable droppableId={"" + group.id}>
-                {(provided, snapshot) => (
+                {(provided) => (
                     <div
                         {...provided.droppableProps}
                         ref={provided.innerRef}
-                    >
-                        {provided.placeholder}
+                    >                        
                         {group.memos?.map( (memo, index1) => (
                             <Draggable key={memo.id} draggableId={"memo" + memo.id} index={index1}>
                                 {(provided) => (
@@ -49,6 +52,7 @@ export const MemoGroup: React.FC<IMemoGroupProps> = ({ group }) => {
                                 )}                                                    
                             </Draggable>
                         ))}
+                        {provided.placeholder}
                     </div>
                 )}                                
             </Droppable>

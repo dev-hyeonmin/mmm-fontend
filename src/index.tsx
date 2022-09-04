@@ -1,5 +1,4 @@
-import { ApolloClient, ApolloProvider } from '@apollo/client';
-import React from 'react';
+import { ApolloProvider } from '@apollo/client';
 import ReactDOM from 'react-dom/client';
 import { ThemeProvider } from 'styled-components';
 import { client } from './apollo';
@@ -10,7 +9,7 @@ import "./styles/styles.css";
 const theme = {
   colors: {
     dark: '#7A4495',
-    error: '#E84545'
+    error: '#C21010'
   }
 };
 
