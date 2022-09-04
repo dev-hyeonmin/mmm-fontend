@@ -1,33 +1,31 @@
 import styled from "styled-components";
 
+interface IEmptyGroupProps {
+    onClick: React.MouseEventHandler;
+}
+
 const CEmptyGroup = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
     max-width: 20%;
     width: 25%;        
-    background-color: rgb(234, 235, 239, 0.3);
+    background-color: rgba(234, 235, 239, 0.3);
     border: 1px dashed #bbb;
     border-radius: 7px;
     padding: 0 20px 20px 20px;
     margin-left: 20px;
     cursor: pointer;
 
-    span {
-        opacity: 0.5;
-    }
-
     &:hover {
-        span {
-            opacity: 1;
-        }
+        background-color: rgba(234, 235, 239, 0.6);
     }
 `;
 
-export const EmptyGroup = () => {
+export const EmptyGroup: React.FC<IEmptyGroupProps> = ({ onClick }) => {
     return (
-        <CEmptyGroup>
-            <span>Add Group ✅</span>
+        <CEmptyGroup onClick={onClick}>
+            Add Group ✅
         </CEmptyGroup>
     );
 }

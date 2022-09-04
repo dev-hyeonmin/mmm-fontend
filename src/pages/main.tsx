@@ -6,6 +6,9 @@ import { MemoGroup } from "../components/memo/memo-group";
 import { sortMemoMutation, sortMemoMutationVariables } from "../__generated__/sortMemoMutation";
 import { MemoType } from "../__generated__/globalTypes";
 import { EmptyGroup } from "../components/memo/empty-group";
+import { CREATEMEMOGROUP_MUTATION, DELETEMEMOGROUP_MUTATION, EDITMEMO_MUTATION, SORTEMEMO_MUTATION } from "../mutation";
+import { createMemoGroupMutation, createMemoGroupMutationVariables } from "../__generated__/createMemoGroupMutation";
+import { deleteMemoGroupMutation, deleteMemoGroupMutationVariables } from "../__generated__/deleteMemoGroupMutation";
 
 const MYMEMOS_QUERY = gql`
     query myMemosQuery {
@@ -24,24 +27,6 @@ const MYMEMOS_QUERY = gql`
     }
 `;
 
-const EDITMEMO_MUTATION = gql`
-    mutation editMemoMutation ($editMemoInput: EditMemoInput!) {
-        editMemo (input: $editMemoInput) {
-            ok
-            error
-        }
-    }
-`;
-
-const SORTEMEMO_MUTATION = gql`
-    mutation sortMemoMutation ($sortMemoInput: SortMemoInput!) {
-        sortMemo (input: $sortMemoInput) {
-            ok
-            error
-        }
-    }
-`;
-
 export interface IRangeMemoMutationInput {
     id: number;
     content: string;
@@ -51,9 +36,12 @@ export interface IRangeMemoMutationInput {
 
 export const Main = () => {
     const client = useApolloClient();
-    const { data: myMemoData, loading } = useQuery<myMemosQuery, myMemosQuery_myMemos>(MYMEMOS_QUERY);
+    const { data: myMemoData, loading, refetch } = useQuery<myMemosQuery, myMemosQuery_myMemos>(MYMEMOS_QUERY);
     const [editMemoMutation] = useMutation<editMemoMutation, editMemoMutationVariables>(EDITMEMO_MUTATION);
-    const [sortMemoMutation] = useMutation<sortMemoMutation, sortMemoMutationVariables>(SORTEMEMO_MUTATION);    
+    const [sortMemoMutation] = useMutation<sortMemoMutation, sortMemoMutationVariables>(SORTEMEMO_MUTATION);
+    const [createMemoGroupMutation] = useMutation<createMemoGroupMutation, createMemoGroupMutationVariables>(CREATEMEMOGROUP_MUTATION, {
+        onCompleted: () => { refetch(); }
+    });    
     
     const reorder = (list: myMemosQuery_myMemos_groups_memos[], startIndex:number, endIndex: number) => {
         const result = Array.from(list);
@@ -153,6 +141,16 @@ export const Main = () => {
         }
     };
 
+    const createMemoGroup = () => {
+        createMemoGroupMutation({
+            variables: {
+                createMemoGroupInput: {
+                    title: "new group!"
+                }
+            }
+        })
+    };   
+
     return (                  
         <div className="wrapper-memo">        
             { (!loading && myMemoData?.myMemos.groups) && 
@@ -165,7 +163,7 @@ export const Main = () => {
                     ))}
 
                     {myMemoData?.myMemos.groups?.length < 5 && (
-                        <EmptyGroup />
+                        <EmptyGroup onClick={createMemoGroup} />
                     )}
                 </DragDropContext>
             }

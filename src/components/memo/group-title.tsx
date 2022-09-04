@@ -9,7 +9,8 @@ import deleteImg from "../../images/delete.png";
 import addImg from "../../images/add.png";
 import { useState } from "react";
 import { editMemoGroupMutation, editMemoGroupMutationVariables } from "../../__generated__/editMemoGroupMutation";
-import { FormError } from "../form-error";
+import { DELETEMEMOGROUP_MUTATION } from "../../mutation";
+import { deleteMemoGroupMutation, deleteMemoGroupMutationVariables } from "../../__generated__/deleteMemoGroupMutation";
 
 
 interface IGroupTitleProps {
@@ -94,6 +95,7 @@ export const GroupTitle: React.FC<IGroupTitleProps> = ({ groupId, title: groupTi
     const [editMemoGroupMutations] = useMutation<editMemoGroupMutation, editMemoGroupMutationVariables>(EDITMEMOGROUP_MUTATION, {
         onCompleted
     });
+    const [deleteMemoGroupMutation] = useMutation<deleteMemoGroupMutation, deleteMemoGroupMutationVariables>(DELETEMEMOGROUP_MUTATION);
 
     const onChange = (event: any) => {
         setTitle(event.target.value);
@@ -116,6 +118,20 @@ export const GroupTitle: React.FC<IGroupTitleProps> = ({ groupId, title: groupTi
         });
     };
 
+    const deleteMemoGroup = () => {
+        if (!window.confirm('그룹 삭제시, 해당 그룹의 메모들도 함께 삭제됩니다.')) { return; }
+
+        deleteMemoGroupMutation({
+            variables: {
+                deleteMemoGroupInput: {
+                    id: groupId
+                }
+            }
+        });
+
+        client.cache.evict({ id: `MemoGroup:${groupId}` });
+    };
+    
     const toggleMenu = () => {
         setUseMemu((current) => { return !current});
     }
@@ -139,7 +155,7 @@ export const GroupTitle: React.FC<IGroupTitleProps> = ({ groupId, title: groupTi
 
             <Buttons active={useMemu}>
                 <MemoButton src={addImg} backgroundSize="14px"/>
-                <MemoButton src={deleteImg}/>
+                <MemoButton src={deleteImg} onClick={deleteMemoGroup} />
             </Buttons>
         </CGroupTitle>
     )

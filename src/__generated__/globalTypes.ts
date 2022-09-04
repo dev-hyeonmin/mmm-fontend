@@ -13,6 +13,14 @@ export interface CreateAccountInput {
   password: string;
 }
 
+export interface CreateMemoGroupInput {
+  title: string;
+}
+
+export interface DeleteMemoGroupInput {
+  id: number;
+}
+
 export interface EditMemoGroupInput {
   id: number;
   title: string;
