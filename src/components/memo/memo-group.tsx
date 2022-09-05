@@ -20,12 +20,12 @@ const CMemoGroup = styled.div`
         margin-left: 20px;
     }
 
-    * {
-        margin-bottom: 3px;
+    > * {
+        margin-top: 3px;
     }
 
-    *:last-child {
-        margin-bottom: 3px;
+    * {
+        outline: none;
     }
 `;
 
@@ -36,21 +36,22 @@ export const MemoGroup: React.FC<IMemoGroupProps> = ({ group }) => {
                 groupId={group.id}
                 title={group.title}            
             />
+            <MemoAddButton
+                groupId={group.id}
+            />
             <Droppable droppableId={"" + group.id}>
                 {(provided) => (
                     <div
                         {...provided.droppableProps}
                         ref={provided.innerRef}
-                    >     
-                        <MemoAddButton
-                            groupId={group.id}
-                        />
+                    >                             
                         {group.memos?.map( (memo, index1) => (
                             <Draggable key={memo.id} draggableId={"memo" + memo.id} index={index1}>
                                 {(provided) => (
                                     <Memo
                                         provided={provided}
-                                        content={memo.content}    
+                                        id={memo.id}
+                                        content={memo.content}
                                     >
                                     </Memo>
                                 )}                                                    

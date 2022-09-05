@@ -17,7 +17,7 @@ const CMemoButton = styled.button<IImgProps>`
     height: 30px;
     background-color: #fff;
     border: 1px solid #ddd;
-    border-radius: 3px;
+    border-radius: 7px;
     vertical-align: middle;
     background-image: url(${props=>props.src});
     background-size: ${props=>props.backgroundSize ? props=>props.backgroundSize : "18px"};

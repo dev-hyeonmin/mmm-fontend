@@ -16,6 +16,7 @@ const Button = styled.div`
     align-items: center;
     height: 30px;
     border: 1px dashed #bbb;
+    margin-bottom: 5px;
     cursor: pointer;
     background-color: rgba(255, 255, 255 ,0.6);
     background-image: url(${addImg});
@@ -59,8 +60,8 @@ export const MemoAddButton: React.FC<IMemoAddButtonProps> = ({ groupId }) => {
             `,
             data: {
                 memos: [
-                    ...currentMemos.memos,
-                    {__typename: "Memo", id: data.createMemo.id, content}
+                    {__typename: "Memo", id: data.createMemo.id, content},
+                    ...currentMemos.memos                    
                 ],
             },
         });

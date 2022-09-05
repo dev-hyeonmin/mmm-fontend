@@ -26,6 +26,10 @@ export interface DeleteMemoGroupInput {
   id: number;
 }
 
+export interface DeleteMemoInput {
+  id: number;
+}
+
 export interface EditMemoGroupInput {
   id: number;
   title: string;

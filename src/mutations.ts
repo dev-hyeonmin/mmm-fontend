@@ -37,6 +37,15 @@ export const EDITMEMO_MUTATION = gql`
     }
 `;
 
+export const DELETEMEMO_MUTATION = gql`
+    mutation deleteMemoMutation ($deleteMemoInput: DeleteMemoInput!) {
+        deleteMemo (input: $deleteMemoInput) {
+            ok
+            error
+        }
+    }
+`;
+
 export const SORTEMEMO_MUTATION = gql`
     mutation sortMemoMutation ($sortMemoInput: SortMemoInput!) {
         sortMemo (input: $sortMemoInput) {

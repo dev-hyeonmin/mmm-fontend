@@ -1,16 +1,16 @@
 import { gql, useApolloClient, useMutation } from "@apollo/client";
 import styled from "styled-components";
 import { MemoButton } from "./memo-button";
+import { useState } from "react";
+import { editMemoGroupMutation, editMemoGroupMutationVariables } from "../../__generated__/editMemoGroupMutation";
+import { DELETEMEMOGROUP_MUTATION } from "../../mutations";
+import { deleteMemoGroupMutation, deleteMemoGroupMutationVariables } from "../../__generated__/deleteMemoGroupMutation";
 // @ts-ignore
 import buttonImg from "../../images/menu.png";
 // @ts-ignore
 import deleteImg from "../../images/delete.png";
 // @ts-ignore
 import addImg from "../../images/add.png";
-import { useState } from "react";
-import { editMemoGroupMutation, editMemoGroupMutationVariables } from "../../__generated__/editMemoGroupMutation";
-import { DELETEMEMOGROUP_MUTATION } from "../../mutations";
-import { deleteMemoGroupMutation, deleteMemoGroupMutationVariables } from "../../__generated__/deleteMemoGroupMutation";
 
 
 interface IGroupTitleProps {
@@ -54,6 +54,7 @@ const Buttons = styled.div<IMenuStyledProps>`
     right: 0;
     display: ${props=>props.active ? "flex" : "none"};
     flex-direction: column;
+    z-index: 9;
 `;
 
 const TitleError = styled.div`
@@ -102,7 +103,7 @@ export const GroupTitle: React.FC<IGroupTitleProps> = ({ groupId, title: groupTi
     };
 
     const onKeyDown = (event: any) => {        
-        if (event.key == 'Enter') {
+        if (event.key === 'Enter') {
             editMemoTitle();
         }
     }
@@ -154,7 +155,6 @@ export const GroupTitle: React.FC<IGroupTitleProps> = ({ groupId, title: groupTi
             />
 
             <Buttons active={useMemu}>
-                <MemoButton src={addImg} backgroundSize="14px"/>
                 <MemoButton src={deleteImg} onClick={deleteMemoGroup} />
             </Buttons>
         </CGroupTitle>
