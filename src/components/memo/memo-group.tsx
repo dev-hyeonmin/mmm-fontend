@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { myMemosQuery_myMemos_groups } from "../../__generated__/myMemosQuery";
 import { GroupTitle } from "./group-title";
 import { Memo } from "./memo";
+import { MemoAddButton } from "./memo-add-button";
 
 interface IMemoGroupProps {
     group: myMemosQuery_myMemos_groups;
@@ -40,7 +41,10 @@ export const MemoGroup: React.FC<IMemoGroupProps> = ({ group }) => {
                     <div
                         {...provided.droppableProps}
                         ref={provided.innerRef}
-                    >                        
+                    >     
+                        <MemoAddButton
+                            groupId={group.id}
+                        />
                         {group.memos?.map( (memo, index1) => (
                             <Draggable key={memo.id} draggableId={"memo" + memo.id} index={index1}>
                                 {(provided) => (

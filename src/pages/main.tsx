@@ -6,9 +6,9 @@ import { MemoGroup } from "../components/memo/memo-group";
 import { sortMemoMutation, sortMemoMutationVariables } from "../__generated__/sortMemoMutation";
 import { MemoType } from "../__generated__/globalTypes";
 import { EmptyGroup } from "../components/memo/empty-group";
-import { CREATEMEMOGROUP_MUTATION, DELETEMEMOGROUP_MUTATION, EDITMEMO_MUTATION, SORTEMEMO_MUTATION } from "../mutation";
+import { CREATEMEMOGROUP_MUTATION, CREATEMEMO_MUTATION, DELETEMEMOGROUP_MUTATION, EDITMEMO_MUTATION, SORTEMEMO_MUTATION } from "../mutations";
 import { createMemoGroupMutation, createMemoGroupMutationVariables } from "../__generated__/createMemoGroupMutation";
-import { deleteMemoGroupMutation, deleteMemoGroupMutationVariables } from "../__generated__/deleteMemoGroupMutation";
+import { createMemoMutation, createMemoMutationVariables } from "../__generated__/createMemoMutation";
 
 const MYMEMOS_QUERY = gql`
     query myMemosQuery {
@@ -149,7 +149,7 @@ export const Main = () => {
                 }
             }
         })
-    };   
+    };    
 
     return (                  
         <div className="wrapper-memo">        

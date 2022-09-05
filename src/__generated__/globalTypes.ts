@@ -17,6 +17,11 @@ export interface CreateMemoGroupInput {
   title: string;
 }
 
+export interface CreateMemoInput {
+  content: string;
+  groupId: number;
+}
+
 export interface DeleteMemoGroupInput {
   id: number;
 }

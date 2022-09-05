@@ -9,7 +9,7 @@ import deleteImg from "../../images/delete.png";
 import addImg from "../../images/add.png";
 import { useState } from "react";
 import { editMemoGroupMutation, editMemoGroupMutationVariables } from "../../__generated__/editMemoGroupMutation";
-import { DELETEMEMOGROUP_MUTATION } from "../../mutation";
+import { DELETEMEMOGROUP_MUTATION } from "../../mutations";
 import { deleteMemoGroupMutation, deleteMemoGroupMutationVariables } from "../../__generated__/deleteMemoGroupMutation";
 
 
