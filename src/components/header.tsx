@@ -2,6 +2,7 @@ import { authTokenVar, isLoggedInVar } from "../apollo";
 import { LOCALSTORAGE_TOKEN } from "../constants";
 import { useMe } from "../hooks/useMe";
 import styled from "styled-components";
+import { useState } from "react";
 
 const Header = styled.div`
     display: flex;
@@ -33,13 +34,20 @@ const VerifiedMemo = styled.div`
     line-height: 30px;
 `;
 
+const Search = styled.input`
+    width: 130px;
+    margin-right: 10px;
+    font-size: 12px;
+`;
+
 export const Headers = () => {
     const { data: userData } = useMe();    
-
+    const [keyword, setKeyword] = useState('');
+    
     const logout = () => {
         localStorage.removeItem(LOCALSTORAGE_TOKEN);
         isLoggedInVar(false);
-        authTokenVar('');
+        authTokenVar('');   
     };
 
     return (
@@ -50,7 +58,11 @@ export const Headers = () => {
 
             <Header>
                 <Logo>m._.m</Logo>
-                <Logout onClick={logout}>Logout</Logout>
+
+                <div>
+                    <Search placeholder="search memo"/>
+                    <Logout onClick={logout}>Logout</Logout>
+                </div>
             </Header>
         </>
     );

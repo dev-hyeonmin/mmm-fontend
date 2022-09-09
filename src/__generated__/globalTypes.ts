@@ -36,10 +36,11 @@ export interface EditMemoGroupInput {
 }
 
 export interface EditMemoInput {
-  id: number;
+  id?: number | null;
   content?: string | null;
-  groupId?: number | null;
   orderby?: number | null;
+  color?: string | null;
+  groupId?: number | null;
 }
 
 export interface LoginInput {
@@ -51,6 +52,11 @@ export interface MemoType {
   id: number;
   content: string;
   orderby: number;
+  color?: string | null;
+}
+
+export interface MyMemosInput {
+  keyword?: string | null;
 }
 
 export interface SortMemoInput {

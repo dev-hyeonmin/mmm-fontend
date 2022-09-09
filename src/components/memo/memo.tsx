@@ -6,19 +6,31 @@ import styled from "styled-components";
 import { DELETEMEMO_MUTATION, EDITMEMO_MUTATION } from "../../mutations";
 import { editMemoMutation, editMemoMutationVariables } from "../../__generated__/editMemoMutation";
 import { MemoButton } from "./memo-button";
-// @ts-ignore
-import deleteImg from "../../images/delete-memo.png";
 import { deleteMemoMutation, deleteMemoMutationVariables } from "../../__generated__/deleteMemoMutation";
 import { client } from "../../apollo";
+// @ts-ignore
+import menuImg from "../../images/menu.png";
+// @ts-ignore
+import deleteImg from "../../images/delete.png";
+// @ts-ignore
+import paletteImg from "../../images/color-palette.png";
+import { myMemosQuery_myMemos_groups_memos } from "../../__generated__/myMemosQuery";
 
 interface IMemoProps {
     children: never[];
     provided: DraggableProvided;
-    id: number;
-    content: string;
+    memo: myMemosQuery_myMemos_groups_memos;
 }
 
-const CMemo = styled.div`
+interface ICMemoProps {
+    backgroundColor?: string;
+}
+interface IPaletteProps {
+    backgroundColor?: string;
+    onClick?: any
+}
+
+const CMemo = styled.div<ICMemoProps>`
     position: relative;
     width: 100%;
     line-height: 18px;
@@ -26,23 +38,22 @@ const CMemo = styled.div`
     border-radius: 7px;
     font-size: 14px;
     padding: 20px 15px;
-    background-color: #fff;
+    background-color: ${props=>props.backgroundColor ? props=>props.backgroundColor : "#000000"};
     color: #2e3238;
     box-shadow: 0px 1px 10px rgba(153, 161, 173,0.05);
     white-space: pre-wrap;
 
-    button {
+    .memo-menu {
         position: absolute;
         top: 8px;
         right: 8px;
-        width: 20px;
-        height: 20px;
-        opacity: 0;
-        transition: opacity 0.2s ease;
-    }
+        display: flex;
 
-    &:hover button {
-        opacity: 1;
+        button {        
+            width: 22px;
+            height: 22px;
+            margin-left: 1px;
+        }
     }
 
     textarea {
@@ -60,21 +71,46 @@ const CMemo = styled.div`
     }
 `;
 
-export const Memo: React.FC<IMemoProps> = ({ provided, id, content: currentContent }) => {
+const Palette = styled.ul`
+    position: absolute;
+    top: 25px;
+    right: 0;
+    width: -webkit-fill-available;
+    z-index: 9;
+`;
+
+const PaletteColor = styled.li<IPaletteProps>`
+    float: left;
+    width: 15px;
+    height: 15px;
+    border-radius: 8px;
+    background-color: ${props=>props.backgroundColor ? props=>props.backgroundColor : "#000000"};
+    margin: 0 0 2px 2px;
+    cursor: pointer;
+    border: 1px solid #bbb;
+`;
+
+export const Memo: React.FC<IMemoProps> = ({ provided, memo }) => {
+    const palette = ["#B7C4CF", "#FFDBA4", "#F2D7D9", "#D3CEDF", "#A2B38B", "#ECB390" ,"#F9F3EE", "#FFFFFF"];
     const [editMode, setEditMode] = useState(false);
-    const [content, setContent] = useState(currentContent);
+    const [useMenu, setUseMenu] = useState(false);
+    const [usePalette, setUsePalette] = useState(false);
+    const [content, setContent] = useState(memo.content);
+    const [memoColor, setMemoColor] = useState(memo.color);
     const onCompleted = () => {
         setEditMode(false);
 
         client.writeFragment({
-            id: `Memo:${id}`,
+            id: `Memo:${memo.id}`,
             fragment: gql`
                 fragment editMemo on Memo {
                     content
+                    color
                 }
             `,
             data: {
-                content
+                content,
+                color: memoColor
             },
         });
     }
@@ -82,7 +118,7 @@ export const Memo: React.FC<IMemoProps> = ({ provided, id, content: currentConte
         const { deleteMemo: { ok } } = data;
 
         if (ok) {
-            client.cache.evict({ id: `Memo:${id}` });
+            client.cache.evict({ id: `Memo:${memo.id}` });
         }
     }
     const [editMemoMutation] = useMutation<editMemoMutation, editMemoMutationVariables>(EDITMEMO_MUTATION, {
@@ -103,9 +139,10 @@ export const Memo: React.FC<IMemoProps> = ({ provided, id, content: currentConte
     const onKeyDown = (event: any) => {
         if (event.ctrlKey === true && event.key === 'Enter') {
             // enter line 
-            setContent((currentContent) => `${currentContent}\n`)
+            setContent((currentContent) => `${currentContent}\n`);
         } else if (event.key === 'Enter') {
             editMemo();
+            return;
         }
     }
 
@@ -113,8 +150,8 @@ export const Memo: React.FC<IMemoProps> = ({ provided, id, content: currentConte
         editMemoMutation({
             variables: {
                 editMemoInput: {
-                    id,
-                    content: content.replace(/(?:\r\n|\r|\n)/g, '<br/>')
+                    id: memo.id,
+                    content: content.replace(/(?:\r\n|\r|\n)/g, '<br/>'),  
                 }
             }
         });
@@ -135,23 +172,76 @@ export const Memo: React.FC<IMemoProps> = ({ provided, id, content: currentConte
         deleteMemoMutation({
             variables: {
                 deleteMemoInput: {
-                    id
+                    id: memo.id
                 }
             }
         });
     };
     
+    const toggleMenu = () => {
+        setUseMenu((current) => !current);        
+    };
+
+    const togglePalette = () => {
+        setUsePalette((current) => !current);
+    };
+
+    const setPickColor = (selectColor: string) => {
+        setMemoColor(selectColor);
+        
+        editMemoMutation({
+            variables: {
+                editMemoInput: {
+                    id: memo.id,
+                    content: content.replace(/(?:\r\n|\r|\n)/g, '<br/>'),
+                    color: selectColor   
+                }
+            }
+        });
+    };
+
     return (
         <CMemo
             ref={provided.innerRef}
             {...provided.draggableProps}
             {...provided.dragHandleProps}
+            backgroundColor={memoColor ? memoColor : "#FFFFFF"}
         >
-            <MemoButton
-                onClick={deleteMemo}
-                src={deleteImg}
-                backgroundSize="8px"
-            />
+            <div className="memo-menu">
+                {useMenu &&
+                <>
+                    <MemoButton
+                    onClick={togglePalette}
+                    src={paletteImg}
+                    backgroundSize="14px"
+                    />
+                        
+                    <MemoButton
+                    onClick={deleteMemo}
+                    src={deleteImg}
+                    backgroundSize="14px"
+                    />
+                    {usePalette &&
+                        <Palette>
+                            {palette.map((color) =>
+                                <PaletteColor
+                                    key={color}
+                                    backgroundColor={color}
+                                    onClick={() => setPickColor(color)}
+                                />
+                            )}
+                        </Palette>
+                    }
+                </>
+                }
+
+                <MemoButton
+                    onClick={toggleMenu}
+                    src={menuImg}
+                    backgroundSize="10px"
+                />
+            </div>
+            
             {!editMode && <div onClick={onEdit}>{content.replaceAll('<br/>', '\n')}</div> }
             { editMode &&
                 <ReactTextareaAutosize

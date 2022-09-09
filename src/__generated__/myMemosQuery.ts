@@ -3,6 +3,8 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
+import { MyMemosInput } from "./globalTypes";
+
 // ====================================================
 // GraphQL query operation: myMemosQuery
 // ====================================================
@@ -11,6 +13,7 @@ export interface myMemosQuery_myMemos_groups_memos {
   __typename: "Memo";
   id: number;
   content: string;
+  color: string | null;
 }
 
 export interface myMemosQuery_myMemos_groups {
@@ -29,4 +32,8 @@ export interface myMemosQuery_myMemos {
 
 export interface myMemosQuery {
   myMemos: myMemosQuery_myMemos;
+}
+
+export interface myMemosQueryVariables {
+  myMemosInput?: MyMemosInput | null;
 }

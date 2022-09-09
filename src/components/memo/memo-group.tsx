@@ -50,8 +50,7 @@ export const MemoGroup: React.FC<IMemoGroupProps> = ({ group }) => {
                                 {(provided) => (
                                     <Memo
                                         provided={provided}
-                                        id={memo.id}
-                                        content={memo.content}
+                                        memo={memo}
                                     >
                                     </Memo>
                                 )}                                                    

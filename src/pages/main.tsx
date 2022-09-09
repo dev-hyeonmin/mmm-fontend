@@ -6,13 +6,13 @@ import { MemoGroup } from "../components/memo/memo-group";
 import { sortMemoMutation, sortMemoMutationVariables } from "../__generated__/sortMemoMutation";
 import { MemoType } from "../__generated__/globalTypes";
 import { EmptyGroup } from "../components/memo/empty-group";
-import { CREATEMEMOGROUP_MUTATION, CREATEMEMO_MUTATION, DELETEMEMOGROUP_MUTATION, EDITMEMO_MUTATION, SORTEMEMO_MUTATION } from "../mutations";
+import { CREATEMEMOGROUP_MUTATION, EDITMEMO_MUTATION, SORTEMEMO_MUTATION } from "../mutations";
 import { createMemoGroupMutation, createMemoGroupMutationVariables } from "../__generated__/createMemoGroupMutation";
-import { createMemoMutation, createMemoMutationVariables } from "../__generated__/createMemoMutation";
+import { useState } from "react";
 
 const MYMEMOS_QUERY = gql`
-    query myMemosQuery {
-        myMemos {
+    query myMemosQuery($myMemosInput: MyMemosInput) {
+        myMemos(input: $myMemosInput) {
             ok
             error
             groups {
@@ -21,6 +21,7 @@ const MYMEMOS_QUERY = gql`
                 memos {
                     id
                     content
+                    color
                 }
             }
         }
@@ -35,7 +36,7 @@ export interface IRangeMemoMutationInput {
 }
 
 export const Main = () => {
-    const client = useApolloClient();
+    const client = useApolloClient();    
     const { data: myMemoData, loading, refetch } = useQuery<myMemosQuery, myMemosQuery_myMemos>(MYMEMOS_QUERY);
     const [editMemoMutation] = useMutation<editMemoMutation, editMemoMutationVariables>(EDITMEMO_MUTATION);
     const [sortMemoMutation] = useMutation<sortMemoMutation, sortMemoMutationVariables>(SORTEMEMO_MUTATION);
@@ -76,7 +77,7 @@ export const Main = () => {
                 id: memo.id,
                 content: memo.content,
                 orderby: index
-            })
+            });
         });
         sortMemoMutation({
             variables: {
@@ -133,7 +134,7 @@ export const Main = () => {
                 variables: {
                     editMemoInput: {
                         id: sourceMemo.id,
-                        groupId: destinationGroupId
+                        groupId: destinationGroupId                        
                     }
                 }
             });
