@@ -66,10 +66,17 @@ export const Headers = () => {
 
     const onKeyDown = (event: any) => {
         if (event.key === 'Enter') {
-            navigation({
-                pathname: '/',
-                search: `?term=${keyword}` 
-            });
+            if (keyword) {
+                navigation({
+                    pathname: '/',
+                    search: `?term=${keyword}` 
+                });                
+            } else {
+                navigation({
+                    pathname: '/'
+                });
+            }
+
         }
     }
     return (

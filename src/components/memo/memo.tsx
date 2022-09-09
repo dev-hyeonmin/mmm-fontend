@@ -1,12 +1,12 @@
 import { gql, useMutation } from "@apollo/client";
 import { useState } from "react";
-import { DraggableProvided } from "react-beautiful-dnd";
 import ReactTextareaAutosize from "react-textarea-autosize";
 import styled from "styled-components";
 import { DELETEMEMO_MUTATION, EDITMEMO_MUTATION } from "../../mutations";
 import { editMemoMutation, editMemoMutationVariables } from "../../__generated__/editMemoMutation";
 import { MemoButton } from "./memo-button";
 import { deleteMemoMutation, deleteMemoMutationVariables } from "../../__generated__/deleteMemoMutation";
+import { myMemosQuery_myMemos_groups_memos } from "../../__generated__/myMemosQuery";
 import { client } from "../../apollo";
 // @ts-ignore
 import menuImg from "../../images/menu.png";
@@ -14,11 +14,9 @@ import menuImg from "../../images/menu.png";
 import deleteImg from "../../images/delete.png";
 // @ts-ignore
 import paletteImg from "../../images/color-palette.png";
-import { myMemosQuery_myMemos_groups_memos } from "../../__generated__/myMemosQuery";
+
 
 interface IMemoProps {
-    children: never[];
-    provided: DraggableProvided;
     memo: myMemosQuery_myMemos_groups_memos;
 }
 
@@ -90,7 +88,7 @@ const PaletteColor = styled.li<IPaletteProps>`
     border: 1px solid #bbb;
 `;
 
-export const Memo: React.FC<IMemoProps> = ({ provided, memo }) => {
+export const Memo: React.FC<IMemoProps> = ({ memo }) => {
     const palette = ["#B7C4CF", "#FFDBA4", "#F2D7D9", "#D3CEDF", "#A2B38B", "#ECB390" ,"#F9F3EE", "#FFFFFF"];
     const [editMode, setEditMode] = useState(false);
     const [useMenu, setUseMenu] = useState(false);
@@ -201,12 +199,7 @@ export const Memo: React.FC<IMemoProps> = ({ provided, memo }) => {
     };
 
     return (
-        <CMemo
-            ref={provided.innerRef}
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
-            backgroundColor={memoColor ? memoColor : "#FFFFFF"}
-        >
+        <CMemo backgroundColor={memoColor ? memoColor : "#FFFFFF"}>
             <div className="memo-menu">
                 {useMenu &&
                 <>

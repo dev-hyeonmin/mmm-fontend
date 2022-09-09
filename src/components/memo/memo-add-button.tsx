@@ -1,4 +1,4 @@
-import { gql, useMutation, useQuery } from "@apollo/client";
+import { gql, useMutation } from "@apollo/client";
 import styled from "styled-components";
 import { client } from "../../apollo";
 // @ts-ignore
@@ -10,7 +10,7 @@ interface IMemoAddButtonProps {
     groupId: number;
 }
 
-const Button = styled.div`
+export const CMemoAddButton = styled.div`
     display: flex;
     justify-aligns: center;
     align-items: center;
@@ -81,6 +81,6 @@ export const MemoAddButton: React.FC<IMemoAddButtonProps> = ({ groupId }) => {
     }
     
     return (
-        <Button onClick={createMemo}></Button>
+        <CMemoAddButton onClick={createMemo}></CMemoAddButton>
     );
 }

@@ -48,11 +48,13 @@ export const MemoGroup: React.FC<IMemoGroupProps> = ({ group }) => {
                         {group.memos?.map( (memo, index1) => (
                             <Draggable key={memo.id} draggableId={"memo" + memo.id} index={index1}>
                                 {(provided) => (
-                                    <Memo
-                                        provided={provided}
-                                        memo={memo}
+                                    <div
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
                                     >
-                                    </Memo>
+                                        <Memo memo={memo}/>
+                                    </div>
                                 )}                                                    
                             </Draggable>
                         ))}

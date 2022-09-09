@@ -215,6 +215,15 @@ input::placeholder {
     padding: 50px;
     background-color: rgb(248, 251, 255);
 }
+.option-menus {
+    position: absolute;
+    top: 10px;
+    right: 50px;
+    z-index: 9;    
+}
+.option-menus button {
+    margin-left: 5px;
+}
 .memo-board {
     display: flex;
     justify-content: center;
@@ -224,4 +233,28 @@ input::placeholder {
 }
 .memo-board .memos {
     padding: 20px 10px;
+}
+.wrapper-memo-grid {
+    display: flex;    
+    position: fixed;
+    top: 51px;
+    left: 0;
+    width: 100%;
+    height: calc(100% - 51px);
+    padding: 50px;
+    background-color: rgb(248, 251, 255);
+}
+
+.wrapper-memo-grid > div {
+    width: 16.66%;
+    height: 200px;
+}
+.wrapper-memo-grid > div:nth-child(n+2) {
+    margin-left: 5px;
+}
+.wrapper-memo-grid > div:nth-child(6n) {
+    margin-left: 0px;
+}
+.wrapper-memo-grid > div:nth-child(n+7) {
+    margin-top: 5px;
 }

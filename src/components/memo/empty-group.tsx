@@ -13,7 +13,7 @@ const CEmptyGroup = styled.div`
     background-color: rgba(234, 235, 239, 0.3);
     border: 1px dashed #bbb;
     border-radius: 7px;
-    padding: 0 20px 20px 20px;
+    padding: 20px 20px 20px 20px;
     margin-left: 20px;
     cursor: pointer;
 
