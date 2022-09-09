@@ -3,6 +3,9 @@ import { LOCALSTORAGE_TOKEN } from "../constants";
 import { useMe } from "../hooks/useMe";
 import styled from "styled-components";
 import { useState } from "react";
+// @ts-ignore
+import searchImg from "../images/search.png";
+import { useNavigate } from "react-router-dom";
 
 const Header = styled.div`
     display: flex;
@@ -38,11 +41,17 @@ const Search = styled.input`
     width: 130px;
     margin-right: 10px;
     font-size: 12px;
+    background-image: url(${searchImg});
+    background-size: 14px;
+    background-position: 107px center;
+    background-repeat: no-repeat;
+    padding: 0 23px 0 5px;
 `;
 
 export const Headers = () => {
     const { data: userData } = useMe();    
     const [keyword, setKeyword] = useState('');
+    const navigation = useNavigate();
     
     const logout = () => {
         localStorage.removeItem(LOCALSTORAGE_TOKEN);
@@ -50,6 +59,19 @@ export const Headers = () => {
         authTokenVar('');   
     };
 
+    const onChange = (event: any) => {
+        setKeyword(event.target.value);        
+    };
+
+
+    const onKeyDown = (event: any) => {
+        if (event.key === 'Enter') {
+            navigation({
+                pathname: '/',
+                search: `?term=${keyword}` 
+            });
+        }
+    }
     return (
         <>
             {!userData?.me.verified &&
@@ -60,7 +82,11 @@ export const Headers = () => {
                 <Logo>m._.m</Logo>
 
                 <div>
-                    <Search placeholder="search memo"/>
+                    <Search
+                        placeholder="search memo"
+                        onChange={onChange}
+                        onKeyDown={onKeyDown}
+                    />
                     <Logout onClick={logout}>Logout</Logout>
                 </div>
             </Header>

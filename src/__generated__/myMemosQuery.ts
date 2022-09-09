@@ -35,5 +35,5 @@ export interface myMemosQuery {
 }
 
 export interface myMemosQueryVariables {
-  myMemosInput?: MyMemosInput | null;
+  myMemosInput: MyMemosInput;
 }

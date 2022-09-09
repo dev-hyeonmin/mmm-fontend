@@ -1,17 +1,17 @@
 import { gql, useApolloClient, useMutation, useQuery } from "@apollo/client";
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import { editMemoMutation, editMemoMutationVariables } from "../__generated__/editMemoMutation";
-import { myMemosQuery, myMemosQuery_myMemos, myMemosQuery_myMemos_groups_memos } from "../__generated__/myMemosQuery";
+import { myMemosQuery, myMemosQueryVariables, myMemosQuery_myMemos_groups_memos } from "../__generated__/myMemosQuery";
 import { MemoGroup } from "../components/memo/memo-group";
 import { sortMemoMutation, sortMemoMutationVariables } from "../__generated__/sortMemoMutation";
 import { MemoType } from "../__generated__/globalTypes";
 import { EmptyGroup } from "../components/memo/empty-group";
 import { CREATEMEMOGROUP_MUTATION, EDITMEMO_MUTATION, SORTEMEMO_MUTATION } from "../mutations";
 import { createMemoGroupMutation, createMemoGroupMutationVariables } from "../__generated__/createMemoGroupMutation";
-import { useState } from "react";
+import { useLocation } from "react-router-dom";
 
 const MYMEMOS_QUERY = gql`
-    query myMemosQuery($myMemosInput: MyMemosInput) {
+    query myMemosQuery($myMemosInput: MyMemosInput!) {
         myMemos(input: $myMemosInput) {
             ok
             error
@@ -35,9 +35,18 @@ export interface IRangeMemoMutationInput {
     groupId?: number;
 }
 
-export const Main = () => {
-    const client = useApolloClient();    
-    const { data: myMemoData, loading, refetch } = useQuery<myMemosQuery, myMemosQuery_myMemos>(MYMEMOS_QUERY);
+export const Main = () => {    
+    const client = useApolloClient();  
+    const location = useLocation();
+    const [, term] = location.search.split("?term=");
+    const { data: myMemoData, loading, refetch } = useQuery<myMemosQuery, myMemosQueryVariables>(MYMEMOS_QUERY, {
+        variables: {
+            myMemosInput: {
+                keyword: term
+            }
+        }
+    });
+
     const [editMemoMutation] = useMutation<editMemoMutation, editMemoMutationVariables>(EDITMEMO_MUTATION);
     const [sortMemoMutation] = useMutation<sortMemoMutation, sortMemoMutationVariables>(SORTEMEMO_MUTATION);
     const [createMemoGroupMutation] = useMutation<createMemoGroupMutation, createMemoGroupMutationVariables>(CREATEMEMOGROUP_MUTATION, {
