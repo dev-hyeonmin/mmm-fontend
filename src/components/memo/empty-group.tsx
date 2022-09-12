@@ -20,6 +20,16 @@ const CEmptyGroup = styled.div`
     &:hover {
         background-color: rgba(234, 235, 239, 0.6);
     }
+
+    @media screen and (max-width: 1024px) {
+        width: 100%;
+        max-width: 100%;
+        margin-top: 10px;
+
+        &:nth-child(n+2) {
+            margin-left: 0;
+        }
+    }
 `;
 
 export const EmptyGroup: React.FC<IEmptyGroupProps> = ({ onClick }) => {

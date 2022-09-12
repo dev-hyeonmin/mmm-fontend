@@ -1,5 +1,6 @@
 import { ApolloProvider } from '@apollo/client';
 import ReactDOM from 'react-dom/client';
+import { RecoilRoot } from 'recoil';
 import { ThemeProvider } from 'styled-components';
 import { client } from './apollo';
 import App from './App';
@@ -19,8 +20,10 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <ApolloProvider client={client}>
-      <ThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}>
+      <RecoilRoot>
         <App />
+      </RecoilRoot>
       </ThemeProvider>
   </ApolloProvider>  
 );

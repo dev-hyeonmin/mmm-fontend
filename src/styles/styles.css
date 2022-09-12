@@ -113,7 +113,6 @@ input::placeholder {
     height: 50%;  
 }
 
-
 /*
 * ALERT :: ERROR
 */
@@ -207,12 +206,12 @@ input::placeholder {
 */
 .wrapper-memo {
     display: flex;    
-    position: fixed;
+    position: absolute;
     top: 51px;
     left: 0;
     width: 100%;
-    height: calc(100% - 51px);
-    padding: 50px;
+    min-height: calc(100% - 51px);
+    padding: 0 50px 50px 50px;
     background-color: rgb(248, 251, 255);
 }
 .option-menus {
@@ -224,23 +223,18 @@ input::placeholder {
 .option-menus button {
     margin-left: 5px;
 }
-.memo-board {
-    display: flex;
-    justify-content: center;
-    align-items: baseline;
-    width: 100%;
-    padding: 50px 100px;
+.box-memos {
+    overflow: scroll;
+    height: calc(100% - 100px);
 }
-.memo-board .memos {
-    padding: 20px 10px;
-}
+
 .wrapper-memo-grid {
     display: flex;    
     position: fixed;
     top: 51px;
     left: 0;
     width: 100%;
-    height: calc(100% - 51px);
+    min-height: calc(100% - 51px);
     padding: 50px;
     background-color: rgb(248, 251, 255);
 }
@@ -257,4 +251,54 @@ input::placeholder {
 }
 .wrapper-memo-grid > div:nth-child(n+7) {
     margin-top: 5px;
+}
+.wrapper-memo-grid > div > div {
+    overflow: scroll;
+    height: -webkit-fill-available;
+}
+
+
+@media screen and (min-width: 1024px) {
+    #root, .wrapper-memo, .wrapper-memo-grid {
+        min-width: 1440px;
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    .wrapper-login {
+        flex-direction: column;
+    }
+
+    .box {
+        width: 100%;
+    }
+
+    .box:nth-child(1) {
+        padding: 100px 0;
+    }
+
+    .box:nth-child(2) {
+        padding: 50px 0;
+    }
+
+    .wrapper-memo {
+        flex-direction: column;
+    }
+
+    .wrapper-memo-grid {
+        display: block;
+    }
+
+    .wrapper-memo-grid > div {
+        float: left;
+        width: calc(50% - 5px);
+    }
+
+    .wrapper-memo-grid > div:nth-child(2n + 1) {
+        margin-left: 0px;
+    }
+
+    .wrapper-memo-grid > div:nth-child(n + 3) {
+        margin-top: 5px;
+    }
 }

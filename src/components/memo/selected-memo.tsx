@@ -1,16 +1,11 @@
 import { gql, useMutation } from "@apollo/client";
-import { useState } from "react";
-import ReactTextareaAutosize from "react-textarea-autosize";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { DELETEMEMO_MUTATION, EDITMEMO_MUTATION } from "../../mutations";
 import { editMemoMutation, editMemoMutationVariables } from "../../__generated__/editMemoMutation";
 import { MemoButton } from "./memo-button";
 import { deleteMemoMutation, deleteMemoMutationVariables } from "../../__generated__/deleteMemoMutation";
-import { myMemosQuery_myMemos_groups_memos } from "../../__generated__/myMemosQuery";
 import { client } from "../../apollo";
-import { useLocation } from "react-router-dom";
-import { useSetRecoilState } from "recoil";
-import { selectMemoAtom } from "../../atom";
 // @ts-ignore
 import menuImg from "../../images/menu.png";
 // @ts-ignore
@@ -18,27 +13,30 @@ import deleteImg from "../../images/delete.png";
 // @ts-ignore
 import paletteImg from "../../images/color-palette.png";
 // @ts-ignore
-import zoomOutImg from "../../images/zoom-out.png";
-// @ts-ignore
 import closeImg from "../../images/delete-memo.png";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { selectMemoAtom } from "../../atom";
 
 
 interface IMemoProps {
-    memo: myMemosQuery_myMemos_groups_memos;
+    //memo: myMemosQuery_myMemos_groups_memos;
 }
 
 interface ICMemoProps {
     backgroundColor?: string;
 }
-
 interface IPaletteProps {
     backgroundColor?: string;
     onClick?: any
 }
 
 const CMemo = styled.div<ICMemoProps>`
-    position: relative;
-    width: 100%;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50% !important;
+    height: 400px !important;
     line-height: 18px;
     border: 1px solid #ededed;
     border-radius: 7px;
@@ -104,9 +102,8 @@ const PaletteColor = styled.li<IPaletteProps>`
     border: 1px solid #bbb;
 `;
 
-export const Memo: React.FC<IMemoProps> = ({ memo }) => {
-    let location = useLocation();
-    const path = location.pathname;
+export const SelectedMemo: React.FC = () => {
+    const memo = useRecoilValue(selectMemoAtom);
     const palette = ["#B7C4CF", "#FFDBA4", "#F2D7D9", "#D3CEDF", "#A2B38B", "#ECB390", "#F9F3EE", "#FFFFFF"];
     const setSelectMemo = useSetRecoilState(selectMemoAtom);
     const [editMode, setEditMode] = useState(false);
@@ -114,6 +111,10 @@ export const Memo: React.FC<IMemoProps> = ({ memo }) => {
     const [usePalette, setUsePalette] = useState(false);
     const [content, setContent] = useState(memo.content);
     const [memoColor, setMemoColor] = useState(memo.color);
+    
+    useEffect(() => {
+        setContent(memo.content);
+    }, [memo]);
     
     const onCompleted = () => {
         setEditMode(false);
@@ -215,10 +216,12 @@ export const Memo: React.FC<IMemoProps> = ({ memo }) => {
         });
     };
 
-    const selectMemo = () => {
+    const closeSelectedMemo = () => {
         setSelectMemo({
-            ...memo,
-            content
+            __typename: "Memo",
+            id: 0,
+            content: "",
+            color: null
         });
     }
     return (
@@ -257,20 +260,16 @@ export const Memo: React.FC<IMemoProps> = ({ memo }) => {
                     src={menuImg}
                     backgroundSize="10px"
                 />
+
+                <MemoButton
+                    onClick={closeSelectedMemo}
+                    src={closeImg}
+                    backgroundSize="10px"
+                />
             </div>
             
             {!editMode && <div onClick={onEdit}>{content.replaceAll('<br/>', '\n')}</div> }
-            {(editMode && path !== '/grid') &&
-                <ReactTextareaAutosize
-                value={content.replaceAll('<br/>', '\n')}
-                onChange={onChange}
-                onBlur={editMemo}
-                onKeyDown={onKeyDown}
-                onFocus={moveCursor}
-                autoFocus
-                />
-            }
-            {(editMode && path === '/grid') &&
+            {editMode &&
                 <textarea
                 value={content.replaceAll('<br/>', '\n')}
                 onChange={onChange}
@@ -279,15 +278,8 @@ export const Memo: React.FC<IMemoProps> = ({ memo }) => {
                 onFocus={moveCursor}
                 autoFocus
                 />
-            }  
-            
-            {path === '/grid' &&
-                <MemoButton
-                    onClick={selectMemo}
-                    src={zoomOutImg}
-                    backgroundSize="14px"
-                />          
-            }  
+            }
         </CMemo>
     )
+    
 }

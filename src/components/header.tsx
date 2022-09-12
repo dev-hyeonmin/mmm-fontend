@@ -56,7 +56,8 @@ export const Headers = () => {
     const logout = () => {
         localStorage.removeItem(LOCALSTORAGE_TOKEN);
         isLoggedInVar(false);
-        authTokenVar('');   
+        authTokenVar('');
+        navigation("/");
     };
 
     const onChange = (event: any) => {

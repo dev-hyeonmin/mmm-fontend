@@ -27,6 +27,16 @@ const CMemoGroup = styled.div`
     * {
         outline: none;
     }
+
+    @media screen and (max-width: 1023px) {
+        width: 100%;
+        max-width: 100%;
+        margin-top: 10px;
+
+        &:nth-child(n+2) {
+            margin-left: 0;
+        }
+    }
 `;
 
 export const MemoGroup: React.FC<IMemoGroupProps> = ({ group }) => {
@@ -41,7 +51,7 @@ export const MemoGroup: React.FC<IMemoGroupProps> = ({ group }) => {
             />
             <Droppable droppableId={"" + group.id}>
                 {(provided) => (
-                    <div
+                    <div className="box-memos"
                         {...provided.droppableProps}
                         ref={provided.innerRef}
                     >                             
