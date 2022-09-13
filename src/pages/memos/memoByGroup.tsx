@@ -125,7 +125,7 @@ export const MemoByGroup: React.FC<IMemoByGroupProps> = ({ groups, createMemoGro
     };
 
     return (                  
-        <div className="wrapper-memo">        
+        <>        
             { groups && 
                 <DragDropContext onDragEnd={onDragEnd}>
                     { groups?.map((group, index) => (                            
@@ -140,6 +140,6 @@ export const MemoByGroup: React.FC<IMemoByGroupProps> = ({ groups, createMemoGro
                     )}
                 </DragDropContext>
             }
-        </div>
+        </>
     );
 };

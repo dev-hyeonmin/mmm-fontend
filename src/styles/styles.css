@@ -205,13 +205,11 @@ input::placeholder {
 * main
 */
 .wrapper-memo {
-    display: flex;    
-    position: absolute;
-    top: 51px;
-    left: 0;
+    position: relative;
+    display: flex;
     width: 100%;
-    min-height: calc(100% - 51px);
-    padding: 0 50px 50px 50px;
+    min-height: -webkit-fill-available;
+    padding: 50px;
     background-color: rgb(248, 251, 255);
 }
 .option-menus {
