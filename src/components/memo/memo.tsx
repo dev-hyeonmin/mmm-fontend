@@ -158,6 +158,8 @@ export const Memo: React.FC<IMemoProps> = ({ memo }) => {
         if (event.ctrlKey === false && event.key === 'Enter') {
             editMemo();
             event.preventDefault();
+        } else if (event.key === 'Enter') {
+            setContent((currentContent) => currentContent + "\n");
         }
     }
 

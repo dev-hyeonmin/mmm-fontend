@@ -12,6 +12,7 @@ interface IMemoGroupProps {
 const CMemoGroup = styled.div`
     max-width: 20%;
     width: 25%;    
+    height: calc(100vh - 150px);
     background-color: rgb(234, 235, 239);
     border-radius: 7px;
     padding: 0 20px 20px 20px;
@@ -30,6 +31,7 @@ const CMemoGroup = styled.div`
 
     @media screen and (max-width: 1023px) {
         width: 100%;
+        height: auto;
         max-width: 100%;
         margin-top: 10px;
 
