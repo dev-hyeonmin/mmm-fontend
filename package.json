@@ -11,6 +11,7 @@
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
     "apollo": "^2.34.0",
+    "framer-motion": "^7.3.5",
     "graphql": "^15.8.0",
     "react": "^18.2.0",
     "react-beautiful-dnd": "^13.1.1",

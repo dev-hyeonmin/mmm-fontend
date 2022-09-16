@@ -16,6 +16,7 @@ import paletteImg from "../../images/color-palette.png";
 import closeImg from "../../images/delete-memo.png";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { selectMemoAtom } from "../../atom";
+import { motion } from "framer-motion";
 
 
 interface IMemoProps {
@@ -23,10 +24,10 @@ interface IMemoProps {
 }
 
 interface ICMemoProps {
-    backgroundColor?: string;
+    backgroundcolor?: string;
 }
 interface IPaletteProps {
-    backgroundColor?: string;
+    backgroundcolor?: string;
     onClick?: any
 }
 
@@ -42,7 +43,7 @@ const CMemo = styled.div<ICMemoProps>`
     border-radius: 7px;
     font-size: 14px;
     padding: 20px 15px;
-    background-color: ${props=>props.backgroundColor ? props=>props.backgroundColor : "#000000"};
+    background-color: ${props=>props.backgroundcolor ? props=>props.backgroundcolor : "#000000"};
     color: #2e3238;
     box-shadow: 0px 1px 10px rgba(153, 161, 173,0.05);
     white-space: pre-wrap;    
@@ -96,7 +97,7 @@ const PaletteColor = styled.li<IPaletteProps>`
     width: 15px;
     height: 15px;
     border-radius: 8px;
-    background-color: ${props=>props.backgroundColor ? props=>props.backgroundColor : "#000000"};
+    background-color: ${props=>props.backgroundcolor ? props=>props.backgroundcolor : "#000000"};
     margin: 0 0 2px 2px;
     cursor: pointer;
     border: 1px solid #bbb;
@@ -225,7 +226,7 @@ export const SelectedMemo: React.FC = () => {
         });
     }
     return (
-        <CMemo backgroundColor={memoColor ? memoColor : "#FFFFFF"}>
+        <CMemo backgroundcolor={memoColor ? memoColor : "#FFFFFF"}>
 
             <div className="memo-menu">
                 {useMenu &&
@@ -246,7 +247,7 @@ export const SelectedMemo: React.FC = () => {
                             {palette.map((color) =>
                                 <PaletteColor
                                     key={color}
-                                    backgroundColor={color}
+                                    backgroundcolor={color}
                                     onClick={() => setPickColor(color)}
                                 />
                             )}
