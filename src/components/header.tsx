@@ -6,6 +6,7 @@ import { useState } from "react";
 // @ts-ignore
 import searchImg from "../images/search.png";
 import { useNavigate } from "react-router-dom";
+import { UserProfile } from "./userProfile";
 
 const Header = styled.div`
     display: flex;
@@ -95,7 +96,10 @@ export const Headers = () => {
                         onChange={onChange}
                         onKeyDown={onKeyDown}
                     />
-                    <Logout onClick={logout}>Logout</Logout>
+
+                    {userData?.me.name &&
+                        <UserProfile />
+                    }
                 </div>
             </Header>
         </>

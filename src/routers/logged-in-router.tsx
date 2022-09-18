@@ -6,7 +6,12 @@ import { VerifyEmail } from "../pages/verify-email";
 
 const routes = [
     {
-        path: "/*",
+        path: "/",
+        component: <Main />,
+        useHeader: true,
+    },
+    {
+        path: "/grid",
         component: <Main />,
         useHeader: true,
     },
@@ -18,8 +23,6 @@ const routes = [
 ];
 
 export const LoggedInRouter = () => {
-    const pathname = window.location.pathname;
-    
     return (
         <BrowserRouter>
             <Headers />
