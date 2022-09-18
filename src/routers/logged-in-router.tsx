@@ -20,6 +20,11 @@ const routes = [
         component: <VerifyEmail />,
         useHeader: false,
     },
+    {
+        path: "*",
+        component: <NotFound />,
+        useHeader: true,
+    },
 ];
 
 export const LoggedInRouter = () => {
@@ -31,6 +36,7 @@ export const LoggedInRouter = () => {
                 {routes.map((route) => (
                     <Route key={route.path} path={route.path} element={route.component} />
                 ))}
+                
                 <Route path="*" element={<NotFound/>} />
             </Routes>
         </BrowserRouter>

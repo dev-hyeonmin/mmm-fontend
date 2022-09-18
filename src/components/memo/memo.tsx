@@ -11,6 +11,7 @@ import { client } from "../../apollo";
 import { useLocation } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { selectMemoAtom } from "../../atom";
+import { motion } from "framer-motion";
 // @ts-ignore
 import menuImg from "../../images/menu.png";
 // @ts-ignore
@@ -19,9 +20,6 @@ import deleteImg from "../../images/delete.png";
 import paletteImg from "../../images/color-palette.png";
 // @ts-ignore
 import zoomOutImg from "../../images/zoom-out.png";
-// @ts-ignore
-import closeImg from "../../images/delete-memo.png";
-import { motion } from "framer-motion";
 
 
 interface IMemoProps {

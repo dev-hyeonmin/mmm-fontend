@@ -9,7 +9,7 @@ const CEmptyGroup = styled.div`
     justify-content: center;
     align-items: center;
     max-width: 20%;
-    width: 25%;        
+    width: 25%; 
     background-color: rgba(234, 235, 239, 0.3);
     border: 1px dashed #bbb;
     border-radius: 7px;
@@ -24,11 +24,15 @@ const CEmptyGroup = styled.div`
     @media screen and (max-width: 1024px) {
         width: 100%;
         max-width: 100%;
-        margin-top: 10px;
+        margin-top: 10px;        
 
         &:nth-child(n+2) {
             margin-left: 0;
         }
+    }
+
+    @media screen and (min-width: 1024px) {
+        height: calc(100vh - 150px);
     }
 `;
 

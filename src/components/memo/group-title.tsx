@@ -10,7 +10,9 @@ import buttonImg from "../../images/menu.png";
 // @ts-ignore
 import deleteImg from "../../images/delete.png";
 // @ts-ignore
-import addImg from "../../images/add.png";
+import inviteImg from "../../images/invite.png";
+import { useSetRecoilState } from "recoil";
+import { selectInviteGroupAtom } from "../../atom";
 
 
 interface IGroupTitleProps {
@@ -55,6 +57,10 @@ const Buttons = styled.div<IMenuStyledProps>`
     display: ${props=>props.active ? "flex" : "none"};
     flex-direction: column;
     z-index: 9;
+
+    button {
+        margin-bottom: 2px;
+    }
 `;
 
 const TitleError = styled.div`
@@ -67,12 +73,13 @@ const TitleError = styled.div`
 
 export const GroupTitle: React.FC<IGroupTitleProps> = ({ groupId, title: groupTitle }) => {
     const client = useApolloClient();
+    const setSelectInviteGroupAtom = useSetRecoilState(selectInviteGroupAtom);
     const [title, setTitle] = useState(groupTitle);
     const [useMemu, setUseMemu] = useState(false);
     const [error, setError] = useState(false);
     const onCompleted = (data: editMemoGroupMutation) => {
         const {
-            editMemoGroup: {ok, error}
+            editMemoGroup: { ok }
         } = data;
         
         if (ok) {
@@ -133,6 +140,12 @@ export const GroupTitle: React.FC<IGroupTitleProps> = ({ groupId, title: groupTi
         client.cache.evict({ id: `MemoGroup:${groupId}` });
     };
     
+    const selectInviteGroupMemo = () => {
+        setSelectInviteGroupAtom({
+            id: groupId
+        });
+    }
+
     const toggleMenu = () => {
         setUseMemu((current) => { return !current});
     }
@@ -147,7 +160,7 @@ export const GroupTitle: React.FC<IGroupTitleProps> = ({ groupId, title: groupTi
                 onBlur={editMemoTitle}
                 onKeyDown={onKeyDown}
             />
-            {error && <TitleError>Group title is required.</TitleError>}
+            {error && <TitleError>Group title is required.</TitleError>}            
 
             <MemoButton
                 src={buttonImg}
@@ -155,6 +168,7 @@ export const GroupTitle: React.FC<IGroupTitleProps> = ({ groupId, title: groupTi
             />
 
             <Buttons active={useMemu}>
+                <MemoButton src={inviteImg} onClick={selectInviteGroupMemo} />
                 <MemoButton src={deleteImg} onClick={deleteMemoGroup} />
             </Buttons>
         </CGroupTitle>

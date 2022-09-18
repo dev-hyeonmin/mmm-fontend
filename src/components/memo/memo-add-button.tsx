@@ -1,10 +1,10 @@
 import { gql, useMutation } from "@apollo/client";
 import styled from "styled-components";
 import { client } from "../../apollo";
-// @ts-ignore
-import addImg from "../../images/add.png";
 import { CREATEMEMO_MUTATION } from "../../mutations";
 import { createMemoMutation, createMemoMutationVariables } from "../../__generated__/createMemoMutation";
+// @ts-ignore
+import addImg from "../../images/add.png";
 
 interface IMemoAddButtonProps {
     groupId: number;

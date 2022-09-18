@@ -7,6 +7,7 @@ import { sortMemoMutation, sortMemoMutationVariables } from "../../__generated__
 import { MemoType } from "../../__generated__/globalTypes";
 import { EmptyGroup } from "../../components/memo/empty-group";
 import { EDITMEMO_MUTATION, SORTEMEMO_MUTATION } from "../../mutations";
+import { InvitedMemo } from "../../components/memo/invited-member";
 
 
 export interface IRangeMemoMutationInput {
@@ -135,9 +136,8 @@ export const MemoByGroup: React.FC<IMemoByGroupProps> = ({ groups, createMemoGro
                         />
                     ))}
 
-                    {groups?.length < 5 && (
-                        <EmptyGroup onClick={createMemoGroup} />
-                    )}
+                    <EmptyGroup onClick={createMemoGroup} />
+                    <InvitedMemo />
                 </DragDropContext>
             }
         </>

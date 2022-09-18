@@ -43,6 +43,11 @@ export interface EditMemoInput {
   groupId?: number | null;
 }
 
+export interface InviteGroupMemberInput {
+  groupId: number;
+  inviteEmail: string;
+}
+
 export interface LoginInput {
   email: string;
   password: string;

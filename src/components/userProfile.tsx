@@ -5,14 +5,6 @@ import styled from "styled-components";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-const Logout = styled.button`
-    line-height: 30px;
-    padding: 0 15px;
-    background-color: #7A4495;
-    color: #fff;
-    border-radius: 20px;
-`;
-
 const CUserProfile = styled.div`
     position: relative;
     float: right;

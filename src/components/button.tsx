@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
 interface IButtonProps {
-    loading: boolean;
-    canClick: boolean;
+    loading?: boolean;
+    canClick?: boolean;
     actionText: string;
 }
 

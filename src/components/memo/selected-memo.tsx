@@ -16,12 +16,6 @@ import paletteImg from "../../images/color-palette.png";
 import closeImg from "../../images/delete-memo.png";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { selectMemoAtom } from "../../atom";
-import { motion } from "framer-motion";
-
-
-interface IMemoProps {
-    //memo: myMemosQuery_myMemos_groups_memos;
-}
 
 interface ICMemoProps {
     backgroundcolor?: string;
