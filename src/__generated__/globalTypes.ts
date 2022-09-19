@@ -7,6 +7,12 @@
 // START Enums and Input Objects
 //==============================================================
 
+export interface AcceptGroupMemberInput {
+  userId: number;
+  groupId: number;
+  accept: boolean;
+}
+
 export interface CreateAccountInput {
   name: string;
   email: string;

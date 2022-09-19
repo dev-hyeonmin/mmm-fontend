@@ -7,11 +7,16 @@
 // GraphQL subscription operation: acceptInvitation
 // ====================================================
 
-export interface acceptInvitation_acceptInvitation {
-  __typename: "AcceptInvitationOutput";
+export interface acceptInvitation_acceptInvitation_invitation {
+  __typename: "MemoGroupMembers";
   groupId: number;
   userId: number;
-  groupTitle: string;
+  accept: boolean;
+}
+
+export interface acceptInvitation_acceptInvitation {
+  __typename: "AcceptInvitationOutput";
+  invitation: acceptInvitation_acceptInvitation_invitation;
 }
 
 export interface acceptInvitation {

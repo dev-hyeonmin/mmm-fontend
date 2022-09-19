@@ -5,8 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { UserProfile } from "./userProfile";
 // @ts-ignore
 import searchImg from "../images/search.png";
-import { gql, useSubscription } from "@apollo/client";
-import { acceptInvitation } from "../__generated__/acceptInvitation";
 
 const Header = styled.div`
     display: flex;
@@ -41,26 +39,10 @@ const Search = styled.input`
     padding: 0 23px 0 5px;
 `;
 
-const ACCEPT_INVITATION_SUBSCRIPTION = gql`
-    subscription acceptInvitation {
-        acceptInvitation {
-            groupId,
-            userId,
-            groupTitle
-        }
-    }
-`;
-
 export const Headers = () => {
     const { data: userData } = useMe();    
     const [keyword, setKeyword] = useState('');
     const navigation = useNavigate();
-    const { data: subscriptionData } = useSubscription<acceptInvitation>(
-        ACCEPT_INVITATION_SUBSCRIPTION
-    );
-    useEffect(() => {
-        console.log(subscriptionData);
-    }, [subscriptionData])
     
     const onChange = (event: any) => {
         setKeyword(event.target.value);        

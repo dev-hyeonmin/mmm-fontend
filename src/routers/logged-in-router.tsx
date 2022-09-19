@@ -6,7 +6,7 @@ import { VerifyEmail } from "../pages/verify-email";
 
 const routes = [
     {
-        path: "/",
+        path: "/list/*",
         component: <Main />,
         useHeader: true,
     },
@@ -19,12 +19,7 @@ const routes = [
         path: "/confirm",
         component: <VerifyEmail />,
         useHeader: false,
-    },
-    {
-        path: "*",
-        component: <NotFound />,
-        useHeader: true,
-    },
+    }
 ];
 
 export const LoggedInRouter = () => {
@@ -37,7 +32,7 @@ export const LoggedInRouter = () => {
                     <Route key={route.path} path={route.path} element={route.component} />
                 ))}
                 
-                <Route path="*" element={<NotFound/>} />
+                <Route path="/*" element={<NotFound/>} />
             </Routes>
         </BrowserRouter>
     );

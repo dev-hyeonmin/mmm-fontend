@@ -4,6 +4,7 @@ interface IButtonProps {
     loading?: boolean;
     canClick?: boolean;
     actionText: string;
+    onClick?: any;
 }
 
 const Btn = styled.button`
@@ -23,11 +24,12 @@ const Btn = styled.button`
 `;
 
 
-export const Button:React.FC<IButtonProps> = ({ canClick, loading, actionText }) => {
+export const Button:React.FC<IButtonProps> = ({ canClick, loading, actionText, onClick }) => {
     return (
         <Btn
             role="button"
             className={canClick ? "active" : ""}
+            onClick={onClick}
         >
             {loading ? "Loading..." : actionText}
         </Btn>

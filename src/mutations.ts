@@ -54,3 +54,12 @@ export const SORTEMEMO_MUTATION = gql`
         }
     }
 `;
+
+export const ACCEPTGROUPMEMBER_MUTATION = gql`
+    mutation acceptGroupMemberMutation ($acceptGroupMemberInput: AcceptGroupMemberInput!) {
+        acceptGroupMember (input: $acceptGroupMemberInput) {
+            ok
+            error
+        }
+    }
+`;

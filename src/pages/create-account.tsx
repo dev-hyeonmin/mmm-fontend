@@ -29,7 +29,7 @@ export const CreateAccount = () => {
         
         if (ok) {      
             alert("Create account success!");
-            navigation("/");
+            navigation("/list");
         }
     };
     

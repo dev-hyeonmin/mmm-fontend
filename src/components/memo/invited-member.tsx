@@ -31,6 +31,7 @@ const Modal = styled.div`
     padding: 30px 40px;
     background-color: #fff;
     box-shadow: 0px 10px 50px rgba(0,0,0,0.1);
+    z-index: 9;
 
     h3 {
         font-size: 16px;
