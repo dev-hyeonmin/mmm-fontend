@@ -1,12 +1,11 @@
 import { myMemosQuery_myMemos_groups } from "../../__generated__/myMemosQuery";
 import { Memo } from "../../components/memo/memo";
-import { CMemoAddButton, MemoAddButton } from "../../components/memo/memo-add-button";
-import styled from "styled-components";
+import { MemoAddButton } from "../../components/memo/memo-add-button";
 import { EmptyGroup } from "../../components/memo/empty-group";
 import { SelectedMemo } from "../../components/memo/selected-memo";
 import { useRecoilValue } from "recoil";
 import { selectMemoAtom } from "../../atom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { UseType } from "../../__generated__/globalTypes";
 import { useMe } from "../../hooks/useMe";
 
@@ -19,26 +18,31 @@ export const MemoByGrid: React.FC<IMemoByGroupProps> = ({ groups, createMemoGrou
     const selectedMemo = useRecoilValue(selectMemoAtom);
     const { data: userData } = useMe();
 
-    const myPermission = (group: myMemosQuery_myMemos_groups):UseType => {
+    const myPermission = (group: myMemosQuery_myMemos_groups):any => {
         if (group.user.id === userData.me.id) {
-            return UseType.Editor;
+            return {
+                userType: UseType.Editor,
+                isOwner: true
+            };
         } else {
             const myUseTypeInfo = group.members?.find((member) => member.user.id === userData.me.id);
             if (myUseTypeInfo?.useType) {                
-                return myUseTypeInfo?.useType;
+                return {
+                    userType: UseType.Editor,
+                    isOwner: false
+                }
             }
         }
-
-        return UseType.Viewer;
     }
 
     return (                  
         <div className="wrapper-memo-grid">
             { (groups) && 
                 groups?.map((group) => (
-                    group.memos?.map((memo, index) => (
-                        <Memo key={index} memo={memo} useType={myPermission(group)} />
-                    ))
+                    group.memos?.map((memo, index) => {  
+                        const getPermission = myPermission(group);
+                        return <Memo key={index} memo={memo} useType={getPermission.userType} isOwner={getPermission.isOwner} />
+                    })
                 ))
             }
 

@@ -19,7 +19,7 @@ import { UseType } from "../../__generated__/globalTypes";
 interface IGroupTitleProps {
     groupId: number;
     title: string;
-    useType: UseType;
+    isOwner: boolean;
 }
 
 interface IMenuStyledProps {
@@ -73,15 +73,15 @@ const TitleError = styled.div`
     font-size: 12px;
 `;
 
-export const GroupTitle: React.FC<IGroupTitleProps> = ({ groupId, title: groupTitle, useType }) => {
+export const GroupTitle: React.FC<IGroupTitleProps> = ({ groupId, title: groupTitle, isOwner }) => {
     const client = useApolloClient();
     const setSelectInviteGroupAtom = useSetRecoilState(selectInviteGroupAtom);
     const [title, setTitle] = useState(groupTitle);
     const [useMemu, setUseMemu] = useState(false);
-    const [error, setError] = useState(false);
+    const [error, setError] = useState("");
     const onCompleted = (data: editMemoGroupMutation) => {
         const {
-            editMemoGroup: { ok }
+            editMemoGroup: { ok, error }
         } = data;
         
         if (ok) {
@@ -96,9 +96,9 @@ export const GroupTitle: React.FC<IGroupTitleProps> = ({ groupId, title: groupTi
                     title
                 },
             });
-            setError(false);
-        } else {
-            setError(true);
+            setError("");
+        } else if (error) {
+            setError(error);
         }
     };
     
@@ -161,21 +161,23 @@ export const GroupTitle: React.FC<IGroupTitleProps> = ({ groupId, title: groupTi
                 onChange={onChange}
                 onBlur={editMemoTitle}
                 onKeyDown={onKeyDown}
-                disabled={useType === UseType.Editor ? false : true}
+                disabled={isOwner ? false : true}
             />
-            {error && <TitleError>Group title is required.</TitleError>}            
+            <TitleError>{error}</TitleError>
 
-            {useType === UseType.Editor &&
+            {isOwner &&
                 <MemoButton
                     src={buttonImg}
                     onClick={toggleMenu}
                 />
             }
 
-            <Buttons active={useMemu}>
-                <MemoButton src={inviteImg} onClick={selectInviteGroupMemo} />
-                <MemoButton src={deleteImg} onClick={deleteMemoGroup} />
-            </Buttons>
+            {isOwner &&
+                <Buttons active={useMemu}>
+                    <MemoButton src={inviteImg} onClick={selectInviteGroupMemo} />
+                    <MemoButton src={deleteImg} onClick={deleteMemoGroup} />
+                </Buttons>
+            }
         </CGroupTitle>
     )
 }

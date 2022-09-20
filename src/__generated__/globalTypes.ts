@@ -33,6 +33,11 @@ export interface CreateMemoInput {
   groupId: number;
 }
 
+export interface DeleteGroupMemberInput {
+  userId: number;
+  groupId: number;
+}
+
 export interface DeleteMemoGroupInput {
   id: number;
 }

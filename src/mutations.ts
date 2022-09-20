@@ -72,3 +72,12 @@ export const EDITPROFILE_MUTATION = gql`
         }
     }
 `;
+
+export const DELETEGROUPMEMBERS_MUTATION = gql`
+    mutation deleteGroupMember ($deleteGroupMemberInput: DeleteGroupMemberInput!) {
+        deleteGroupMember (input: $deleteGroupMemberInput) {
+            ok
+            error
+        }
+    }
+`;
