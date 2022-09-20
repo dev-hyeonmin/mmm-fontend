@@ -21,7 +21,7 @@ const CUserProfile = styled.div`
     font-size: 24px;
     margin: 6px 0 0 5px;
     cursor: pointer;
-`
+`;
 const ProfileMenu = styled.ul`
     position: absolute;
     top: 60px;
@@ -70,7 +70,6 @@ const ProfileMenu = styled.ul`
         }
     }
 `;
-
 const Notice = styled.div`
     position: absolute;
     width: 11px;
@@ -114,7 +113,6 @@ const ACCEPT_INVITATION_SUBSCRIPTION = gql`
 `;
 
 export const UserProfile = () => {
-    const client = useApolloClient();
     const { data: userData } = useMe();
     const [toggleProfileMenu, setToggleProfileMenu] = useState(false);
     const navigation = useNavigate();
@@ -129,7 +127,7 @@ export const UserProfile = () => {
         localStorage.removeItem(LOCALSTORAGE_TOKEN);
         isLoggedInVar(false);
         authTokenVar('');
-        navigation("/list");
+        navigation("/");
     };
 
     const setProfileMenuStatus = () => {

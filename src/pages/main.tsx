@@ -1,4 +1,4 @@
-import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import { Route, Router, Routes, useLocation, useNavigate } from "react-router-dom";
 import { MemoButton } from "../components/memo/memo-button";
 import { MemoByGroup } from "./memos/memoByGroup";
 import { MemoByGrid } from "./memos/memoByGrid";
@@ -11,6 +11,7 @@ import { CREATEMEMOGROUP_MUTATION } from "../mutations";
 import orderbyImg from "../images/memo-orderby1.png";
 // @ts-ignore
 import orderbyImg2 from "../images/memo-orderby2.png";
+import { NotFound } from "./404";
 
 const MYMEMOS_QUERY = gql`
     query myMemosQuery($myMemosInput: MyMemosInput!) {
@@ -33,6 +34,7 @@ const MYMEMOS_QUERY = gql`
 export const Main = () => {
     const navigation = useNavigate();
     const location = useLocation();
+    const path = location.pathname;
     const [, term] = location.search.split("?term=");
     const [myData, setMyData] = useState<myMemosQuery_myMemos_groups[]>();
     
@@ -46,7 +48,7 @@ export const Main = () => {
         }
     };
 
-    const [callQuery, { data, refetch }] = useLazyQuery<myMemosQuery, myMemosQueryVariables>(MYMEMOS_QUERY, {
+    const [callQuery, { refetch }] = useLazyQuery<myMemosQuery, myMemosQueryVariables>(MYMEMOS_QUERY, {
         onCompleted
     });
     const [createMemoGroupMutation] = useMutation<createMemoGroupMutation, createMemoGroupMutationVariables>(CREATEMEMOGROUP_MUTATION, {
@@ -90,10 +92,13 @@ export const Main = () => {
                     onClick={() => switchMemoList('/grid')}
                 />
             </div>
-            <Routes>
-                <Route path='/' element={<MemoByGroup groups={myData} createMemoGroup={createMemoGroup} />} />
-                <Route path='/grid' element={<MemoByGrid groups={myData} createMemoGroup={createMemoGroup}/>} />
-            </Routes>
+            { path === '/' && 
+                <MemoByGroup groups={myData} createMemoGroup={createMemoGroup} />
+            }
+
+            { path === '/grid' && 
+                <MemoByGrid groups={myData} createMemoGroup={createMemoGroup} />
+            }
         </div>
     );
 };

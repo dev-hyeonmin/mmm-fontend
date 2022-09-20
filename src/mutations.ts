@@ -63,3 +63,12 @@ export const ACCEPTGROUPMEMBER_MUTATION = gql`
         }
     }
 `;
+
+export const EDITPROFILE_MUTATION = gql`
+    mutation editProfileMutation ($editProfileInput: EditProfileInput!) {
+        editProfile (input: $editProfileInput) {
+            ok
+            error
+        }
+    }
+`;

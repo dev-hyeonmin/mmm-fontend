@@ -1,4 +1,5 @@
 import { useMutation } from "@apollo/client";
+import { useState } from "react";
 import styled from "styled-components";
 import { client } from "../apollo";
 import { ACCEPTGROUPMEMBER_MUTATION } from "../mutations";
@@ -27,7 +28,6 @@ const CInvitation = styled.li`
     }
 `;
 
-
 const Buttons = styled.div`
     margin-top: 10px;
 
@@ -53,8 +53,15 @@ const Buttons = styled.div`
     }
 `;
 
+const Notice = styled.div`
+    padding: 0 32px;
+    color: #7A4495;
+    font-size: 12px;
+`;
 
 export const Invitation: React.FC<IInvitationProps> = ({ userId, groupId, title, invitedUserName }) => {
+    const [isAccepted, setIsAccepted] = useState(false);
+    const [isDeleted, setIsDeleted] = useState(false);
     const [acceptGroupMemberMutation, { loading }] = useMutation<acceptGroupMemberMutation, acceptGroupMemberMutationVariables>(ACCEPTGROUPMEMBER_MUTATION);
     
     const acceptInvitation = (accept: boolean) => {
@@ -68,21 +75,39 @@ export const Invitation: React.FC<IInvitationProps> = ({ userId, groupId, title,
                     accept
                 }
             }
-        })
+        });
+
+        if (accept) {
+            setIsAccepted(true);
+        } else {
+            setIsDeleted(true);
+        }
     };
 
     return (
-        <CInvitation>
-            {title} <br />
-            <div className="invited-user">by. {invitedUserName}</div>
+        <>
+            { (!isAccepted && !isDeleted) &&
+                <CInvitation>
+                    {title} <br />
+                    <div className="invited-user">by. {invitedUserName}</div>
 
-            <Buttons>
-                <button type="button" onClick={() => acceptInvitation(false)}>Deny</button>
-                <Button
-                    actionText="Confirm"
-                    onClick={() => acceptInvitation(true)}
-                />
-            </Buttons>
-        </CInvitation>
+                    <Buttons>
+                        <button type="button" onClick={() => acceptInvitation(false)}>Deny</button>
+                        <Button
+                            actionText="Confirm"
+                            onClick={() => acceptInvitation(true)}
+                        />
+                    </Buttons>
+                </CInvitation>                
+            }
+
+            {isAccepted &&
+                <Notice>Please refresh the page 👍</Notice>
+            }
+
+            {isDeleted &&
+                <Notice>Deny invitation</Notice>
+            }
+        </>
     );
 };

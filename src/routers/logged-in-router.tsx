@@ -3,22 +3,24 @@ import { NotFound } from "../pages/404";
 import { Headers } from "../components/header";
 import { Main } from "../pages/main";
 import { VerifyEmail } from "../pages/verify-email";
+import { EditProfile } from "../pages/edit-profile";
 
 const routes = [
     {
-        path: "/list/*",
-        component: <Main />,
-        useHeader: true,
+        path: "/",
+        component: <Main />
     },
     {
         path: "/grid",
-        component: <Main />,
-        useHeader: true,
+        component: <Main />
     },
     {
         path: "/confirm",
-        component: <VerifyEmail />,
-        useHeader: false,
+        component: <VerifyEmail />
+    },
+    {
+        path: "/edit-profile",
+        component: <EditProfile />
     }
 ];
 

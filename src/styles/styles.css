@@ -34,6 +34,7 @@ input::placeholder {
     left: 0;
     width: 100%;
     height: -webkit-fill-available;
+    z-index: 99;
 }
 
 .box {
@@ -43,6 +44,7 @@ input::placeholder {
     flex-direction: column;
     position: relative;
     width: 50%;
+    background-color: #fff;
 }
 
 .box:nth-child(2){
