@@ -1,5 +1,8 @@
+import { useEffect, useState } from "react";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import styled from "styled-components";
+import { useMe } from "../../hooks/useMe";
+import { UseType } from "../../__generated__/globalTypes";
 import { myMemosQuery_myMemos_groups } from "../../__generated__/myMemosQuery";
 import { GroupTitle } from "./group-title";
 import { Memo } from "./memo";
@@ -64,15 +67,32 @@ const Members = styled.div`
 `;
 
 export const MemoGroup: React.FC<IMemoGroupProps> = ({ group }) => {
+    const { data: userData } = useMe();
+    const [useType, setUseType] = useState(UseType.Viewer);
+    useEffect(() => {
+        if (group.user.id === userData.me.id) {
+            setUseType(UseType.Editor);
+        } else {
+            const myUseTypeInfo = group.members?.find((member) => member.user.id === userData.me.id);
+            if (myUseTypeInfo?.useType) {                
+                setUseType(myUseTypeInfo?.useType);
+            }
+        }
+    });
+
     return (
         <CMemoGroup key={group.id}>
             <GroupTitle
                 groupId={group.id}
-                title={group.title}            
+                title={group.title}   
+                useType={useType}
             />
-            <MemoAddButton
-                groupId={group.id}
-            />
+
+            {useType === UseType.Editor &&
+                <MemoAddButton
+                    groupId={group.id}
+                />
+            }
             <Droppable droppableId={"" + group.id}>
                 {(provided) => (
                     <div className={group.members ? group.members.length > 0 ? "box-memos has-group" : "box-memos" : "box-memos"}
@@ -87,9 +107,9 @@ export const MemoGroup: React.FC<IMemoGroupProps> = ({ group }) => {
                                     {...provided.draggableProps}
                                     {...provided.dragHandleProps}
                                     >
-                                        <Memo memo={memo}/>
+                                        <Memo memo={memo} useType={useType} />
                                     </div>
-                                )}                                                    
+                                )}                                     
                             </Draggable>
                         ))}
                         {provided.placeholder}

@@ -1,4 +1,4 @@
-import { Route, Router, Routes, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { MemoButton } from "../components/memo/memo-button";
 import { MemoByGroup } from "./memos/memoByGroup";
 import { MemoByGrid } from "./memos/memoByGrid";
@@ -11,7 +11,6 @@ import { CREATEMEMOGROUP_MUTATION } from "../mutations";
 import orderbyImg from "../images/memo-orderby1.png";
 // @ts-ignore
 import orderbyImg2 from "../images/memo-orderby2.png";
-import { NotFound } from "./404";
 
 const MYMEMOS_QUERY = gql`
     query myMemosQuery($myMemosInput: MyMemosInput!) {
@@ -21,13 +20,18 @@ const MYMEMOS_QUERY = gql`
             groups {
                 id
                 title
+                user {
+                    id
+                }
                 memos {
                     id
                     content
                     color
                 }
                 members{
+                    useType
                     user {
+                        id
                         name
                         email
                     }

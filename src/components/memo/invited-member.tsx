@@ -6,10 +6,18 @@ import { Button } from "../button";
 import { useForm } from "react-hook-form";
 import { FormError } from "../form-error";
 import { inviteGroupMemberMutation, inviteGroupMemberMutationVariables } from "../../__generated__/inviteGroupMemberMutation";
-
+import { UseType } from "../../__generated__/globalTypes";
+// @ts-ignore
+import viewerImg from "../../images/permission-viewer.png";
+// @ts-ignore
+import editorImg from "../../images/permission-editor.png";
 
 interface IForm {
     email: string;
+    useType: UseType;
+}
+interface IPermissionProps {
+    src: any;
 }
 
 const INVITEGROUPMEMBER_MUTATION = gql`
@@ -52,11 +60,20 @@ const Form = styled.dl`
     }
 
     dd {
-        margin-top: 5px;
+        margin: 5px 0 15px;
         input {
             height: 40px;
             border-radius: 3px;
             padding: 0 10px;
+        }
+
+        input[type='radio'] {
+            display: none;
+        }
+
+        input[type='radio']:checked+label {
+            border: 1px solid #FF8FB1;
+            color: #4c5158
         }
     }
 `;
@@ -85,6 +102,28 @@ const Buttons = styled.div`
     }
 `;
 
+const Permission = styled.label<IPermissionProps>`
+    display: inline-block;
+    width: calc(50% - 2.5px);
+    height: 130px;
+    line-height: 200px;
+    text-align: center;
+    cursor: pointer;
+    border: 1px solid #eee;
+    border-radius: 3px;
+    margin: 4px 0 0;
+    color: #999;
+    transition: all 0.2s ease;
+    background-image: url(${props=>props.src});
+    background-size: 50px;
+    background-position: center 20px;
+    background-repeat: no-repeat;
+
+    &:nth-child(4) {
+        margin-left: 5px;
+    }
+`;
+
 export const InvitedMemo: React.FC = () => {
     
     const selectInviteGroup = useRecoilValue(selectInviteGroupAtom);
@@ -110,13 +149,14 @@ export const InvitedMemo: React.FC = () => {
 
     const onSubmit = () => {
         if (!selectInviteGroup.id) { return; }
-        const { email } = getValues();
-
+        const { email, useType } = getValues();
+    
         inviteGroupMemberMutation({
             variables: {
                 inviteGroupMemberInput: {
                     groupId: selectInviteGroup.id,
-                    inviteEmail: email
+                    inviteEmail: email,
+                    useType
                 }
             }
         })
@@ -140,6 +180,31 @@ export const InvitedMemo: React.FC = () => {
                 
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <Form>
+                            <dt>Permission</dt>
+                            <dd>
+                                <input
+                                    {...register("useType", { required: true })}
+                                    type="radio"
+                                    value={UseType.Viewer}
+                                    id={`useType_${UseType.Viewer}`}
+                                />
+                                <Permission
+                                    src={viewerImg}
+                                    htmlFor={`useType_${UseType.Viewer}`}>{UseType.Viewer}</Permission>
+
+                                <input
+                                    {...register("useType", { required: true })}
+                                    type="radio"
+                                    value={UseType.Editor}
+                                    id={`useType_${UseType.Editor}`}
+                                />
+                                <Permission
+                                    src={editorImg}
+                                    htmlFor={`useType_${UseType.Editor}`}>{UseType.Editor}</Permission>
+
+                                {errors.useType?.type === "required" && <FormError errorMessage="Permission is required." />}
+                            </dd>
+
                             <dt>Email</dt>
                             <dd>
                                 <input

@@ -40,7 +40,7 @@ const Search = styled.input`
 `;
 
 export const Headers = () => {
-    const { data: userData } = useMe();    
+    const { data: userData } = useMe();
     const [keyword, setKeyword] = useState('');
     const navigation = useNavigate();
     

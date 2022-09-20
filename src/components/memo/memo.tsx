@@ -20,10 +20,12 @@ import deleteImg from "../../images/delete.png";
 import paletteImg from "../../images/color-palette.png";
 // @ts-ignore
 import zoomOutImg from "../../images/zoom-out.png";
+import { UseType } from "../../__generated__/globalTypes";
 
 
 interface IMemoProps {
     memo: myMemosQuery_myMemos_groups_memos;
+    useType: UseType;
 }
 
 interface ICMemoProps {
@@ -103,7 +105,8 @@ const PaletteColor = styled.li<IPaletteProps>`
     border: 1px solid #bbb;
 `;
 
-export const Memo: React.FC<IMemoProps> = ({ memo }) => {
+export const Memo: React.FC<IMemoProps> = ({ memo, useType }) => {
+    console.log(useType);
     let location = useLocation();
     const path = location.pathname;
     const palette = ["#B7C4CF", "#FFDBA4", "#F2D7D9", "#D3CEDF", "#A2B38B", "#ECB390", "#F9F3EE", "#FFFFFF"];
@@ -224,41 +227,42 @@ export const Memo: React.FC<IMemoProps> = ({ memo }) => {
     }
     return (
         <CMemo backgroundcolor={memoColor ? memoColor : "#FFFFFF"} layoutId={`memo${memo.id}`}>
-
-            <div className="memo-menu">
-                {useMenu &&
-                <>
-                    <MemoButton
-                    onClick={togglePalette}
-                    src={paletteImg}
-                    backgroundSize="14px"
-                    />
-                        
-                    <MemoButton
-                    onClick={deleteMemo}
-                    src={deleteImg}
-                    backgroundSize="14px"
-                    />
-                    {usePalette &&
-                        <Palette>
-                            {palette.map((color) =>
-                                <PaletteColor
-                                    key={color}
-                                    backgroundcolor={color}
-                                    onClick={() => setPickColor(color)}
-                                />
-                            )}
-                        </Palette>
+            {useType === UseType.Editor &&
+                <div className="memo-menu">
+                    {useMenu &&
+                        <>
+                            <MemoButton
+                                onClick={togglePalette}
+                                src={paletteImg}
+                                backgroundSize="14px"
+                            />
+                            
+                            <MemoButton
+                                onClick={deleteMemo}
+                                src={deleteImg}
+                                backgroundSize="14px"
+                            />
+                            {usePalette &&
+                                <Palette>
+                                    {palette.map((color) =>
+                                        <PaletteColor
+                                            key={color}
+                                            backgroundcolor={color}
+                                            onClick={() => setPickColor(color)}
+                                        />
+                                    )}
+                                </Palette>
+                            }
+                        </>
                     }
-                </>
-                }
-                
-                <MemoButton
-                    onClick={toggleMenu}
-                    src={menuImg}
-                    backgroundSize="10px"
-                />
-            </div>
+                    
+                    <MemoButton
+                        onClick={toggleMenu}
+                        src={menuImg}
+                        backgroundSize="10px"
+                    />
+                </div>
+            }
             
             {!editMode && <div onClick={onEdit}>{content.replaceAll('<br/>', '\n')}</div> }
             {(editMode && path !== '/grid') &&
@@ -269,6 +273,7 @@ export const Memo: React.FC<IMemoProps> = ({ memo }) => {
                 onKeyDown={onKeyDown}
                 onFocus={moveCursor}
                 autoFocus
+                disabled={useType === UseType.Editor ? false : true}
                 />
             }
             {(editMode && path === '/grid') &&
@@ -279,6 +284,7 @@ export const Memo: React.FC<IMemoProps> = ({ memo }) => {
                 onKeyDown={onKeyDown}
                 onFocus={moveCursor}
                 autoFocus
+                disabled={useType === UseType.Editor ? false : true}
                 />
             }  
             

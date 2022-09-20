@@ -7,6 +7,11 @@
 // START Enums and Input Objects
 //==============================================================
 
+export enum UseType {
+  Editor = "Editor",
+  Viewer = "Viewer",
+}
+
 export interface AcceptGroupMemberInput {
   userId: number;
   groupId: number;
@@ -57,6 +62,7 @@ export interface EditProfileInput {
 
 export interface InviteGroupMemberInput {
   groupId: number;
+  useType: UseType;
   inviteEmail: string;
 }
 

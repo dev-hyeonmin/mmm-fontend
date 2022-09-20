@@ -13,11 +13,13 @@ import deleteImg from "../../images/delete.png";
 import inviteImg from "../../images/invite.png";
 import { useSetRecoilState } from "recoil";
 import { selectInviteGroupAtom } from "../../atom";
+import { UseType } from "../../__generated__/globalTypes";
 
 
 interface IGroupTitleProps {
     groupId: number;
     title: string;
+    useType: UseType;
 }
 
 interface IMenuStyledProps {
@@ -71,7 +73,7 @@ const TitleError = styled.div`
     font-size: 12px;
 `;
 
-export const GroupTitle: React.FC<IGroupTitleProps> = ({ groupId, title: groupTitle }) => {
+export const GroupTitle: React.FC<IGroupTitleProps> = ({ groupId, title: groupTitle, useType }) => {
     const client = useApolloClient();
     const setSelectInviteGroupAtom = useSetRecoilState(selectInviteGroupAtom);
     const [title, setTitle] = useState(groupTitle);
@@ -159,13 +161,16 @@ export const GroupTitle: React.FC<IGroupTitleProps> = ({ groupId, title: groupTi
                 onChange={onChange}
                 onBlur={editMemoTitle}
                 onKeyDown={onKeyDown}
+                disabled={useType === UseType.Editor ? false : true}
             />
             {error && <TitleError>Group title is required.</TitleError>}            
 
-            <MemoButton
-                src={buttonImg}
-                onClick={toggleMenu}
-            />
+            {useType === UseType.Editor &&
+                <MemoButton
+                    src={buttonImg}
+                    onClick={toggleMenu}
+                />
+            }
 
             <Buttons active={useMemu}>
                 <MemoButton src={inviteImg} onClick={selectInviteGroupMemo} />

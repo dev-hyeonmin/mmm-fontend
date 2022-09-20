@@ -3,11 +3,16 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import { MyMemosInput } from "./globalTypes";
+import { MyMemosInput, UseType } from "./globalTypes";
 
 // ====================================================
 // GraphQL query operation: myMemosQuery
 // ====================================================
+
+export interface myMemosQuery_myMemos_groups_user {
+  __typename: "User";
+  id: number;
+}
 
 export interface myMemosQuery_myMemos_groups_memos {
   __typename: "Memo";
@@ -18,12 +23,14 @@ export interface myMemosQuery_myMemos_groups_memos {
 
 export interface myMemosQuery_myMemos_groups_members_user {
   __typename: "User";
+  id: number;
   name: string;
   email: string;
 }
 
 export interface myMemosQuery_myMemos_groups_members {
   __typename: "MemoGroupMembers";
+  useType: UseType;
   user: myMemosQuery_myMemos_groups_members_user;
 }
 
@@ -31,6 +38,7 @@ export interface myMemosQuery_myMemos_groups {
   __typename: "MemoGroup";
   id: number;
   title: string;
+  user: myMemosQuery_myMemos_groups_user;
   memos: myMemosQuery_myMemos_groups_memos[] | null;
   members: myMemosQuery_myMemos_groups_members[] | null;
 }
