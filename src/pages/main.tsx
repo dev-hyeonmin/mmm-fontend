@@ -26,6 +26,12 @@ const MYMEMOS_QUERY = gql`
                     content
                     color
                 }
+                members{
+                    user {
+                        name
+                        email
+                    }
+                }
             }
         }
     }

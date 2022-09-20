@@ -16,11 +16,23 @@ export interface myMemosQuery_myMemos_groups_memos {
   color: string | null;
 }
 
+export interface myMemosQuery_myMemos_groups_members_user {
+  __typename: "User";
+  name: string;
+  email: string;
+}
+
+export interface myMemosQuery_myMemos_groups_members {
+  __typename: "MemoGroupMembers";
+  user: myMemosQuery_myMemos_groups_members_user;
+}
+
 export interface myMemosQuery_myMemos_groups {
   __typename: "MemoGroup";
   id: number;
   title: string;
   memos: myMemosQuery_myMemos_groups_memos[] | null;
+  members: myMemosQuery_myMemos_groups_members[] | null;
 }
 
 export interface myMemosQuery_myMemos {

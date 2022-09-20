@@ -227,6 +227,9 @@ input::placeholder {
     overflow: scroll;
     height: calc(100% - 100px);
 }
+.box-memos.has-group {
+    height: calc(100% - 150px);
+}
 
 .wrapper-memo-grid {
     display: flex;    

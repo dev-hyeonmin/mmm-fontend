@@ -41,6 +41,28 @@ const CMemoGroup = styled.div`
     }
 `;
 
+const Members = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    margin: 15px 0 0;    
+
+    div {
+        width: 100%;
+        color: #666;
+        font-size: 12px;
+        margin-bottom: 5px;
+        padding-left: 2px;
+    }
+    span {
+        line-height: 20px;
+        padding: 0 5px;
+        background-color: #FCE2DB;
+        color: #7A4495;
+        font-size: 12px;
+        margin: 2px 0 2px 0;
+    }
+`;
+
 export const MemoGroup: React.FC<IMemoGroupProps> = ({ group }) => {
     return (
         <CMemoGroup key={group.id}>
@@ -53,7 +75,7 @@ export const MemoGroup: React.FC<IMemoGroupProps> = ({ group }) => {
             />
             <Droppable droppableId={"" + group.id}>
                 {(provided) => (
-                    <div className="box-memos"
+                    <div className={group.members ? group.members.length > 0 ? "box-memos has-group" : "box-memos" : "box-memos"}
                         {...provided.droppableProps}
                         ref={provided.innerRef}
                     >                             
@@ -74,6 +96,18 @@ export const MemoGroup: React.FC<IMemoGroupProps> = ({ group }) => {
                     </div>
                 )}                                
             </Droppable>
+
+            {group.members && group.members.length > 0 &&
+                <Members>
+                    <div>members</div>
+
+                    {group.members?.map((member, index) =>
+                        <span key={index}>
+                            {member.user.name}
+                        </span>
+                    )}
+                </Members>
+            }
         </CMemoGroup>
     )
 }
