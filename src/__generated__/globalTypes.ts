@@ -63,6 +63,7 @@ export interface EditProfileInput {
   name?: string | null;
   email?: string | null;
   password?: string | null;
+  userImage?: string | null;
 }
 
 export interface InviteGroupMemberInput {

@@ -13,6 +13,7 @@ interface IForm {
     name: string;
     email: string;
     password: string;
+    checkPassword: string;
 }
 
 const Back = styled.button`
@@ -53,7 +54,13 @@ export const CreateAccount = () => {
     });
     
     const onSubmit = () => {
-        const { name, email, password } = getValues();
+        const { name, email, password, checkPassword } = getValues();
+        
+        if (password !== checkPassword) {
+            alert("Please check password!");
+            return;
+        }
+        
         createAccountMutation({
             variables: {
                 createAccountInput: {
@@ -111,6 +118,17 @@ export const CreateAccount = () => {
                             />
                             {errors.password?.type === "required" && <FormError errorMessage="Password is required." />}
                             {errors.password?.type === "minLength" && <FormError errorMessage="Password must be more than 4 chars." />}
+                        </dd>
+
+                        <dt>check password</dt>
+                        <dd>
+                            <input
+                                type="password" 
+                                placeholder="password"
+                                {...register("checkPassword", { required: true, minLength: 4 })}
+                            />
+                            {errors.checkPassword?.type === "required" && <FormError errorMessage="Password is required." />}
+                            {errors.checkPassword?.type === "minLength" && <FormError errorMessage="Password must be more than 4 chars." />}
                         </dd>
                     </dl>
                     
