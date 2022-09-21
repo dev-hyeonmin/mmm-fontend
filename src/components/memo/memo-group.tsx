@@ -99,7 +99,7 @@ export const MemoGroup: React.FC<IMemoGroupProps> = ({ group }) => {
     const { data: userData } = useMe();
     const [useType, setUseType] = useState(UseType.Viewer);
     const [isOwner, setIsOwner] = useState(false);
-    const [deleteGroupMember, { loading }] = useMutation<deleteGroupMember, deleteGroupMemberVariables>(DELETEGROUPMEMBERS_MUTATION);
+    const [deleteGroupMember] = useMutation<deleteGroupMember, deleteGroupMemberVariables>(DELETEGROUPMEMBERS_MUTATION);
 
     useEffect(() => {
         if (group.user.id === userData.me.id) {

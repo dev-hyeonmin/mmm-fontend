@@ -4,12 +4,26 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "../components/button";
 import { FormError } from "../components/form-error";
 import { createAccountMutation, createAccountMutationVariables } from "../__generated__/createAccountMutation";
+import styled from "styled-components";
+import {Helmet} from "react-helmet";
+// @ts-ignore
+import backImg from "../images/back.png";
 
 interface IForm {
     name: string;
     email: string;
     password: string;
 }
+
+const Back = styled.button`
+    width: 20px !important;
+    height: 40px;
+    background-image: url(${backImg});
+    background-color: transparent;
+    background-position: center;
+    background-size: 20px;
+    background-repeat: no-repeat;
+`;
 
 const CREATEACCOUNT_MUTATION = gql`
     mutation createAccountMutation($createAccountInput: CreateAccountInput!) {
@@ -26,10 +40,10 @@ export const CreateAccount = () => {
         const {
             createAccount: { ok }
         } = data;
-        
+
         if (ok) {      
             alert("Create account success!");
-            navigation("/list");
+            navigation("/");
         }
     };
     
@@ -51,10 +65,18 @@ export const CreateAccount = () => {
         });
     };
 
+    const goBack = () => {
+        navigation(-1);
+    };
+
     return (
         <div className="wrapper-login">
+            <Helmet>
+                <title>Create Account | mmm</title>
+            </Helmet>
             <div className="box">                
                 <form onSubmit={handleSubmit(onSubmit)}>
+                    <Back onClick={goBack} />
                     <h3>Create an account 🥳</h3>
                     <h6>Let's get started with you.</h6>
 

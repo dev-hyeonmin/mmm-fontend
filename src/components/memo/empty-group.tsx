@@ -14,7 +14,7 @@ const CEmptyGroup = styled.div`
     border: 1px dashed #bbb;
     border-radius: 7px;
     padding: 20px 20px 20px 20px;
-    margin-left: 20px;
+    margin-left: 20px !important;
     cursor: pointer;
 
     &:hover {

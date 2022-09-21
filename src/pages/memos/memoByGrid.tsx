@@ -5,7 +5,6 @@ import { EmptyGroup } from "../../components/memo/empty-group";
 import { SelectedMemo } from "../../components/memo/selected-memo";
 import { useRecoilValue } from "recoil";
 import { selectMemoAtom } from "../../atom";
-import { useState } from "react";
 import { UseType } from "../../__generated__/globalTypes";
 import { useMe } from "../../hooks/useMe";
 

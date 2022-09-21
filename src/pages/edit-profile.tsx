@@ -1,11 +1,11 @@
-import { gql, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
+import { Helmet } from "react-helmet";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { authTokenVar, isLoggedInVar } from "../apollo";
 import { Button } from "../components/button";
 import { FormError } from "../components/form-error";
 import { EDITPROFILE_MUTATION } from "../mutations";
-import { createAccountMutation } from "../__generated__/createAccountMutation";
 import { editProfileMutation, editProfileMutationVariables } from "../__generated__/editProfileMutation";
 
 interface IForm {
@@ -45,12 +45,15 @@ export const EditProfile = () => {
                 }
             },
         });
-    };
+    };    
 
     return (
         <div className="wrapper-login">
+            <Helmet>
+                <title>Edit Profile | mmm</title>
+            </Helmet>
             <div className="box">                
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <form onSubmit={handleSubmit(onSubmit)}>                    
                     <h3>Edit Profile 🌟</h3>
                     <dl>
                         <dt>name</dt>

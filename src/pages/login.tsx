@@ -6,6 +6,7 @@ import { FormError } from "../components/form-error";
 import { LOCALSTORAGE_TOKEN } from "../constants";
 import { loginMutation, loginMutationVariables } from "../__generated__/loginMutation";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 interface IForm {
     email: string;
@@ -55,6 +56,9 @@ export const Login = () => {
 
     return (
         <div className="wrapper-login">
+            <Helmet>
+                <title>Login | mmm</title>
+            </Helmet>
             <div className="box">                
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <h3>Hello 😎</h3>

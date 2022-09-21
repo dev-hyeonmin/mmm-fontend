@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { verifyEmailMutaion, verifyEmailMutaionVariables } from "../__generated__/verifyEmailMutaion";
 import { Link } from "react-router-dom";
 import { useMe } from "../hooks/useMe";
+import { Helmet } from "react-helmet";
 
 const VERIFYEMAIL_MUTATION = gql`
     mutation verifyEmailMutaion($verifyEmailInput: VerifyEmailInput!) {
@@ -51,6 +52,9 @@ export const VerifyEmail = () => {
     }, []);
     return (
         <div className="wrapper-email">
+            <Helmet>
+                <title>Verify Email | mmm</title>
+            </Helmet>
             {loading ? "Verifing your email." :
                 <div className="box-confirm">
                     <img src={require('../images/verified-email.png')} />

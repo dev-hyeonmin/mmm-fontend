@@ -1,6 +1,6 @@
 import { useMe } from "../hooks/useMe";
 import styled from "styled-components";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserProfile } from "./userProfile";
 // @ts-ignore
@@ -14,6 +14,10 @@ const Header = styled.div`
     border-bottom: 1px solid #eee;
     padding: 0 50px;
     box-sizing: border-box;
+
+    @media screen and (max-width: 1023px) {
+        padding: 0 10px;
+    }
 `;
 
 const Logo = styled.span`

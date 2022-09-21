@@ -24,8 +24,8 @@ const CUserProfile = styled.div`
 `;
 const ProfileMenu = styled.ul`
     position: absolute;
-    top: 60px;
-    right: 10px;
+    top: 55px;
+    right: 0;
     width: 250px;
     z-index: 99;
     background-color: #fff;
@@ -36,7 +36,7 @@ const ProfileMenu = styled.ul`
         content: '';
         position: absolute;
         top: -9px;
-        right: 33px;
+        right: -5px;
         width: 0;
         height: 0;
         transform: translateX(-50%);
@@ -55,6 +55,7 @@ const ProfileMenu = styled.ul`
             transition: all 0.2s ease;
             font-size: 14px;
             text-decoration: none;
+            text-align: left;
 
             &:hover {
                 background-color: #fafafa;
@@ -143,28 +144,27 @@ export const UserProfile = () => {
                     {invitationData.myInvitation.invitations.length > 0 &&
                         <Notice />
                     }
-                </CUserProfile>
-                
 
-                {toggleProfileMenu &&
-                    <ProfileMenu>
-                        <li><Link to='edit-profile'>Edit Profile</Link></li>
-                        <li><a onClick={logout}>Logout</a></li>
+                    {toggleProfileMenu &&
+                        <ProfileMenu>
+                            <li><Link to='edit-profile'>Edit Profile</Link></li>
+                            <li><a onClick={logout}>Logout</a></li>
 
-                        {invitationData.myInvitation.invitations.length > 0 &&
-                            <li>Invitation</li>
-                        }
-                        {invitationData.myInvitation.invitations.map((invitation) => 
-                            <Invitation
-                                key={invitation.groupId}
-                                userId={invitation.userId}
-                                groupId={invitation.groupId}
-                                title={invitation.group.title}
-                                invitedUserName={invitation.group.user.name}
-                            />
-                        )}
-                    </ProfileMenu>
-                }
+                            {invitationData.myInvitation.invitations.length > 0 &&
+                                <li>Invitation</li>
+                            }
+                            {invitationData.myInvitation.invitations.map((invitation) => 
+                                <Invitation
+                                    key={invitation.groupId}
+                                    userId={invitation.userId}
+                                    groupId={invitation.groupId}
+                                    title={invitation.group.title}
+                                    invitedUserName={invitation.group.user.name}
+                                />
+                            )}
+                        </ProfileMenu>
+                    }
+                </CUserProfile>            
                 </>
             }
         </>

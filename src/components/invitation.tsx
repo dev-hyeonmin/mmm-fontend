@@ -1,7 +1,6 @@
 import { useMutation } from "@apollo/client";
 import { useState } from "react";
 import styled from "styled-components";
-import { client } from "../apollo";
 import { ACCEPTGROUPMEMBER_MUTATION } from "../mutations";
 import { acceptGroupMemberMutation, acceptGroupMemberMutationVariables } from "../__generated__/acceptGroupMemberMutation";
 import { Button } from "./button";

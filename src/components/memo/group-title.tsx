@@ -5,15 +5,14 @@ import { useState } from "react";
 import { editMemoGroupMutation, editMemoGroupMutationVariables } from "../../__generated__/editMemoGroupMutation";
 import { DELETEMEMOGROUP_MUTATION } from "../../mutations";
 import { deleteMemoGroupMutation, deleteMemoGroupMutationVariables } from "../../__generated__/deleteMemoGroupMutation";
+import { useSetRecoilState } from "recoil";
+import { selectInviteGroupAtom } from "../../atom";
 // @ts-ignore
 import buttonImg from "../../images/menu.png";
 // @ts-ignore
 import deleteImg from "../../images/delete.png";
 // @ts-ignore
 import inviteImg from "../../images/invite.png";
-import { useSetRecoilState } from "recoil";
-import { selectInviteGroupAtom } from "../../atom";
-import { UseType } from "../../__generated__/globalTypes";
 
 
 interface IGroupTitleProps {

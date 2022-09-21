@@ -12,6 +12,7 @@ import { useLocation } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { selectMemoAtom } from "../../atom";
 import { motion } from "framer-motion";
+import { UseType } from "../../__generated__/globalTypes";
 // @ts-ignore
 import menuImg from "../../images/menu.png";
 // @ts-ignore
@@ -20,7 +21,6 @@ import deleteImg from "../../images/delete.png";
 import paletteImg from "../../images/color-palette.png";
 // @ts-ignore
 import zoomOutImg from "../../images/zoom-out.png";
-import { UseType } from "../../__generated__/globalTypes";
 
 
 interface IMemoProps {
@@ -170,7 +170,7 @@ export const Memo: React.FC<IMemoProps> = ({ memo, useType, isOwner }) => {
             variables: {
                 editMemoInput: {
                     id: memo.id,
-                    content: content.replace(/(?:\r\n|\r|\n)/g, '<br/>'),  
+                    content: content.replace(/(?:\r\n|\r|\n)/g, '<br/>'),
                 }
             }
         });
