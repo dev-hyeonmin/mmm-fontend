@@ -84,7 +84,7 @@ export const Headers = () => {
                     />
 
                     {userData?.me.name &&
-                        <UserProfile />
+                        <UserProfile userData={userData.me}/>
                     }
                 </div>
             </Header>

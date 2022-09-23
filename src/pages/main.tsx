@@ -11,6 +11,7 @@ import { CREATEMEMOGROUP_MUTATION } from "../mutations";
 import orderbyImg from "../images/memo-orderby1.png";
 // @ts-ignore
 import orderbyImg2 from "../images/memo-orderby2.png";
+import { Helmet } from "react-helmet";
 
 const MYMEMOS_QUERY = gql`
     query myMemosQuery($myMemosInput: MyMemosInput!) {
@@ -34,6 +35,7 @@ const MYMEMOS_QUERY = gql`
                         id
                         name
                         email
+                        userImage
                     }
                 }
             }
@@ -92,6 +94,9 @@ export const Main = () => {
     
     return (                  
         <div className="wrapper-memo">
+            <Helmet>
+                <title>mmm</title>
+            </Helmet>
             <div className="option-menus">
                 <MemoButton
                     src={orderbyImg}

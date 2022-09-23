@@ -7,7 +7,8 @@ Color palette
 
 * react-beautiful-dnd 이슈로 <React.StrictMode> 제외
 
-- create account / check password 추가
 - alert창 대신 확인 modal창 추가
 - 로그인했을때 리스트 불러오는 캐시 날리기
 - 사용자 이미지 추가
+
+- 윈도우 테스트하기

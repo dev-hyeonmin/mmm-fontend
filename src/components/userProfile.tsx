@@ -1,26 +1,39 @@
 import { authTokenVar, isLoggedInVar } from "../apollo";
 import { LOCALSTORAGE_TOKEN } from "../constants";
-import { useMe } from "../hooks/useMe";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { gql, useApolloClient, useQuery, useSubscription } from "@apollo/client";
+import { gql, useQuery, useSubscription } from "@apollo/client";
 import { acceptInvitation } from "../__generated__/acceptInvitation";
 import { myInvitationQuery, myInvitationQuery_myInvitation } from "../__generated__/myInvitationQuery";
 import { Invitation } from "./invitation";
+import { meQuery_me } from "../__generated__/meQuery";
+import { GoBack } from "./goBack";
 
-const CUserProfile = styled.div`
+interface IUserProfileProps {
+    userData: meQuery_me;
+}
+interface IUserImageProps {
+    src?: any;
+}
+
+const CUserProfile = styled.div<IUserImageProps>`
     position: relative;
     float: right;
     width: 36px;
     height: 36px;
     line-height: 34px;
-    background-color: #ddd;
+    background-color: ${props => props.src ? 'transparent' : '#66367F'};
     border-radius: 20px;
     text-align: center;
     font-size: 24px;
     margin: 6px 0 0 5px;
     cursor: pointer;
+
+    background-image: url("${props => props.src ? props.src : ''}");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 `;
 const ProfileMenu = styled.ul`
     position: absolute;
@@ -83,6 +96,13 @@ const Notice = styled.div`
     border-radius: 6px;
     z-index: 9;
 `;
+const UserImage = styled.span<IUserImageProps>`
+    display: inline-block;
+    background-image: url(${props => props.src});
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+`;
 
 const MYINVITATION_QUERY = gql`
     query myInvitationQuery {
@@ -113,8 +133,7 @@ const ACCEPT_INVITATION_SUBSCRIPTION = gql`
     }
 `;
 
-export const UserProfile = () => {
-    const { data: userData } = useMe();
+export const UserProfile: React.FC<IUserProfileProps> = ({userData}) => {
     const [toggleProfileMenu, setToggleProfileMenu] = useState(false);
     const navigation = useNavigate();
     const { data: invitationData, refetch } = useQuery<myInvitationQuery, myInvitationQuery_myInvitation>(MYINVITATION_QUERY);
@@ -137,10 +156,13 @@ export const UserProfile = () => {
 
     return (
         <>
-            {(userData?.me.name && invitationData?.myInvitation.invitations) &&
+            {(userData.name && invitationData?.myInvitation.invitations) &&
                 <>
-                <CUserProfile onClick={setProfileMenuStatus}>
-                    {userData?.me.name.substr(0, 1)}
+                <CUserProfile onClick={setProfileMenuStatus} src={userData.userImage}>
+                    {!userData.userImage &&
+                        userData.name.substring(0, 1)
+                    }
+
                     {invitationData.myInvitation.invitations.length > 0 &&
                         <Notice />
                     }

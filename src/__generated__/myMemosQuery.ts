@@ -26,6 +26,7 @@ export interface myMemosQuery_myMemos_groups_members_user {
   id: number;
   name: string;
   email: string;
+  userImage: string | null;
 }
 
 export interface myMemosQuery_myMemos_groups_members {

@@ -1,11 +1,14 @@
 import { useMutation } from "@apollo/client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Helmet } from "react-helmet";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 import { authTokenVar, isLoggedInVar } from "../apollo";
 import { Button } from "../components/button";
 import { FormError } from "../components/form-error";
+import { GoBack } from "../components/goBack";
+import { useMe } from "../hooks/useMe";
 import { EDITPROFILE_MUTATION } from "../mutations";
 import { editProfileMutation, editProfileMutationVariables } from "../__generated__/editProfileMutation";
 
@@ -17,9 +20,27 @@ interface IForm {
     file?: FileList;
 }
 
+interface IUserImage {
+    src: string;
+}
+
+const UserImage = styled.div<IUserImage>`
+    display: inline-block;
+    width: 80px;
+    height: 80px;
+    border-radius: 40px;
+    vertical-align: middle;
+    margin-right: 10px;
+    background-color: ${props => props.src ? "transparent" : "#66367F"};
+    background-image: url(${props => props.src});
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+`;
+
 export const EditProfile = () => {  
+    const { data: userData } = useMe();
     const navigation = useNavigate();
-    const [userImage, setUserImage] = useState('');
     const [userImageName, setUserImageName] = useState('');
     const onCompleted = async (data: editProfileMutation) => {
         const {
@@ -28,9 +49,9 @@ export const EditProfile = () => {
         
         if (ok) {      
             alert("Edit profile success!");
-            // isLoggedInVar(false);
-            // authTokenVar('');
-            // navigation("/");
+            isLoggedInVar(false);
+            authTokenVar('');
+            navigation("/");
         }
     };
     
@@ -41,19 +62,26 @@ export const EditProfile = () => {
     
     const onSubmit = async () => {
         const { file, name, email, password, checkPassword } = getValues();
-
+        let userImage = "";
+        // await fetch("http://localhost:4000/uploads/delete", {
+        //     method: "POST",
+        //     headers: { 'Content-Type': 'application/json'},
+        //     body: JSON.stringify({
+        //         fileName: userData?.me.userImage
+        //     })
+        // })
+        
         if (file) {
             const actualFile = file[0];
             const formBody = new FormData();
             formBody.append("file", actualFile);
             const { url: coverImg } = await (
-                await fetch("http://localhost:4000/uploads/", {
+                await fetch("http://localhost:4000/uploads", {
                     method: "POST",
                     body: formBody,
                 })
             ).json();
-
-            setUserImage(coverImg);
+            userImage = coverImg;
         }
         
         if (password) {
@@ -86,21 +114,22 @@ export const EditProfile = () => {
             <Helmet>
                 <title>Edit Profile | mmm</title>
             </Helmet>
-            <div className="box">                
+            <div className="box">
                 <form onSubmit={handleSubmit(onSubmit)}>                    
+                    <GoBack />
                     <h3>Edit Profile 🌟</h3>
                     <dl>
                         <dt>profile image</dt>
-                        <dd>
+                        <dd className="file">
+                            <UserImage src={userData?.me.userImage} />
                             <label htmlFor="userImage">
-                                <span>UPLOAD FILE</span>
+                                <span>UPLOAD FILE</span> <br/>
                                 {userImageName}
                                 <input
                                     id="userImage"
                                     type="file"                                
                                     accept="image/*"
-                                    {...register("file")}
-                                    onChange={getFileName}
+                                    {...register("file", {onChange: getFileName})}
                                     />
                             </label>
                         </dd>

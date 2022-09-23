@@ -81,6 +81,13 @@ input::placeholder {
     margin: 5px 0 15px;
 }
 
+.box form dd.file {
+    display: flex;
+    align-items: center;
+    line-height: 24px;
+}
+
+
 .box form dd label {
     font-size: 12px;
     color: #999;

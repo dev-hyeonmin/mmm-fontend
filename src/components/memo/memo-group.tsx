@@ -15,6 +15,10 @@ interface IMemoGroupProps {
     group: myMemosQuery_myMemos_groups;
 }
 
+interface IMember {
+    src: string | null;
+}
+
 const CMemoGroup = styled.div`
     max-width: 20%;
     width: 25%;    
@@ -59,42 +63,50 @@ const Members = styled.div`
         margin-bottom: 5px;
         padding-left: 2px;
     }
-    span {
-        position: relative;
-        line-height: 20px;
-        padding: 0 5px;
-        background-color: #FCE2DB;
-        color: #7A4495;
-        font-size: 12px;
-        margin: 2px 0 2px 0;
-        border-radius: 2px;
-        overflow: hidden;
-
-        &.owner {
-            cursor: pointer;
-        }
-
-        &.owner:before {
-            content: "delete";
-            display: block;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
-            color: #fff;
-            text-align: center;
-            opacity: 0;            
-            transition: all 0.2s ease;
-        }
-
-        &.owner:hover:before {
-            opacity: 1;
-        }
-    }
 `;
 
+const Member = styled.span<IMember>`
+    position: relative;
+    width: 25px;
+    height: 25px;
+    line-height: 25px;
+    padding: 0 5px;
+    color: #7A4495;
+    font-size: 12px;
+    margin: 2px 0 2px 0;
+    border-radius: 16px;
+    text-align: center;
+    overflow: hidden;
+    background-color: ${props => props.src ? "transparent" : "#fff"};
+    background-image: url(${props => props.src});
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    &.owner {
+        cursor: pointer;
+    }
+
+    &.owner:before {
+        content: "x";
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background-color: rgba(0, 0, 0, 0.6);
+        color: #fff;
+        text-align: center;
+        opacity: 0;            
+        transition: all 0.2s ease;
+    }
+
+    &.owner:hover:before {
+        opacity: 1;
+    }
+`;
 export const MemoGroup: React.FC<IMemoGroupProps> = ({ group }) => {
     const { data: userData } = useMe();
     const [useType, setUseType] = useState(UseType.Viewer);
@@ -170,13 +182,14 @@ export const MemoGroup: React.FC<IMemoGroupProps> = ({ group }) => {
                     <div>members</div>
 
                     {group.members?.map((member, index) =>
-                        <span
+                        <Member
                             key={index}
                             onClick={isOwner ? () => deleteMember(member.user.id, member.user.name) : () => { }}
-                            className={isOwner? "owner" : ""}
+                            className={isOwner ? "owner" : ""}
+                            src={member.user.userImage ? member.user.userImage : null}
                         >
-                            {member.user.name}
-                        </span>
+                            {member.user.userImage ? "" : member.user.name.substring(0, 1)}
+                        </Member>
                     )}
                 </Members>
             }

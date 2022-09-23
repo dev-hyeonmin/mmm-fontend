@@ -6,8 +6,7 @@ import { FormError } from "../components/form-error";
 import { createAccountMutation, createAccountMutationVariables } from "../__generated__/createAccountMutation";
 import styled from "styled-components";
 import {Helmet} from "react-helmet";
-// @ts-ignore
-import backImg from "../images/back.png";
+import { GoBack } from "../components/goBack";
 
 interface IForm {
     name: string;
@@ -15,16 +14,6 @@ interface IForm {
     password: string;
     checkPassword: string;
 }
-
-const Back = styled.button`
-    width: 20px !important;
-    height: 40px;
-    background-image: url(${backImg});
-    background-color: transparent;
-    background-position: center;
-    background-size: 20px;
-    background-repeat: no-repeat;
-`;
 
 const CREATEACCOUNT_MUTATION = gql`
     mutation createAccountMutation($createAccountInput: CreateAccountInput!) {
@@ -83,7 +72,7 @@ export const CreateAccount = () => {
             </Helmet>
             <div className="box">                
                 <form onSubmit={handleSubmit(onSubmit)}>
-                    <Back onClick={goBack} />
+                    <GoBack />
                     <h3>Create an account 🥳</h3>
                     <h6>Let's get started with you.</h6>
 
