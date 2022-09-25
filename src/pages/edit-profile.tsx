@@ -8,6 +8,7 @@ import { authTokenVar, isLoggedInVar } from "../apollo";
 import { Button } from "../components/button";
 import { FormError } from "../components/form-error";
 import { GoBack } from "../components/goBack";
+import { SERVER_URL } from "../constants";
 import { useMe } from "../hooks/useMe";
 import { EDITPROFILE_MUTATION } from "../mutations";
 import { editProfileMutation, editProfileMutationVariables } from "../__generated__/editProfileMutation";
@@ -76,7 +77,7 @@ export const EditProfile = () => {
             const formBody = new FormData();
             formBody.append("file", actualFile);
             const { url: coverImg } = await (
-                await fetch("http://localhost:4000/uploads", {
+                await fetch(`http://${SERVER_URL}/uploads`, {
                     method: "POST",
                     body: formBody,
                 })

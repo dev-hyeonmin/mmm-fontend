@@ -58,13 +58,13 @@ export const Headers = () => {
                 navigation({
                     pathname: '/',
                     search: `?term=${keyword}` 
-                });                
+                });
             } else {
                 navigation({
                     pathname: '/'
                 });
             }
-
+            window.location.reload();
         }
     }
     return (
