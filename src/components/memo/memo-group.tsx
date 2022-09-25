@@ -51,33 +51,37 @@ const CMemoGroup = styled.div`
     }
 `;
 
-const Members = styled.div`
-    display: flex;
-    flex-wrap: wrap;
-    margin: 15px 0 0;    
+const Members = styled.div`    
+    margin: 15px 0 0;
 
-    div {
+    .box-name {
         width: 100%;
         color: #666;
         font-size: 12px;
         margin-bottom: 5px;
         padding-left: 2px;
     }
+
+    .member-box {
+        white-space: nowrap;
+        overflow: auto;
+    }
 `;
 
 const Member = styled.span<IMember>`
     position: relative;
+    display: inline-block;
     width: 25px;
     height: 25px;
     line-height: 25px;
     padding: 0 5px;
     color: #7A4495;
     font-size: 12px;
-    margin: 2px 0 2px 0;
+    margin: 2px 2px 2px 0;
     border-radius: 16px;
     text-align: center;
     overflow: hidden;
-    background-color: ${props => props.src ? "transparent" : "#fff"};
+    background-color: #fff;
     background-image: url(${props => props.src});
     background-position: center;
     background-repeat: no-repeat;
@@ -123,7 +127,7 @@ export const MemoGroup: React.FC<IMemoGroupProps> = ({ group }) => {
                 setUseType(myUseTypeInfo?.useType);
             }
         }
-    });
+    }, []);
 
     const deleteMember = (memberId: number, memberName: string) => {
         if (!window.confirm(`Are you sure delete ${memberName} on this group?`)) { return; }
@@ -155,7 +159,12 @@ export const MemoGroup: React.FC<IMemoGroupProps> = ({ group }) => {
             }
             <Droppable droppableId={"" + group.id}>
                 {(provided) => (
-                    <div className={group.members ? group.members.length > 0 ? "box-memos has-group" : "box-memos" : "box-memos"}
+                    <div className={
+                        (group.members && group.members.length > 0) ?
+                            useType == UseType.Viewer ?
+                                "box-memos has-group is-viewer" : "box-memos has-group"
+                            : "box-memos"
+                        }
                         {...provided.droppableProps}
                         ref={provided.innerRef}
                     >                             
@@ -179,18 +188,25 @@ export const MemoGroup: React.FC<IMemoGroupProps> = ({ group }) => {
 
             {group.members && group.members.length > 0 &&
                 <Members>
-                    <div>members</div>
-
-                    {group.members?.map((member, index) =>
-                        <Member
-                            key={index}
-                            onClick={isOwner ? () => deleteMember(member.user.id, member.user.name) : () => { }}
-                            className={isOwner ? "owner" : ""}
-                            src={member.user.userImage ? member.user.userImage : null}
-                        >
-                            {member.user.userImage ? "" : member.user.name.substring(0, 1)}
+                    <div className="box-name">members</div>
+                    
+                    <div className="member-box">
+                        <Member src={group.user.userImage}>
+                            {group.user.userImage ? "" : group.user.name.substring(0, 1)}
                         </Member>
-                    )}
+
+                        {group.members?.map((member, index) => 
+                            member.accept &&
+                            <Member
+                                key={index}
+                                onClick={isOwner ? () => deleteMember(member.user.id, member.user.name) : () => { }}
+                                className={isOwner ? "owner" : ""}
+                                src={member.user.userImage ? member.user.userImage : null}
+                            >
+                                {member.user.userImage ? "" : member.user.name.substring(0, 1)}
+                            </Member>
+                        )}
+                    </div>
                 </Members>
             }
         </CMemoGroup>

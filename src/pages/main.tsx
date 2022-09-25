@@ -23,6 +23,8 @@ const MYMEMOS_QUERY = gql`
                 title
                 user {
                     id
+                    name
+                    userImage
                 }
                 memos {
                     id
@@ -31,6 +33,7 @@ const MYMEMOS_QUERY = gql`
                 }
                 members{
                     useType
+                    accept
                     user {
                         id
                         name

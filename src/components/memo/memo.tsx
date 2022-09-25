@@ -45,6 +45,7 @@ const CMemo = styled(motion.div)<ICMemoProps>`
     border: 1px solid #ededed;
     border-radius: 7px;
     font-size: 14px;
+    margin-bottom: 3px;
     padding: 20px 15px;
     background-color: ${props=>props.backgroundcolor ? props=>props.backgroundcolor : "#000000"};
     color: #2e3238;

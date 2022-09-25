@@ -5,6 +5,30 @@
     font-size: 14px ;
 }
 
+/* total width */
+*::-webkit-scrollbar {
+    background-color: #fff;
+    width: 0px;
+    height: 0px;
+}
+
+/* background of the scrollbar except button or resizer */
+*::-webkit-scrollbar-track {
+    background-color: #fff;
+}
+
+/* scrollbar itself */
+*::-webkit-scrollbar-thumb {
+    background-color: #babac0;
+    border-radius: 16px;
+    border: 2px solid #fff;
+}
+
+/* set button(top and bottom of the scrollbar) */
+*::-webkit-scrollbar-button {
+    display:none;
+}
+
 input {
     border: 1px solid #ddd;
     padding: 0 5px;
@@ -238,6 +262,7 @@ input::placeholder {
 .wrapper-memo {
     position: relative;
     display: flex;
+    flex-wrap: wrap;
     width: 100%;
     min-height: -webkit-fill-available;
     padding: 50px;
@@ -253,11 +278,14 @@ input::placeholder {
     margin-left: 5px;
 }
 .box-memos {
-    overflow: scroll;
+    overflow-y: scroll;
     height: calc(100% - 100px);
 }
 .box-memos.has-group {
     height: calc(100% - 150px);
+}
+.box-memos.is-viewer {
+    height: calc(100% - 120px);
 }
 
 .wrapper-memo-grid {

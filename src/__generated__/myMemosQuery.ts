@@ -12,6 +12,8 @@ import { MyMemosInput, UseType } from "./globalTypes";
 export interface myMemosQuery_myMemos_groups_user {
   __typename: "User";
   id: number;
+  name: string;
+  userImage: string | null;
 }
 
 export interface myMemosQuery_myMemos_groups_memos {
@@ -32,6 +34,7 @@ export interface myMemosQuery_myMemos_groups_members_user {
 export interface myMemosQuery_myMemos_groups_members {
   __typename: "MemoGroupMembers";
   useType: UseType;
+  accept: boolean;
   user: myMemosQuery_myMemos_groups_members_user;
 }
 
