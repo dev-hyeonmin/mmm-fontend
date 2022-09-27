@@ -63,9 +63,11 @@ export const Invitation: React.FC<IInvitationProps> = ({ userId, groupId, title,
     const [isDeleted, setIsDeleted] = useState(false);
     const [acceptGroupMemberMutation, { loading }] = useMutation<acceptGroupMemberMutation, acceptGroupMemberMutationVariables>(ACCEPTGROUPMEMBER_MUTATION);
     
-    const acceptInvitation = (accept: boolean) => {
+    const acceptInvitation = (event: any, accept: boolean) => {
+        event.preventDefault();
+        event.stopPropagation();
         if (loading) { return; }
-
+        
         acceptGroupMemberMutation({
             variables: {
                 acceptGroupMemberInput: {
@@ -75,11 +77,11 @@ export const Invitation: React.FC<IInvitationProps> = ({ userId, groupId, title,
                 }
             }
         });
-
+        
         if (accept) {
-            setIsAccepted(true);
+            setIsAccepted((current) => true);
         } else {
-            setIsDeleted(true);
+            setIsDeleted((current) => true);
         }
     };
 
@@ -91,10 +93,10 @@ export const Invitation: React.FC<IInvitationProps> = ({ userId, groupId, title,
                     <div className="invited-user">by. {invitedUserName}</div>
 
                     <Buttons>
-                        <button type="button" onClick={() => acceptInvitation(false)}>Deny</button>
+                        <button type="button" onClick={(event:any) => acceptInvitation(event, false)}>Deny</button>
                         <Button
                             actionText="Confirm"
-                            onClick={() => acceptInvitation(true)}
+                            onClick={(event:any) => acceptInvitation(event, true)}
                         />
                     </Buttons>
                 </CInvitation>                

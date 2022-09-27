@@ -9,8 +9,7 @@ const CEmptyGroup = styled.div`
     flex: 0 0 auto;
     justify-content: center;
     align-items: center;
-    max-width: 20%;
-    width: 25%; 
+    width: 250px; 
     background-color: rgba(234, 235, 239, 0.3);
     border: 1px dashed #bbb;
     border-radius: 7px;
@@ -28,7 +27,7 @@ const CEmptyGroup = styled.div`
         margin-top: 10px;        
 
         &:nth-child(n+2) {
-            margin-left: 0;
+            margin-left: 0 !important;
         }
     }
 

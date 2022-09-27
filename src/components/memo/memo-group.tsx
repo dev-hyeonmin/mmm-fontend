@@ -21,7 +21,7 @@ interface IMember {
 
 const CMemoGroup = styled.div`
     flex: 0 0 auto;
-    max-width: 20%;
+    width: 250px;
     height: calc(100vh - 150px);
     background-color: rgb(234, 235, 239);
     border-radius: 7px;

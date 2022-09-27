@@ -23,11 +23,12 @@ const CUserProfile = styled.div<IUserImageProps>`
     width: 36px;
     height: 36px;
     line-height: 34px;
-    background-color: ${props => props.src ? 'transparent' : '#66367F'};
+    background-color: #fff;
+    border: 1px solid #ddd;
     border-radius: 20px;
     text-align: center;
-    font-size: 24px;
-    margin: 6px 0 0 5px;
+    font-size: 18px;
+    margin: 8px 0 0 5px;
     cursor: pointer;
 
     background-image: url("${props => props.src ? props.src : ''}");
@@ -59,6 +60,8 @@ const ProfileMenu = styled.ul`
     }
 
     li {
+        text-align: left;
+        
         a {
             display: block;
             line-height: 50px;

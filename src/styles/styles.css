@@ -327,6 +327,14 @@ input::placeholder {
 }
 
 @media screen and (max-width: 1024px) {
+    .wrapper-memo {
+        padding: 50px 20px;
+    }
+
+    .box-memo {
+        flex-wrap: wrap;
+    }
+
     .wrapper-memo-grid {
         position: absolute;
         top: 0;
