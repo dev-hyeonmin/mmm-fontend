@@ -77,7 +77,7 @@ export const EditProfile = () => {
             const formBody = new FormData();
             formBody.append("file", actualFile);
             const { url: coverImg } = await (
-                await fetch(`http://${SERVER_URL}/uploads`, {
+                await fetch(`${SERVER_URL}/uploads`, {
                     method: "POST",
                     body: formBody,
                 })

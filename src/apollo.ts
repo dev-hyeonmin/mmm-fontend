@@ -5,7 +5,7 @@ import {
     makeVar,
     split,
 } from "@apollo/client";
-import { LOCALSTORAGE_TOKEN, SERVER_URL } from "./constants";
+import { LOCALSTORAGE_TOKEN, SERVER_URL, SOCKET_URL } from "./constants";
 import { setContext } from "@apollo/client/link/context";
 
 import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
@@ -20,7 +20,7 @@ const httpLink = createHttpLink({
     uri:
         process.env.NODE_ENV === 'production' 
         ? "https://mmm-backend.herokuapp.com/graphql"
-        : `http://${SERVER_URL}/graphql`,
+        : `${SERVER_URL}/graphql`,
 });
 
 const wsLink = new GraphQLWsLink(
@@ -28,7 +28,7 @@ const wsLink = new GraphQLWsLink(
     url:
         process.env.NODE_ENV === 'production' 
         ? "https://mmm-backend.herokuapp.com/graphql"
-        : `http://${SERVER_URL}/graphql`,
+        : `${SOCKET_URL}/graphql`,
     connectionParams: {
         "x-jwt": authTokenVar() || "",
     },
