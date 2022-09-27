@@ -110,13 +110,16 @@ export const Main = () => {
                     onClick={() => switchMemoList('/grid')}
                 />
             </div>
-            { path === '/' && 
-                <MemoByGroup groups={myData} createMemoGroup={createMemoGroup} />
-            }
 
-            { path === '/grid' && 
-                <MemoByGrid groups={myData} createMemoGroup={createMemoGroup} />
-            }
+            <div className="box-memo">
+                { path === '/' && 
+                    <MemoByGroup groups={myData} createMemoGroup={createMemoGroup} />
+                }
+
+                { path === '/grid' && 
+                    <MemoByGrid groups={myData} createMemoGroup={createMemoGroup} />
+                }
+            </div>
         </div>
     );
 };

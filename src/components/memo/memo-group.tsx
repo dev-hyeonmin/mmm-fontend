@@ -20,12 +20,13 @@ interface IMember {
 }
 
 const CMemoGroup = styled.div`
+    flex: 0 0 auto;
     max-width: 20%;
-    width: 25%;    
     height: calc(100vh - 150px);
     background-color: rgb(234, 235, 239);
     border-radius: 7px;
     padding: 0 20px 20px 20px;
+    scroll-snap-align: start;
 
     &:nth-child(n+2) {
         margin-left: 20px;
@@ -141,7 +142,7 @@ export const MemoGroup: React.FC<IMemoGroupProps> = ({ group }) => {
             }
         });
 
-        group.members?.filter((member) => member.user.id != memberId);
+        group.members?.filter((member) => member.user.id !== memberId);
     }
 
     return (
@@ -161,7 +162,7 @@ export const MemoGroup: React.FC<IMemoGroupProps> = ({ group }) => {
                 {(provided) => (
                     <div className={
                         (group.members && group.members.length > 0) ?
-                            useType == UseType.Viewer ?
+                            useType === UseType.Viewer ?
                                 "box-memos has-group is-viewer" : "box-memos has-group"
                             : "box-memos"
                         }

@@ -261,12 +261,17 @@ input::placeholder {
 */
 .wrapper-memo {
     position: relative;
-    display: flex;
-    flex-wrap: wrap;
-    width: 100%;
-    min-height: -webkit-fill-available;
     padding: 50px;
     background-color: rgb(248, 251, 255);
+}
+.box-memo {
+    display: flex;
+    flex-wrap: nowrap;
+    width: 100%;
+    min-height: -webkit-fill-available;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+	scroll-snap-type: x mandatory;
 }
 .option-menus {
     position: absolute;

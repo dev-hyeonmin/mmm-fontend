@@ -69,7 +69,7 @@ const CMemo = styled(motion.div)<ICMemoProps>`
         height: 100%;
         line-height: 18px;
         font-size: 14px;
-        background-color: #fff;
+        background-color: ${props=>props.backgroundcolor ? props=>props.backgroundcolor : "#000000"};
         color: #2e3238;
         resize: none;
         outline: none;

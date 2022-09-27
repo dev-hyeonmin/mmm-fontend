@@ -6,6 +6,7 @@ interface IEmptyGroupProps {
 
 const CEmptyGroup = styled.div`
     display: flex;
+    flex: 0 0 auto;
     justify-content: center;
     align-items: center;
     max-width: 20%;
