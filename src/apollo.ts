@@ -27,7 +27,7 @@ const wsLink = new GraphQLWsLink(
     createClient({
     url:
         process.env.NODE_ENV === 'production' 
-        ? "https://mmm-backend.herokuapp.com/graphql"
+        ? "wss://mmm-backend.herokuapp.com/graphql"
         : `${SOCKET_URL}/graphql`,
     connectionParams: {
         "x-jwt": authTokenVar() || "",
