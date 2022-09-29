@@ -21,6 +21,7 @@ export interface myMemosQuery_myMemos_groups_memos {
   id: number;
   content: string;
   color: string | null;
+  updateAt: any;
 }
 
 export interface myMemosQuery_myMemos_groups_members_user {

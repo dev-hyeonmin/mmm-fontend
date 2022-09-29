@@ -42,7 +42,7 @@ const CMemo = styled(motion.div)<ICMemoProps>`
     position: relative;
     width: 100%;
     line-height: 18px;
-    border: 1px solid #ededed;
+    border: 1px solid #ddd;
     border-radius: 7px;
     font-size: 14px;
     margin-bottom: 3px;
@@ -62,6 +62,17 @@ const CMemo = styled(motion.div)<ICMemoProps>`
             height: 22px;
             margin-left: 1px;
         }
+    }
+    
+    .memo {
+        height: 40px;
+        line-height: 20px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2; 
+        -webkit-box-orient: vertical;
+        font-weight: bold;
     }
 
     textarea {
@@ -107,6 +118,12 @@ const PaletteColor = styled.li<IPaletteProps>`
     border: 1px solid #bbb;
 `;
 
+const Date = styled.ul`
+    font-size: 12px;
+    color: #777;
+    margin-top: 10px;
+`;
+
 export const Memo: React.FC<IMemoProps> = ({ memo, useType, isOwner }) => {
     let location = useLocation();
     const path = location.pathname;
@@ -150,7 +167,7 @@ export const Memo: React.FC<IMemoProps> = ({ memo, useType, isOwner }) => {
     });
 
     const onEdit = (event: any) => {
-        setEditMode(true);
+        //setEditMode(true);
     };
 
     const onChange = (event: any) => {
@@ -267,7 +284,10 @@ export const Memo: React.FC<IMemoProps> = ({ memo, useType, isOwner }) => {
                 </div>
             }
             
-            {!editMode && <div onClick={onEdit}>{content.replaceAll('<br/>', '\n')}</div> }
+            {!editMode &&
+                <div className="memo" onClick={onEdit}>{content.replaceAll('<br/>', '\n')}</div>
+            }
+
             {(editMode && path !== '/grid') &&
                 <ReactTextareaAutosize
                 value={content.replaceAll('<br/>', '\n')}
@@ -291,6 +311,7 @@ export const Memo: React.FC<IMemoProps> = ({ memo, useType, isOwner }) => {
                 />
             }  
             
+            <Date>{memo.updateAt}</Date>
             {path === '/grid' &&
                 <MemoButton
                     onClick={selectMemo}

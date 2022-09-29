@@ -216,7 +216,8 @@ export const SelectedMemo: React.FC = () => {
             __typename: "Memo",
             id: 0,
             content: "",
-            color: null
+            color: null,
+            updateAt: ""
         });
     }
     return (

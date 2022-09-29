@@ -59,7 +59,8 @@ export const MemoByGroup: React.FC<IMemoByGroupProps> = ({ groups, createMemoGro
             reqMemos.push({
                 id: memo.id,
                 content: memo.content,
-                orderby: index
+                orderby: index,
+                updateAt: memo.updateAt
             });
         });
         sortMemoMutation({

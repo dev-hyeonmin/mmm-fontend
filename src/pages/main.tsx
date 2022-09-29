@@ -30,6 +30,7 @@ const MYMEMOS_QUERY = gql`
                     id
                     content
                     color
+                    updateAt
                 }
                 members{
                     useType
@@ -100,7 +101,7 @@ export const Main = () => {
             <Helmet>
                 <title>mmm</title>
             </Helmet>
-            <div className="option-menus">
+            {/*<div className="option-menus">
                 <MemoButton
                     src={orderbyImg}
                     onClick={() => switchMemoList('/')}
@@ -109,7 +110,7 @@ export const Main = () => {
                     src={orderbyImg2}
                     onClick={() => switchMemoList('/grid')}
                 />
-            </div>
+            </div>*/}
 
             <div className="box-memo">
                 { path === '/' && 

@@ -79,6 +79,7 @@ export interface LoginInput {
 
 export interface MemoType {
   id: number;
+  updateAt: any;
   content: string;
   orderby: number;
   color?: string | null;

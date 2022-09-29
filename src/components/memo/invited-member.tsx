@@ -11,6 +11,7 @@ import { UseType } from "../../__generated__/globalTypes";
 import viewerImg from "../../images/permission-viewer.png";
 // @ts-ignore
 import editorImg from "../../images/permission-editor.png";
+import { motion } from "framer-motion";
 
 interface IForm {
     email: string;
@@ -31,6 +32,16 @@ const INVITEGROUPMEMBER_MUTATION = gql`
 
 const Modal = styled.div`
     position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 9;
+`;
+
+const ModalBody = styled(motion.div)`
+    position: fixed;
     top: 50%;
     left: 50%;
     width: 400px;
@@ -43,7 +54,6 @@ const Modal = styled.div`
 
     h3 {
         font-size: 16px;
-        font-weight: 400;
     }
 
     p {
@@ -124,6 +134,24 @@ const Permission = styled.label<IPermissionProps>`
     }
 `;
 
+const ModalInnerVariants = {
+    show: {
+        top: "50%",
+        opacity: 1,
+        transition: {
+            delay: 1,
+            duration: 1,
+        }
+    },
+    hidden: {
+        top: "50%",
+        opacity: 1,
+        transition: {
+            delay: 1,
+            duration: 1,
+        }
+    }
+};
 export const InvitedMemo: React.FC = () => {
     
     const selectInviteGroup = useRecoilValue(selectInviteGroupAtom);
@@ -172,60 +200,65 @@ export const InvitedMemo: React.FC = () => {
         <>
             { selectInviteGroup.id &&
                 <Modal>
-                    <h3>Invite group member</h3>
-                    <p>
-                        You haved a great memo note! <br />
-                        Invite your memo's group to share.
-                    </p>
-                
-                    <form onSubmit={handleSubmit(onSubmit)}>
-                        <Form>
-                            <dt>Permission</dt>
-                            <dd>
-                                <input
-                                    {...register("useType", { required: true })}
-                                    type="radio"
-                                    value={UseType.Viewer}
-                                    id={`useType_${UseType.Viewer}`}
+                    <ModalBody
+                        initial={{top: "100%"}}
+                        animate={{ top: "50%" }}
+                    >
+                        <h3>Invite group member</h3>
+                        <p>
+                            You haved a great memo note! <br />
+                            Invite your memo's group to share.
+                        </p>
+                    
+                        <form onSubmit={handleSubmit(onSubmit)}>
+                            <Form>
+                                <dt>Permission</dt>
+                                <dd>
+                                    <input
+                                        {...register("useType", { required: true })}
+                                        type="radio"
+                                        value={UseType.Viewer}
+                                        id={`useType_${UseType.Viewer}`}
+                                    />
+                                    <Permission
+                                        src={viewerImg}
+                                        htmlFor={`useType_${UseType.Viewer}`}>{UseType.Viewer}</Permission>
+
+                                    <input
+                                        {...register("useType", { required: true })}
+                                        type="radio"
+                                        value={UseType.Editor}
+                                        id={`useType_${UseType.Editor}`}
+                                    />
+                                    <Permission
+                                        src={editorImg}
+                                        htmlFor={`useType_${UseType.Editor}`}>{UseType.Editor}</Permission>
+
+                                    {errors.useType?.type === "required" && <FormError errorMessage="Permission is required." />}
+                                </dd>
+
+                                <dt>Email</dt>
+                                <dd>
+                                    <input
+                                        type="email" 
+                                        placeholder="email@gmail.com"
+                                        {...register("email", { required: true, pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i })}
+                                    />
+
+                                    {errors.email?.type === "required" && <FormError errorMessage="Email is required." />}
+                                    {errors.email?.type === "pattern" && <FormError errorMessage="Please enter a valid email." />}
+                                </dd>
+                            </Form>
+
+                            <Buttons>
+                                <button type="button" onClick={closeModal}>Cancel</button>
+                                <Button
+                                    actionText="Send invites"
+                                    loading={loading}
                                 />
-                                <Permission
-                                    src={viewerImg}
-                                    htmlFor={`useType_${UseType.Viewer}`}>{UseType.Viewer}</Permission>
-
-                                <input
-                                    {...register("useType", { required: true })}
-                                    type="radio"
-                                    value={UseType.Editor}
-                                    id={`useType_${UseType.Editor}`}
-                                />
-                                <Permission
-                                    src={editorImg}
-                                    htmlFor={`useType_${UseType.Editor}`}>{UseType.Editor}</Permission>
-
-                                {errors.useType?.type === "required" && <FormError errorMessage="Permission is required." />}
-                            </dd>
-
-                            <dt>Email</dt>
-                            <dd>
-                                <input
-                                    type="email" 
-                                    placeholder="email@gmail.com"
-                                    {...register("email", { required: true, pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i })}
-                                />
-
-                                {errors.email?.type === "required" && <FormError errorMessage="Email is required." />}
-                                {errors.email?.type === "pattern" && <FormError errorMessage="Please enter a valid email." />}
-                            </dd>
-                        </Form>
-
-                        <Buttons>
-                            <button type="button" onClick={closeModal}>Cancel</button>
-                            <Button
-                                actionText="Send invites"
-                                loading={loading}
-                            />
-                        </Buttons>
-                    </form>
+                            </Buttons>
+                        </form>
+                    </ModalBody>
                 </Modal>
             }
         </>

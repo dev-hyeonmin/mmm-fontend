@@ -21,11 +21,8 @@ interface IMember {
 
 const CMemoGroup = styled.div`
     flex: 0 0 auto;
-    width: 250px;
-    height: calc(100vh - 150px);
-    background-color: rgb(234, 235, 239);
+    width: 270px;
     border-radius: 7px;
-    padding: 0 20px 20px 20px;
     scroll-snap-align: start;
 
     &:nth-child(n+2) {
@@ -52,9 +49,7 @@ const CMemoGroup = styled.div`
     }
 `;
 
-const Members = styled.div`    
-    margin: 15px 0 0;
-
+const Members = styled.div`
     .box-name {
         width: 100%;
         color: #666;
@@ -79,6 +74,7 @@ const Member = styled.span<IMember>`
     color: #7A4495;
     font-size: 12px;
     margin: 2px 2px 2px 0;
+    border: 1px solid #ddd;
     border-radius: 16px;
     text-align: center;
     overflow: hidden;
@@ -153,6 +149,29 @@ export const MemoGroup: React.FC<IMemoGroupProps> = ({ group }) => {
                 isOwner={isOwner}
             />
 
+            <Members>
+                {/*<div className="box-name">members</div>*/}
+                
+                <div className="member-box">
+                    <Member src={group.user.userImage}>
+                        {group.user.userImage ? "" : group.user.name.substring(0, 1)}
+                    </Member>
+
+                    { group.members && group.members.length > 0 &&
+                        group.members?.map((member, index) => 
+                        member.accept &&
+                        <Member
+                            key={index}
+                            onClick={isOwner ? () => deleteMember(member.user.id, member.user.name) : () => { }}
+                            className={isOwner ? "owner" : ""}
+                            src={member.user.userImage ? member.user.userImage : null}
+                        >
+                            {member.user.userImage ? "" : member.user.name.substring(0, 1)}
+                        </Member>
+                    )}
+                </div>
+            </Members>
+
             {useType === UseType.Editor &&
                 <MemoAddButton
                     groupId={group.id}
@@ -185,31 +204,7 @@ export const MemoGroup: React.FC<IMemoGroupProps> = ({ group }) => {
                         {provided.placeholder}
                     </div>
                 )}                                
-            </Droppable>
-
-            {group.members && group.members.length > 0 &&
-                <Members>
-                    <div className="box-name">members</div>
-                    
-                    <div className="member-box">
-                        <Member src={group.user.userImage}>
-                            {group.user.userImage ? "" : group.user.name.substring(0, 1)}
-                        </Member>
-
-                        {group.members?.map((member, index) => 
-                            member.accept &&
-                            <Member
-                                key={index}
-                                onClick={isOwner ? () => deleteMember(member.user.id, member.user.name) : () => { }}
-                                className={isOwner ? "owner" : ""}
-                                src={member.user.userImage ? member.user.userImage : null}
-                            >
-                                {member.user.userImage ? "" : member.user.name.substring(0, 1)}
-                            </Member>
-                        )}
-                    </div>
-                </Members>
-            }
+            </Droppable>            
         </CMemoGroup>
     )
 }

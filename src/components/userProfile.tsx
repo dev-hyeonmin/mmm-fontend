@@ -28,7 +28,7 @@ const CUserProfile = styled.div<IUserImageProps>`
     border-radius: 20px;
     text-align: center;
     font-size: 18px;
-    margin: 8px 0 0 5px;
+    margin: 28px 0 0 5px;
     cursor: pointer;
 
     background-image: url("${props => props.src ? props.src : ''}");

@@ -15,19 +15,19 @@ export const CMemoAddButton = styled.div`
     justify-aligns: center;
     align-items: center;
     height: 30px;
-    border: 1px dashed #bbb;
+    border: 1px dashed #ddd;
+    border-radius: 5px;
     margin-bottom: 5px;
     cursor: pointer;
-    background-color: rgba(255, 255, 255 ,0.6);
+    background-color: rgba(247, 247, 247 , 1);
     background-image: url(${addImg});
     background-size: 12px;
     background-position: center;
     background-repeat: no-repeat;
-    opacity: 0.4;
-    transition: opacity 0.1s ease;
+    transition: all 0.1s ease;
 
     &:hover {
-        opacity: 0.8;
+        background-color: rgba(240, 240, 240 , 1);
     }
 `;
 

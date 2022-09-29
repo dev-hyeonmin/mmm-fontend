@@ -10,8 +10,7 @@ const Header = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    line-height: 50px;
-    border-bottom: 1px solid #eee;
+    line-height: 90px;  
     padding: 0 50px;
     box-sizing: border-box;
 
@@ -22,7 +21,8 @@ const Header = styled.div`
 
 const Logo = styled.span`
     font-size: 22px;
-    font-weight: 500;
+    font-weight: bold;
+    color: #66367F;
 `;
 
 const VerifiedMemo = styled.div`
@@ -33,14 +33,20 @@ const VerifiedMemo = styled.div`
 `;
 
 const Search = styled.input`
-    width: 130px;
+    width: 150px;
     margin-right: 10px;
-    font-size: 12px;
+    font-size: 12px;    
+    padding: 0 0 0 30px;
+    border-radius: 5px;
     background-image: url(${searchImg});
     background-size: 14px;
-    background-position: 107px center;
+    background-position: 7px center;
     background-repeat: no-repeat;
-    padding: 0 23px 0 5px;
+
+    &::placeholder {
+        color: #555;
+        font-weight: 400;
+    }
 `;
 
 export const Headers = () => {
@@ -78,7 +84,7 @@ export const Headers = () => {
 
                 <div>
                     <Search
-                        placeholder="search memo"
+                        placeholder="Search"
                         onChange={onChange}
                         onKeyDown={onKeyDown}
                     />

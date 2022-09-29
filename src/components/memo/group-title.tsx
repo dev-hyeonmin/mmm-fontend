@@ -40,14 +40,16 @@ const CGroupTitle = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 15px 0;
+    padding: 15px 0 5px;
     font-size: 14px;
-    font-weight: 500;
+    font-weight: bold;
 
     input {
         width: calc(100% - 30px);
         border: none;
-        background-color: transparent;        
+        background-color: transparent;
+        padding: 0;
+        font-weight: bold;    
     }
 `;
 
