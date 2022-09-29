@@ -12,6 +12,7 @@ import orderbyImg from "../images/memo-orderby1.png";
 // @ts-ignore
 import orderbyImg2 from "../images/memo-orderby2.png";
 import { Helmet } from "react-helmet";
+import { MemoMenu } from "../components/memo/memo-menu";
 
 const MYMEMOS_QUERY = gql`
     query myMemosQuery($myMemosInput: MyMemosInput!) {
@@ -82,7 +83,7 @@ export const Main = () => {
         });
     }, []);
     
-    const createMemoGroup = () => {
+    const createMemoGroup:any = () => {
         createMemoGroupMutation({
             variables: {
                 createMemoGroupInput: {
@@ -101,6 +102,9 @@ export const Main = () => {
             <Helmet>
                 <title>mmm</title>
             </Helmet>
+            
+            <MemoMenu onClick={createMemoGroup}/>
+
             {/*<div className="option-menus">
                 <MemoButton
                     src={orderbyImg}
@@ -114,11 +118,11 @@ export const Main = () => {
 
             <div className="box-memo">
                 { path === '/' && 
-                    <MemoByGroup groups={myData} createMemoGroup={createMemoGroup} />
+                    <MemoByGroup groups={myData} />
                 }
 
                 { path === '/grid' && 
-                    <MemoByGrid groups={myData} createMemoGroup={createMemoGroup} />
+                    <MemoByGrid groups={myData} createMemoGroup={createMemoGroup}/>
                 }
             </div>
         </div>

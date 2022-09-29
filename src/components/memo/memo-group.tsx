@@ -172,11 +172,11 @@ export const MemoGroup: React.FC<IMemoGroupProps> = ({ group }) => {
                 </div>
             </Members>
 
-            {useType === UseType.Editor &&
-                <MemoAddButton
-                    groupId={group.id}
-                />
-            }
+            <MemoAddButton
+                groupId={group.id}
+                useType={useType}
+            />
+            
             <Droppable droppableId={"" + group.id}>
                 {(provided) => (
                     <div className={

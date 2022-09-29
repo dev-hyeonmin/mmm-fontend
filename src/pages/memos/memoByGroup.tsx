@@ -22,10 +22,9 @@ export interface IRangeMemoMutationInput {
 
 interface IMemoByGroupProps {
     groups?: myMemosQuery_myMemos_groups[] | undefined | null;
-    createMemoGroup: any;
 }
 
-export const MemoByGroup: React.FC<IMemoByGroupProps> = ({ groups, createMemoGroup }) => {
+export const MemoByGroup: React.FC<IMemoByGroupProps> = ({ groups }) => {
     const client = useApolloClient();
     const selectedMemo = useRecoilValue(selectMemoAtom);
     const [editMemoMutation] = useMutation<editMemoMutation, editMemoMutationVariables>(EDITMEMO_MUTATION);
@@ -141,7 +140,6 @@ export const MemoByGroup: React.FC<IMemoByGroupProps> = ({ groups, createMemoGro
                         />
                     ))}
 
-                    <EmptyGroup onClick={createMemoGroup} />
                     <InvitedMemo />
                 </DragDropContext>
             }

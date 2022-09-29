@@ -104,15 +104,6 @@ export const SelectedMemo: React.FC = () => {
         setContent(event.target.value);
     };
 
-    const onKeyDown = (event: any) => {
-        if (event.ctrlKey === false && event.key === 'Enter') {
-            editMemo();
-            event.preventDefault();
-        } else if (event.key === 'Enter') {
-            setContent((currentContent) => currentContent + "\n");
-        }
-    }
-
     const editMemo = () => {
         editMemoMutation({
             variables: {
@@ -152,7 +143,6 @@ export const SelectedMemo: React.FC = () => {
                         value={content.replaceAll('<br/>', '\n')}
                         onChange={onChange}
                         onBlur={editMemo}
-                        onKeyDown={onKeyDown}
                         onFocus={moveCursor}
                         autoFocus
                     />

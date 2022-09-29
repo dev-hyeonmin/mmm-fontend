@@ -1,5 +1,5 @@
 import { gql, useMutation } from "@apollo/client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ReactTextareaAutosize from "react-textarea-autosize";
 import styled from "styled-components";
 import { DELETEMEMO_MUTATION, EDITMEMO_MUTATION } from "../../mutations";
@@ -9,7 +9,7 @@ import { deleteMemoMutation, deleteMemoMutationVariables } from "../../__generat
 import { myMemosQuery_myMemos_groups_memos } from "../../__generated__/myMemosQuery";
 import { client } from "../../apollo";
 import { useLocation } from "react-router-dom";
-import { useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { selectMemoAtom } from "../../atom";
 import { motion } from "framer-motion";
 import { UseType } from "../../__generated__/globalTypes";
@@ -127,14 +127,18 @@ const Date = styled.ul`
 export const Memo: React.FC<IMemoProps> = ({ memo, useType, isOwner }) => {
     let location = useLocation();
     const path = location.pathname;
-    const palette = ["#B7C4CF", "#FFDBA4", "#F2D7D9", "#D3CEDF", "#A2B38B", "#ECB390", "#F9F3EE", "#FFFFFF"];
+    const selectedMemo = useRecoilValue(selectMemoAtom);
     const setSelectMemo = useSetRecoilState(selectMemoAtom);
+    const palette = ["#B7C4CF", "#FFDBA4", "#F2D7D9", "#D3CEDF", "#A2B38B", "#ECB390", "#F9F3EE", "#FFFFFF"];
     const [editMode, setEditMode] = useState(false);
     const [useMenu, setUseMenu] = useState(false);
     const [usePalette, setUsePalette] = useState(false);
     const [content, setContent] = useState(memo.content);
     const [memoColor, setMemoColor] = useState(memo.color);
     
+    useEffect(() => {
+        setContent(memo.content);
+    }, [memo.content])
     const onCompleted = () => {
         setEditMode(false);
 
@@ -156,6 +160,15 @@ export const Memo: React.FC<IMemoProps> = ({ memo, useType, isOwner }) => {
         const { deleteMemo: { ok } } = data;
 
         if (ok) {
+            if (selectedMemo.id === memo.id) {
+                setSelectMemo({
+                    __typename: "Memo",
+                    id: 0,
+                    content: "",
+                    color: null,
+                    updateAt: ""
+                });
+            }
             client.cache.evict({ id: `Memo:${memo.id}` });
         }
     }

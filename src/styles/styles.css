@@ -267,8 +267,9 @@ input::placeholder {
     display: flex;
     flex-wrap: nowrap;
     width: 100%;
-    height: calc(100vh - 120px);
+    height: calc(100vh - 170px);
     overflow-x: auto;
+    overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
 	scroll-snap-type: x mandatory;
 }

@@ -45,9 +45,9 @@ export const MemoByGrid: React.FC<IMemoByGroupProps> = ({ groups, createMemoGrou
                 ))
             }
 
-            { (groups && groups[0]) &&
+            {/* (groups && groups[0]) &&
                 <MemoAddButton groupId={groups[0].id}/>
-            }
+            */}
 
             { groups?.length === 0 &&
                 <EmptyGroup onClick={createMemoGroup} />

@@ -5,33 +5,41 @@ import { CREATEMEMO_MUTATION } from "../../mutations";
 import { createMemoMutation, createMemoMutationVariables } from "../../__generated__/createMemoMutation";
 // @ts-ignore
 import addImg from "../../images/add.png";
+import { UseType } from "../../__generated__/globalTypes";
 
 interface IMemoAddButtonProps {
     groupId: number;
+    useType: UseType;
 }
 
-export const CMemoAddButton = styled.div`
-    display: flex;
-    justify-aligns: center;
-    align-items: center;
+interface ICMemoAddButton {
+    useType: UseType;
+}
+
+export const CMemoAddButton = styled.div<ICMemoAddButton>`
     height: 30px;
+    line-height: 30px;
     border: 1px dashed #ddd;
     border-radius: 5px;
     margin-bottom: 5px;
     cursor: pointer;
     background-color: rgba(247, 247, 247 , 1);
-    background-image: url(${addImg});
+    background-image: url(${props => props.useType === UseType.Editor ? addImg : ''});
     background-size: 12px;
     background-position: center;
     background-repeat: no-repeat;
     transition: all 0.1s ease;
+    font-size: 12px;
+    text-align: center;
+    font-weight: bold;
+    color: #888;
 
     &:hover {
-        background-color: rgba(240, 240, 240 , 1);
+        background-color: ${props => props.useType === UseType.Editor ? "rgba(240, 240, 240 , 1)" : "rgba(247, 247, 247 , 1)"};
     }
 `;
 
-export const MemoAddButton: React.FC<IMemoAddButtonProps> = ({ groupId }) => {
+export const MemoAddButton: React.FC<IMemoAddButtonProps> = ({ groupId, useType }) => {
     const content = "new memo";
 
     const onCompleted = (data: createMemoMutation) => {
@@ -60,8 +68,8 @@ export const MemoAddButton: React.FC<IMemoAddButtonProps> = ({ groupId }) => {
             `,
             data: {
                 memos: [
-                    {__typename: "Memo", id: data.createMemo.id, content},
-                    ...currentMemos.memos                    
+                    { __typename: "Memo", id: data.createMemo.id, content },
+                    ...currentMemos.memos
                 ],
             },
         });
@@ -70,6 +78,10 @@ export const MemoAddButton: React.FC<IMemoAddButtonProps> = ({ groupId }) => {
         onCompleted
     });
     const createMemo = () => {
+        if (useType === UseType.Viewer) {
+            return;
+        }
+
         createMemoMutation({
             variables: {
                 createMemoInput: {
@@ -81,6 +93,8 @@ export const MemoAddButton: React.FC<IMemoAddButtonProps> = ({ groupId }) => {
     }
     
     return (
-        <CMemoAddButton onClick={createMemo}></CMemoAddButton>
+        <CMemoAddButton onClick={createMemo} useType={useType}>
+            {useType === UseType.Viewer ? "Permission denied" : ""}
+        </CMemoAddButton>
     );
 }
