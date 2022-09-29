@@ -8,6 +8,9 @@ import { MemoType } from "../../__generated__/globalTypes";
 import { EmptyGroup } from "../../components/memo/empty-group";
 import { EDITMEMO_MUTATION, SORTEMEMO_MUTATION } from "../../mutations";
 import { InvitedMemo } from "../../components/memo/invited-member";
+import { SelectedMemo } from "../../components/memo/selected-memo";
+import { selectMemoAtom } from "../../atom";
+import { useRecoilValue } from "recoil";
 
 
 export interface IRangeMemoMutationInput {
@@ -23,7 +26,8 @@ interface IMemoByGroupProps {
 }
 
 export const MemoByGroup: React.FC<IMemoByGroupProps> = ({ groups, createMemoGroup }) => {
-    const client = useApolloClient();  
+    const client = useApolloClient();
+    const selectedMemo = useRecoilValue(selectMemoAtom);
     const [editMemoMutation] = useMutation<editMemoMutation, editMemoMutationVariables>(EDITMEMO_MUTATION);
     const [sortMemoMutation] = useMutation<sortMemoMutation, sortMemoMutationVariables>(SORTEMEMO_MUTATION);
     
@@ -141,6 +145,8 @@ export const MemoByGroup: React.FC<IMemoByGroupProps> = ({ groups, createMemoGro
                     <InvitedMemo />
                 </DragDropContext>
             }
+
+            {selectedMemo.id !== 0 && <SelectedMemo />}
         </>
     );
 };

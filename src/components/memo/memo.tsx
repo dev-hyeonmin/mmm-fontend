@@ -239,12 +239,11 @@ export const Memo: React.FC<IMemoProps> = ({ memo, useType, isOwner }) => {
 
     const selectMemo = () => {
         setSelectMemo({
-            ...memo,
-            content
+            ...memo
         });
     }
     return (
-        <CMemo backgroundcolor={memoColor ? memoColor : "#FFFFFF"}>
+        <CMemo backgroundcolor={memoColor ? memoColor : "#FFFFFF"}  onClick={selectMemo}>
             {useType === UseType.Editor &&
                 <div className="memo-menu">
                     {useMenu &&
@@ -312,13 +311,13 @@ export const Memo: React.FC<IMemoProps> = ({ memo, useType, isOwner }) => {
             }  
             
             <Date>{memo.updateAt}</Date>
-            {path === '/grid' &&
+            {/*path === '/grid' &&
                 <MemoButton
                     onClick={selectMemo}
                     src={zoomOutImg}
                     backgroundSize="14px"
                 />          
-            }  
+        */}  
         </CMemo>
     )
 }

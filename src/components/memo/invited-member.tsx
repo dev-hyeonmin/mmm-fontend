@@ -203,6 +203,7 @@ export const InvitedMemo: React.FC = () => {
                     <ModalBody
                         initial={{top: "100%"}}
                         animate={{ top: "50%" }}
+                        transition={{ duration: 0.4 }}                        
                     >
                         <h3>Invite group member</h3>
                         <p>
