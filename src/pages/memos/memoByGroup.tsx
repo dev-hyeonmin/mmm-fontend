@@ -5,13 +5,17 @@ import { myMemosQuery_myMemos_groups, myMemosQuery_myMemos_groups_memos } from "
 import { MemoGroup } from "../../components/memo/memo-group";
 import { sortMemoMutation, sortMemoMutationVariables } from "../../__generated__/sortMemoMutation";
 import { MemoType } from "../../__generated__/globalTypes";
-import { EmptyGroup } from "../../components/memo/empty-group";
 import { EDITMEMO_MUTATION, SORTEMEMO_MUTATION } from "../../mutations";
 import { InvitedMemo } from "../../components/memo/invited-member";
 import { SelectedMemo } from "../../components/memo/selected-memo";
-import { selectMemoAtom } from "../../atom";
-import { useRecoilValue } from "recoil";
+import { alertAtom, selectMemoAtom } from "../../atom";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 
+// @ts-ignore
+import saveImg from "../../images/save.png";
+import { Alert } from "../../components/alert";
+import { useState } from "react";
+import { AnimatePresence } from "framer-motion";
 
 export interface IRangeMemoMutationInput {
     id: number;
@@ -26,6 +30,8 @@ interface IMemoByGroupProps {
 
 export const MemoByGroup: React.FC<IMemoByGroupProps> = ({ groups }) => {
     const client = useApolloClient();
+    const [alertNumber, setAlertNumber] = useState(0);
+    const setAlertAtom = useSetRecoilState(alertAtom);
     const selectedMemo = useRecoilValue(selectMemoAtom);
     const [editMemoMutation] = useMutation<editMemoMutation, editMemoMutationVariables>(EDITMEMO_MUTATION);
     const [sortMemoMutation] = useMutation<sortMemoMutation, sortMemoMutationVariables>(SORTEMEMO_MUTATION);
@@ -129,6 +135,22 @@ export const MemoByGroup: React.FC<IMemoByGroupProps> = ({ groups }) => {
         }
     };
 
+    const addAlert = () => {
+        setAlertNumber((current) => current + 1);
+
+        setAlertAtom((currentAlert) =>
+            [
+                ...currentAlert,
+                {
+                    id: `saveAlert${alertNumber}`,
+                    text: "저장되었습니다 :D",
+                    icon: saveImg,
+                    show: "true"
+                }
+            ]
+        )
+    }
+
     return (                  
         <>        
             { groups && 
@@ -144,7 +166,11 @@ export const MemoByGroup: React.FC<IMemoByGroupProps> = ({ groups }) => {
                 </DragDropContext>
             }
 
-            {selectedMemo.id !== 0 && <SelectedMemo />}
+            <AnimatePresence>
+                <Alert/>
+            </AnimatePresence>
+
+            {selectedMemo.id !== 0 && <SelectedMemo onSaving={() => addAlert()} />}
         </>
     );
 };

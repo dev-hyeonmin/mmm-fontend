@@ -5,6 +5,13 @@ interface ISelectInviteGroupAtomProps {
     id: number | null;
 }
 
+interface IAlertAtomProps {
+    id: string;
+    text: string;
+    icon: string;
+    show: string;
+}
+
 export const selectMemoAtom = atom<myMemosQuery_myMemos_groups_memos>({
     key: "selectMemo",
     default: {
@@ -21,4 +28,9 @@ export const selectInviteGroupAtom = atom<ISelectInviteGroupAtomProps>({
     default: {
         id: null
     },
+});
+
+export const alertAtom = atom<IAlertAtomProps[]>({
+    key: "alertAtom",
+    default: []
 });

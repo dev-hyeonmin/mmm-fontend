@@ -1,10 +1,6 @@
 import { myMemosQuery_myMemos_groups } from "../../__generated__/myMemosQuery";
 import { Memo } from "../../components/memo/memo";
-import { MemoAddButton } from "../../components/memo/memo-add-button";
 import { EmptyGroup } from "../../components/memo/empty-group";
-import { SelectedMemo } from "../../components/memo/selected-memo";
-import { useRecoilValue } from "recoil";
-import { selectMemoAtom } from "../../atom";
 import { UseType } from "../../__generated__/globalTypes";
 import { useMe } from "../../hooks/useMe";
 
@@ -13,8 +9,7 @@ interface IMemoByGroupProps {
     createMemoGroup: any;
 }
 
-export const MemoByGrid: React.FC<IMemoByGroupProps> = ({ groups, createMemoGroup }) => {  
-    const selectedMemo = useRecoilValue(selectMemoAtom);
+export const MemoByGrid: React.FC<IMemoByGroupProps> = ({ groups, createMemoGroup }) => {
     const { data: userData } = useMe();
 
     const myPermission = (group: myMemosQuery_myMemos_groups):any => {
@@ -52,8 +47,6 @@ export const MemoByGrid: React.FC<IMemoByGroupProps> = ({ groups, createMemoGrou
             { groups?.length === 0 &&
                 <EmptyGroup onClick={createMemoGroup} />
             }
-
-            {selectedMemo.id !== 0 && <SelectedMemo />}
         </div>
     );
 };

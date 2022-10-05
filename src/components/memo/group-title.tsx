@@ -41,7 +41,7 @@ const CGroupTitle = styled.div`
     align-items: center;
     justify-content: space-between;
     padding: 15px 0 5px;
-    font-size: 14px;
+    font-size: 18px;
     font-weight: bold;
 
     input {
@@ -49,7 +49,8 @@ const CGroupTitle = styled.div`
         border: none;
         background-color: transparent;
         padding: 0;
-        font-weight: bold;    
+        font-weight: bold;
+        font-size: 18px;
     }
 `;
 

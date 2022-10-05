@@ -6,11 +6,13 @@ import { editMemoMutation, editMemoMutationVariables } from "../../__generated__
 import { client } from "../../apollo";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { selectMemoAtom } from "../../atom";
+import { motion } from "framer-motion";
 // @ts-ignore
 import closeImg from "../../images/delete-memo.png";
-import { motion } from "framer-motion";
 
-
+interface ISelectedMemo {
+    onSaving: any;
+}
 const CMemo = styled(motion.div)`
     position: fixed;
     top: 0;
@@ -73,7 +75,7 @@ const UpdateDate = styled.div`
     color: #777;
 `;
 
-export const SelectedMemo: React.FC = () => {
+export const SelectedMemo: React.FC<ISelectedMemo> = ({ onSaving }) => {
     const memo = useRecoilValue(selectMemoAtom);
     const setSelectMemo = useSetRecoilState(selectMemoAtom);
     const [content, setContent] = useState(memo.content);
@@ -94,6 +96,8 @@ export const SelectedMemo: React.FC = () => {
                 content
             },
         });
+
+        onSaving();
     }
     
     const [editMemoMutation] = useMutation<editMemoMutation, editMemoMutationVariables>(EDITMEMO_MUTATION, {
@@ -104,7 +108,7 @@ export const SelectedMemo: React.FC = () => {
         setContent(event.target.value);
     };
 
-    const editMemo = () => {
+    const editMemo = () => {        
         editMemoMutation({
             variables: {
                 editMemoInput: {
@@ -129,7 +133,8 @@ export const SelectedMemo: React.FC = () => {
             color: null,
             updateAt: ""
         });
-    }
+    };
+
     return (
         <>
             {memo.id &&
@@ -146,7 +151,7 @@ export const SelectedMemo: React.FC = () => {
                         onFocus={moveCursor}
                         autoFocus
                     />
-                    <UpdateDate>{memo.updateAt}</UpdateDate>
+                    <UpdateDate>{memo.updateAt}</UpdateDate>                    
                 </CMemo>
             }
         </>

@@ -267,7 +267,6 @@ input::placeholder {
     display: flex;
     flex-wrap: nowrap;
     width: 100%;
-    height: calc(100vh - 170px);
     overflow-x: auto;
     overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
@@ -283,9 +282,6 @@ input::placeholder {
 .box-memos {
     overflow-y: scroll;
     height: calc(100% - 100px);
-}
-.box-memos.has-group {
-    height: calc(100% - 150px);
 }
 .box-memos.is-viewer {
     height: calc(100% - 120px);
@@ -323,15 +319,21 @@ input::placeholder {
         min-width: 1440px;
         height: calc(100vh - 90px);
     }
+    .box-memos.has-group {
+        height: calc(100% - 150px);
+    }
+    .box-memo {
+        height: calc(100vh - 170px);
+    }
 }
 
 @media screen and (max-width: 1024px) {
     .wrapper-memo {
-        padding: 50px 20px;
+        padding: 0 20px 30px;
     }
 
     .box-memo {
-        flex-wrap: wrap;
+        flex-wrap: wrap;        
     }
 
     .wrapper-memo-grid {

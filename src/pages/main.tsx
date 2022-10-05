@@ -1,5 +1,4 @@
-import { useLocation, useNavigate } from "react-router-dom";
-import { MemoButton } from "../components/memo/memo-button";
+import { useLocation } from "react-router-dom";
 import { MemoByGroup } from "./memos/memoByGroup";
 import { MemoByGrid } from "./memos/memoByGrid";
 import { gql, useLazyQuery, useMutation } from "@apollo/client";
@@ -7,10 +6,6 @@ import { myMemosQuery, myMemosQueryVariables, myMemosQuery_myMemos_groups } from
 import { useEffect, useState } from "react";
 import { createMemoGroupMutation, createMemoGroupMutationVariables } from "../__generated__/createMemoGroupMutation";
 import { CREATEMEMOGROUP_MUTATION } from "../mutations";
-// @ts-ignore
-import orderbyImg from "../images/memo-orderby1.png";
-// @ts-ignore
-import orderbyImg2 from "../images/memo-orderby2.png";
 import { Helmet } from "react-helmet";
 import { MemoMenu } from "../components/memo/memo-menu";
 
@@ -49,7 +44,6 @@ const MYMEMOS_QUERY = gql`
 `;
 
 export const Main = () => {
-    const navigation = useNavigate();
     const location = useLocation();
     const path = location.pathname;
     const [, term] = location.search.split("?term=");
@@ -83,7 +77,7 @@ export const Main = () => {
         });
     }, []);
     
-    const createMemoGroup:any = () => {
+    const createMemoGroup = () => {
         createMemoGroupMutation({
             variables: {
                 createMemoGroupInput: {
@@ -91,10 +85,6 @@ export const Main = () => {
                 }
             }
         })
-    };
-
-    const switchMemoList = (type: string) => {
-        navigation(type);
     };
     
     return (                  
@@ -124,7 +114,7 @@ export const Main = () => {
                 { path === '/grid' && 
                     <MemoByGrid groups={myData} createMemoGroup={createMemoGroup}/>
                 }
-            </div>
+            </div>            
         </div>
     );
 };
