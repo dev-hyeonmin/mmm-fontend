@@ -67,7 +67,9 @@ export const Main = () => {
     });
 
     useEffect(() => {
-        const keyword = term ? term : "";
+        let keyword = term ? term : "";
+        keyword = keyword.includes('%') ? decodeURI(keyword) : keyword;
+
         callQuery({
             variables: {
                 myMemosInput: {
@@ -75,7 +77,7 @@ export const Main = () => {
                 }
             }
         });
-    }, []);
+    }, [term]);
     
     const createMemoGroup = () => {
         createMemoGroupMutation({
