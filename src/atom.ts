@@ -19,7 +19,8 @@ export const selectMemoAtom = atom<myMemosQuery_myMemos_groups_memos>({
         id: 0,
         content: "",
         color: null,
-        updateAt: ""
+        updateAt: "",
+        tags: null
     },
 });
 

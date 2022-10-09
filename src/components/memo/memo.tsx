@@ -19,8 +19,7 @@ import menuImg from "../../images/menu.png";
 import deleteImg from "../../images/delete.png";
 // @ts-ignore
 import paletteImg from "../../images/color-palette.png";
-// @ts-ignore
-import zoomOutImg from "../../images/zoom-out.png";
+import { Tags } from "./tags";
 
 
 interface IMemoProps {
@@ -72,7 +71,7 @@ const CMemo = styled(motion.div)<ICMemoProps>`
         display: -webkit-box;
         -webkit-line-clamp: 2; 
         -webkit-box-orient: vertical;
-        font-weight: bold;
+        font-weight: bold;        
     }
 
     textarea {
@@ -90,6 +89,12 @@ const CMemo = styled(motion.div)<ICMemoProps>`
         vertical-align: middle;
     }
 
+    ul {
+        margin-top: 10px;
+        li {
+            font-size: 12px;
+        }
+    }
     & > button {
         position: absolute;
         bottom: 8px;
@@ -121,7 +126,7 @@ const PaletteColor = styled.li<IPaletteProps>`
 const Date = styled.ul`
     font-size: 12px;
     color: #777;
-    margin-top: 10px;
+    margin-top: 3px !important;
 `;
 
 export const Memo: React.FC<IMemoProps> = ({ memo, useType, isOwner }) => {
@@ -166,7 +171,8 @@ export const Memo: React.FC<IMemoProps> = ({ memo, useType, isOwner }) => {
                     id: 0,
                     content: "",
                     color: null,
-                    updateAt: ""
+                    updateAt: "",
+                    tags: null
                 });
             }
             client.cache.evict({ id: `Memo:${memo.id}` });
@@ -323,14 +329,13 @@ export const Memo: React.FC<IMemoProps> = ({ memo, useType, isOwner }) => {
                 />
             }  
             
+            {memo.tags?.length !== 0 &&
+                <Tags
+                    isSelectedMemo={false}
+                    memoId={memo.id}
+                    tags={memo.tags} />
+            }
             <Date>{memo.updateAt}</Date>
-            {/*path === '/grid' &&
-                <MemoButton
-                    onClick={selectMemo}
-                    src={zoomOutImg}
-                    backgroundSize="14px"
-                />          
-        */}  
         </CMemo>
     )
 }

@@ -16,12 +16,24 @@ export interface myMemosQuery_myMemos_groups_user {
   userImage: string | null;
 }
 
+export interface myMemosQuery_myMemos_groups_memos_tags_tag {
+  __typename: "Tags";
+  id: number;
+  name: string;
+}
+
+export interface myMemosQuery_myMemos_groups_memos_tags {
+  __typename: "MemoTags";
+  tag: myMemosQuery_myMemos_groups_memos_tags_tag;
+}
+
 export interface myMemosQuery_myMemos_groups_memos {
   __typename: "Memo";
   id: number;
   content: string;
   color: string | null;
   updateAt: any;
+  tags: myMemosQuery_myMemos_groups_memos_tags[] | null;
 }
 
 export interface myMemosQuery_myMemos_groups_members_user {
@@ -39,6 +51,12 @@ export interface myMemosQuery_myMemos_groups_members {
   user: myMemosQuery_myMemos_groups_members_user;
 }
 
+export interface myMemosQuery_myMemos_groups_tags {
+  __typename: "Tags";
+  id: number;
+  name: string;
+}
+
 export interface myMemosQuery_myMemos_groups {
   __typename: "MemoGroup";
   id: number;
@@ -46,6 +64,7 @@ export interface myMemosQuery_myMemos_groups {
   user: myMemosQuery_myMemos_groups_user;
   memos: myMemosQuery_myMemos_groups_memos[] | null;
   members: myMemosQuery_myMemos_groups_members[] | null;
+  tags: myMemosQuery_myMemos_groups_tags[] | null;
 }
 
 export interface myMemosQuery_myMemos {

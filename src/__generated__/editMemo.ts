@@ -10,5 +10,4 @@
 export interface editMemo {
   __typename: "Memo";
   content: string;
-  color: string | null;
 }

@@ -18,6 +18,12 @@ export interface AcceptGroupMemberInput {
   accept: boolean;
 }
 
+export interface AddMemoTagInput {
+  memoId: number;
+  tagId: number;
+  name: string;
+}
+
 export interface CreateAccountInput {
   name: string;
   email: string;
@@ -44,6 +50,11 @@ export interface DeleteMemoGroupInput {
 
 export interface DeleteMemoInput {
   id: number;
+}
+
+export interface DeleteMemoTagInput {
+  memoId: number;
+  tagId: number;
 }
 
 export interface EditMemoGroupInput {
@@ -77,12 +88,20 @@ export interface LoginInput {
   password: string;
 }
 
+export interface MemoTagsType {
+  memoId: number;
+  memo: MemoType;
+  tagId: number;
+  tag: TagsType;
+}
+
 export interface MemoType {
   id: number;
   updateAt: any;
   content: string;
   orderby: number;
   color?: string | null;
+  tags?: MemoTagsType[] | null;
 }
 
 export interface MyMemosInput {
@@ -91,6 +110,12 @@ export interface MyMemosInput {
 
 export interface SortMemoInput {
   memos?: MemoType[] | null;
+}
+
+export interface TagsType {
+  id: number;
+  groupId: number;
+  name: string;
 }
 
 export interface VerifyEmailInput {

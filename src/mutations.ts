@@ -81,3 +81,21 @@ export const DELETEGROUPMEMBERS_MUTATION = gql`
         }
     }
 `;
+
+export const ADDMEMOTAG_MUTATION = gql`
+    mutation addMemoTags ($addMemoTagInput: AddMemoTagInput!) {
+        addMemoTags (input: $addMemoTagInput) {
+            ok
+            error
+        }
+    }
+`;
+
+export const DELETEMEMOTAG_MUTATION = gql`
+    mutation deleteMemoTags ($deleteMemoTagInput: DeleteMemoTagInput!) {
+        deleteMemoTags (input: $delteMemoTagInput) {
+            ok
+            error
+        }
+    }
+`;

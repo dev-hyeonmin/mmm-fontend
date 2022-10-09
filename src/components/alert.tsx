@@ -17,7 +17,7 @@ const Alarms = styled(motion.div)`
     z-index: 99;
     display: flex;
     flex-wrap: wrap-reverse;
-    width: 230px;
+    width: 260px;
 `;
 
 

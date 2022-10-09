@@ -143,7 +143,7 @@ export const MemoByGroup: React.FC<IMemoByGroupProps> = ({ groups }) => {
                 ...currentAlert,
                 {
                     id: `saveAlert${alertNumber}`,
-                    text: "저장되었습니다 :D",
+                    text: "메모가 저장되었습니다 :D",
                     icon: saveImg,
                     show: "true"
                 }

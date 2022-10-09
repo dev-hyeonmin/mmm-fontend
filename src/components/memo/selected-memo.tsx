@@ -9,6 +9,7 @@ import { selectMemoAtom } from "../../atom";
 import { motion } from "framer-motion";
 // @ts-ignore
 import closeImg from "../../images/delete-memo.png";
+import { Tags } from "./tags";
 
 interface ISelectedMemo {
     onSaving: any;
@@ -41,7 +42,7 @@ const CMemo = styled(motion.div)`
 
     textarea {
         width: 100%;
-        height: 100%;
+        height: calc(100% - 45px);
         line-height: 24px;
         font-size: 14px;
         background-color: #fff;
@@ -131,7 +132,8 @@ export const SelectedMemo: React.FC<ISelectedMemo> = ({ onSaving }) => {
             id: 0,
             content: "",
             color: null,
-            updateAt: ""
+            updateAt: "",
+            tags: null
         });
     };
 
@@ -151,6 +153,11 @@ export const SelectedMemo: React.FC<ISelectedMemo> = ({ onSaving }) => {
                         onFocus={moveCursor}
                         autoFocus
                     />
+
+                    <Tags
+                        isSelectedMemo={true}
+                        memoId={memo.id}
+                        tags={memo.tags} />
                     <UpdateDate>{memo.updateAt}</UpdateDate>                    
                 </CMemo>
             }

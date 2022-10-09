@@ -9,7 +9,7 @@ import { CREATEMEMOGROUP_MUTATION } from "../mutations";
 import { Helmet } from "react-helmet";
 import { MemoMenu } from "../components/memo/memo-menu";
 
-const MYMEMOS_QUERY = gql`
+export const MYMEMOS_QUERY = gql`
     query myMemosQuery($myMemosInput: MyMemosInput!) {
         myMemos(input: $myMemosInput) {
             ok
@@ -27,6 +27,12 @@ const MYMEMOS_QUERY = gql`
                     content
                     color
                     updateAt
+                    tags {
+                        tag {
+                            id
+                            name
+                        }
+                    }
                 }
                 members{
                     useType
@@ -37,6 +43,10 @@ const MYMEMOS_QUERY = gql`
                         email
                         userImage
                     }
+                }
+                tags {
+                    id
+                    name
                 }
             }
         }
