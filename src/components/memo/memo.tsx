@@ -89,8 +89,13 @@ const CMemo = styled(motion.div)<ICMemoProps>`
         vertical-align: middle;
     }
 
+    h6 {
+        display: none;
+    }
+    
     ul {
         margin-top: 10px;
+
         li {
             font-size: 12px;
         }

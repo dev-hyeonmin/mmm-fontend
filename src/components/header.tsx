@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { UserProfile } from "./userProfile";
 // @ts-ignore
 import searchImg from "../images/search.png";
+import { motion } from "framer-motion";
 
 const Header = styled.div`
     display: flex;
@@ -49,6 +50,13 @@ const Search = styled.input`
     }
 `;
 
+const AdminNotice = styled(motion.div)`
+    position: absolute;
+    left: 130px;
+    overflow: hidden;
+    white-space: nowrap;
+`;
+
 export const Headers = () => {
     const { data: userData } = useMe();
     const [keyword, setKeyword] = useState('');
@@ -81,7 +89,15 @@ export const Headers = () => {
 
             <Header>
                 <Logo>m._.m</Logo>
-
+                <AdminNotice
+                    key="adminNotice"
+                    initial={{ width: "0px" }}
+                    animate={{ width: "-webkit-fit-content" }}
+                    transition={{ repeat: Infinity, duration: 2, repeatDelay: 4 }}                    
+                >
+                    📌 태그 기능 업데이트 중입니다. 현재 태그 추가만 가능.
+                </AdminNotice>
+                
                 <div>
                     <Search
                         placeholder="Search"
