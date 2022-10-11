@@ -1,4 +1,4 @@
-import { useApolloClient, useLazyQuery, useMutation } from "@apollo/client";
+import { gql, useApolloClient, useLazyQuery, useMutation } from "@apollo/client";
 import { useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
@@ -72,35 +72,50 @@ const AddTagInp = styled.li`
 export const Tags: React.FC<ITags> = ({ isSelectedMemo, memoId, tags }) => {
     const client = useApolloClient();
     const [tagName, setTagName] = useState("");
+    const [alertNumber, setAlertNumber] = useState(0);
     const setAlertAtom = useSetRecoilState(alertAtom);
+    const selectedMemo = useRecoilValue(selectMemoAtom);
     const setMemoAtom = useSetRecoilState(selectMemoAtom);
-    const [deleteTagMutation] = useMutation<deleteMemoTags, deleteMemoTagsVariables>(DELETEMEMOTAG_MUTATION);
+    const [deleteTagMutation] = useMutation<deleteMemoTags, deleteMemoTagsVariables>(DELETEMEMOTAG_MUTATION);    
     
     const onCompleted = (data: addMemoTags) => {
         if (data.addMemoTags.id) {            
             const tagId = data.addMemoTags.id;
-            setMemoAtom((curr) => {
-                const copy = JSON.parse(JSON.stringify(curr));                
-                return {
-                    ...copy,
-                    ...{
-                        tags: [
-                            ...copy.tags,
-                            {
-                                __typename: "MemoTags",
-                                tag: {
-                                    __typename: "Tags",
-                                    id: tagId,
-                                    name: tagName,
-                                }
+            const copy = JSON.parse(JSON.stringify(selectedMemo));
+            const newTags = {
+                ...copy,
+                ...{
+                    tags: [
+                        ...copy.tags,
+                        {
+                            __typename: "MemoTags",
+                            tag: {
+                                __typename: "Tags",
+                                id: tagId,
+                                name: tagName,
                             }
-                        ]
+                        }
+                    ]
+                }
+            };
+            setMemoAtom((curr) => newTags);
+
+            client.writeFragment({
+                id: `Memo:${memoId}`,
+                fragment: gql`
+                    fragment editMemo on Memo {
+                        tags {
+                            tag {
+                                id
+                                name
+                            }
+                        }
                     }
-                };
+                `,
+                data: newTags,
             });
         }
-
-
+        
         addAlert();
         setTagName("");
     };
@@ -128,11 +143,13 @@ export const Tags: React.FC<ITags> = ({ isSelectedMemo, memoId, tags }) => {
     };
 
     const addAlert = () => {
+        setAlertNumber((current) => current + 1);
+
         setAlertAtom((currentAlert) =>
             [
                 ...currentAlert,
                 {
-                    id: `saveAlertTags`,
+                    id: `saveAlertTags${alertNumber}`,
                     text: "태그가 저장되었습니다 :D",
                     icon: saveImg,
                     show: "true"
