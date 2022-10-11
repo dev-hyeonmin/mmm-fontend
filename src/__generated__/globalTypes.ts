@@ -88,6 +88,10 @@ export interface LoginInput {
   password: string;
 }
 
+export interface MemoInput {
+  id: number;
+}
+
 export interface MemoTagsType {
   memoId: number;
   memo: MemoType;

@@ -13,6 +13,7 @@ export interface addMemoTags_addMemoTags {
   __typename: "AddMemoTagOutput";
   ok: boolean;
   error: string | null;
+  id: number | null;
 }
 
 export interface addMemoTags {

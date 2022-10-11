@@ -42,7 +42,7 @@ const CMemo = styled(motion.div)`
 
     textarea {
         width: 100%;
-        height: calc(100% - 45px);
+        height: calc(100% - 60px);
         line-height: 24px;
         font-size: 14px;
         background-color: #fff;
@@ -70,9 +70,6 @@ const CloseButton = styled.button`
 `;
 
 const UpdateDate = styled.div`
-    position: absolute;
-    bottom: 50px;
-    left: 80px;
     color: #777;
 `;
 
@@ -151,7 +148,6 @@ export const SelectedMemo: React.FC<ISelectedMemo> = ({ onSaving }) => {
                         onChange={onChange}
                         onBlur={editMemo}
                         onFocus={moveCursor}
-                        autoFocus
                     />
 
                     <Tags

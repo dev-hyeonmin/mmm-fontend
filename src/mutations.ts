@@ -1,5 +1,33 @@
 import { gql } from "@apollo/client";
 
+export const MEMO_FRAGEMENT = gql`
+    fragment MemoParts on Memo {
+        id
+        content
+        color
+        updateAt
+        tags {
+            tag {
+                id
+                name
+            }
+        }
+    }
+`;
+
+export const MEMOBYID_QUERY = gql`
+    query memoById($memoInput: MemoInput!) {
+        memoById(input: $memoInput) {
+            ok
+            error
+            memo {
+                ...MemoParts
+            }
+        }
+    }
+    ${MEMO_FRAGEMENT}
+`;
+
 export const CREATEMEMOGROUP_MUTATION = gql`
     mutation createMemoGroupMutation ($createMemoGroupInput: CreateMemoGroupInput!) {
         createMemoGroup (input: $createMemoGroupInput) {
@@ -87,13 +115,14 @@ export const ADDMEMOTAG_MUTATION = gql`
         addMemoTags (input: $addMemoTagInput) {
             ok
             error
+            id
         }
     }
 `;
 
 export const DELETEMEMOTAG_MUTATION = gql`
     mutation deleteMemoTags ($deleteMemoTagInput: DeleteMemoTagInput!) {
-        deleteMemoTags (input: $delteMemoTagInput) {
+        deleteMemoTags (input: $deleteMemoTagInput) {
             ok
             error
         }

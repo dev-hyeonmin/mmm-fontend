@@ -338,7 +338,8 @@ export const Memo: React.FC<IMemoProps> = ({ memo, useType, isOwner }) => {
                 <Tags
                     isSelectedMemo={false}
                     memoId={memo.id}
-                    tags={memo.tags} />
+                    tags={memo.tags}
+                     />
             }
             <Date>{memo.updateAt}</Date>
         </CMemo>
