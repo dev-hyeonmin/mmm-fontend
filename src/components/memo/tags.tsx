@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { alertAtom, selectMemoAtom } from "../../atom";
 import { ADDMEMOTAG_MUTATION, DELETEMEMOTAG_MUTATION, MEMOBYID_QUERY, MEMO_FRAGEMENT } from "../../mutations";
 import { addMemoTags, addMemoTagsVariables } from "../../__generated__/addMemoTags";
-import { myMemosQuery_myMemos_groups_memos_tags } from "../../__generated__/myMemosQuery";
+import { myMemosQuery_myMemos_groups_memos, myMemosQuery_myMemos_groups_memos_tags } from "../../__generated__/myMemosQuery";
 // @ts-ignore
 import saveImg from "../../images/save.png";
 // @ts-ignore
@@ -98,22 +98,8 @@ export const Tags: React.FC<ITags> = ({ isSelectedMemo, memoId, tags }) => {
                     ]
                 }
             };
-            setMemoAtom((curr) => newTags);
-
-            client.writeFragment({
-                id: `Memo:${memoId}`,
-                fragment: gql`
-                    fragment editMemo on Memo {
-                        tags {
-                            tag {
-                                id
-                                name
-                            }
-                        }
-                    }
-                `,
-                data: newTags,
-            });
+            
+            setNewTags(newTags);
         }
         
         addAlert();
@@ -144,7 +130,6 @@ export const Tags: React.FC<ITags> = ({ isSelectedMemo, memoId, tags }) => {
 
     const addAlert = () => {
         setAlertNumber((current) => current + 1);
-
         setAlertAtom((currentAlert) =>
             [
                 ...currentAlert,
@@ -168,7 +153,36 @@ export const Tags: React.FC<ITags> = ({ isSelectedMemo, memoId, tags }) => {
                     tagId
                 }
             }
-        })
+        });
+
+        const copy = JSON.parse(JSON.stringify(selectedMemo));
+        const newTags = {
+            ...copy,
+            ...{
+                tags: copy.tags.filter((tag: any) => tag.tag.id !== tagId)
+            }
+        };
+        console.log(newTags);
+        setNewTags(newTags);
+    };
+
+    const setNewTags = (newTags: myMemosQuery_myMemos_groups_memos) => {
+        setMemoAtom((curr) => newTags);
+
+        client.writeFragment({
+            id: `Memo:${memoId}`,
+            fragment: gql`
+                fragment editMemo on Memo {
+                    tags {
+                        tag {
+                            id
+                            name
+                        }
+                    }
+                }
+            `,
+            data: newTags,
+        });
     };
 
     return (
@@ -187,7 +201,6 @@ export const Tags: React.FC<ITags> = ({ isSelectedMemo, memoId, tags }) => {
                 {(isSelectedMemo) &&
                     <AddTagInp>
                         <input 
-                            autoFocus
                             onChange={onChange}
                             onKeyDown={addMemoTags}
                             placeholder="+ Add tag"
