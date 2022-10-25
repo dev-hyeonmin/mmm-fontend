@@ -313,7 +313,6 @@ input::placeholder {
     height: -webkit-fill-available;
 }
 
-
 @media screen and (min-width: 1024px) {
     #root, .wrapper-memo, .wrapper-memo-grid {
         min-width: 1440px;

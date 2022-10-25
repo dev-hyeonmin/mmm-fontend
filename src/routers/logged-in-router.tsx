@@ -11,10 +11,6 @@ const routes = [
         component: <Main />
     },
     {
-        path: "/grid",
-        component: <Main />
-    },
-    {
         path: "/confirm",
         component: <VerifyEmail />
     },

@@ -1,17 +1,16 @@
-import { gql, useApolloClient, useLazyQuery, useMutation } from "@apollo/client";
+import { gql, useApolloClient, useMutation } from "@apollo/client";
 import { useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { alertAtom, selectMemoAtom } from "../../atom";
-import { ADDMEMOTAG_MUTATION, DELETEMEMOTAG_MUTATION, MEMOBYID_QUERY, MEMO_FRAGEMENT } from "../../mutations";
+import { ADDMEMOTAG_MUTATION, DELETEMEMOTAG_MUTATION } from "../../mutations";
 import { addMemoTags, addMemoTagsVariables } from "../../__generated__/addMemoTags";
 import { myMemosQuery_myMemos_groups_memos, myMemosQuery_myMemos_groups_memos_tags } from "../../__generated__/myMemosQuery";
+import { deleteMemoTags, deleteMemoTagsVariables } from "../../__generated__/deleteMemoTags";
 // @ts-ignore
 import saveImg from "../../images/save.png";
 // @ts-ignore
 import closeTagImg from "../../images/tag-close.png";
-import { deleteMemoTags, deleteMemoTagsVariables } from "../../__generated__/deleteMemoTags";
-import { memoById, memoByIdVariables } from "../../__generated__/memoById";
 
 
 interface ITags {

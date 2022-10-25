@@ -105,18 +105,7 @@ export const Main = () => {
                 <title>mmm</title>
             </Helmet>
             
-            <MemoMenu onClick={createMemoGroup}/>
-
-            {/*<div className="option-menus">
-                <MemoButton
-                    src={orderbyImg}
-                    onClick={() => switchMemoList('/')}
-                />
-                <MemoButton
-                    src={orderbyImg2}
-                    onClick={() => switchMemoList('/grid')}
-                />
-            </div>*/}
+            <MemoMenu onClick={createMemoGroup}/>            
 
             <div className="box-memo">
                 { path === '/' && 
