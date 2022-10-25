@@ -308,12 +308,12 @@ export const Memo: React.FC<IMemoProps> = ({ memo, useType, isOwner }) => {
             }
             
             {!editMode &&
-                <div className="memo" onClick={onEdit}>{content.replaceAll('<br/>', '\n')}</div>
+                <div className="memo" onClick={onEdit}>{content.replaceAll('<br/>', '\n').replace(/<[^>]*>?/g, '')}</div>
             }
 
             {(editMode && path !== '/grid') &&
                 <ReactTextareaAutosize
-                value={content.replaceAll('<br/>', '\n')}
+                value={content.replaceAll('<br/>', '\n').replace(/<[^>]*>?/g, '')}
                 onChange={onChange}
                 onBlur={editMemo}
                 onKeyDown={onKeyDown}
@@ -324,7 +324,7 @@ export const Memo: React.FC<IMemoProps> = ({ memo, useType, isOwner }) => {
             }
             {(editMode && path === '/grid') &&
                 <textarea
-                value={content.replaceAll('<br/>', '\n')}
+                value={content.replaceAll('<br/>', '\n').replace(/<[^>]*>?/g, '')}
                 onChange={onChange}
                 onBlur={editMemo}
                 onKeyDown={onKeyDown}

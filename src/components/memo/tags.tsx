@@ -25,6 +25,7 @@ const CTags = styled.div`
 const Tag = styled.ul`
     width: 100%;
     margin-top: 3px;
+    padding: 0 10px;
     
     &:after {
         content: "";

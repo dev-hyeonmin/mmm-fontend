@@ -95,7 +95,7 @@ export const Headers = () => {
                     animate={{ width: "-webkit-fit-content" }}
                     transition={{ repeat: Infinity, duration: 2, repeatDelay: 4 }}                    
                 >
-                    📌 태그 기능 업데이트 중입니다.
+                    📌 에디터가 추가되었어요!
                 </AdminNotice>
                 
                 <div>

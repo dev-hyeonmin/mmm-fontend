@@ -30,9 +30,11 @@ const Alarm = styled(motion.div) <IAlarm>`
     padding: 20px 30px 20px 70px;
     font-weight: bold;
     background-image: url(${props => props.src});
+    background-color: #fff;
     background-size: 24px;
     background-position: 25px center;
     background-repeat: no-repeat;
+    z-index: 99;
 `;
 
 
